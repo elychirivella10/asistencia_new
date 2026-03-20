@@ -1,0 +1,18 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Printer } from "lucide-react";
+
+export function PrintButton({ className, ...props }) {
+  return (
+    <Button 
+      onClick={() => window.print()} 
+      variant="outline" 
+      className={`print:hidden ${className}`} 
+      {...props}
+    >
+      <Printer className="mr-2 h-4 w-4" />
+      Imprimir
+    </Button>
+  );
+}

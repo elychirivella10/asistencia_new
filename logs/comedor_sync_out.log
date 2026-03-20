@@ -1,0 +1,71 @@
+
+--- 🍽️ INICIANDO SYNC COMEDOR (15:44:30) ---
+
+📡 Conectando al biométrico en 192.168.1.201:4370...
+❌ Error durante el proceso de comedor: can't reach device (ping 192.168.1.201)
+
+--- 🍽️ INICIANDO SYNC COMEDOR (15:50:46) ---
+
+📡 Conectando al biométrico en 10.100.2.257:4370...
+❌ Error durante el proceso de comedor: can't reach device (ping 10.100.2.257)
+
+--- 🍽️ INICIANDO SYNC COMEDOR (15:51:22) ---
+
+📡 Conectando al biométrico en 10.100.2.157:4370...
+✅ Datos comedor: 0 usuarios, 0 marcajes.
+💾 Insertados 0 marcajes de comedor.
+🔌 Desconectado del biométrico.
+
+--- 🍽️ INICIANDO SYNC COMEDOR (15:52:04) ---
+
+📡 Conectando al biométrico en 10.100.2.157:4370...
+✅ Datos comedor: 0 usuarios, 0 marcajes.
+💾 Insertados 0 marcajes de comedor.
+🔌 Desconectado del biométrico.
+
+--- 🍽️ INICIANDO SYNC COMEDOR (15:53:11) ---
+
+📡 Conectando al biométrico en 10.100.2.157:4370...
+✅ Datos comedor: 0 usuarios, 0 marcajes.
+💾 Insertados 0 marcajes de comedor.
+🔌 Desconectado del biométrico.
+
+--- 🍽️ INICIANDO SYNC COMEDOR (16:03:51) ---
+
+📡 Conectando al biométrico en 10.100.2.157:4370...
+✅ Datos comedor: 349 usuarios, 7 marcajes.
+💾 Insertados 7 marcajes de comedor.
+🔌 Desconectado del biométrico.
+
+--- 🍽️ INICIANDO SYNC COMEDOR (17:12:54) ---
+
+📡 Conectando al biométrico en 10.100.2.157:4370...
+❌ Error durante el proceso de comedor: can't reach device (ping 10.100.2.157)
+
+--- 🍽️ INICIANDO SYNC COMEDOR (17:17:03) ---
+
+📡 Conectando al biométrico en 10.100.2.157:4370...
+✅ Datos comedor: 349 usuarios, 12 marcajes.
+💾 Insertados 12 marcajes de comedor.
+🔌 Desconectado del biométrico.
+
+--- 🍽️ INICIANDO SYNC COMEDOR (17:21:37) ---
+
+📡 Conectando al biométrico en 10.100.2.157:4370...
+✅ Datos comedor: 349 usuarios, 12 marcajes.
+💾 Insertados 12 marcajes de comedor.
+🔌 Desconectado del biométrico.
+
+--- 🍽️ INICIANDO SYNC COMEDOR (14:11:24) ---
+
+📡 Conectando al biométrico en 10.100.2.157:4370...
+✅ Datos comedor: 351 usuarios, 12 marcajes.
+💾 Insertados 12 marcajes de comedor.
+🔌 Desconectado del biométrico.
+
+--- 🍽️ INICIANDO SYNC COMEDOR (14:12:59) ---
+
+📡 Conectando al biométrico en 10.100.2.157:4370...
+✅ Datos comedor: 351 usuarios, 12 marcajes.
+💾 Insertados 12 marcajes de comedor.
+🔌 Desconectado del biométrico.

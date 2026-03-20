@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "C:\Users\PC\Documents\biometrico\scripts\sync\summarizer.py", line 359, in <module>
+    summarizer.process_summary()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\PC\Documents\biometrico\scripts\sync\summarizer.py", line 351, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\PC\Documents\biometrico\scripts\sync\db_repository.py", line 392, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+TypeError: not all arguments converted during string formatting
+Traceback (most recent call last):
+  File "C:\Users\PC\Documents\biometrico\scripts\sync\summarizer.py", line 359, in <module>
+    summarizer.process_summary()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\PC\Documents\biometrico\scripts\sync\summarizer.py", line 351, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\PC\Documents\biometrico\scripts\sync\db_repository.py", line 392, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+TypeError: not all arguments converted during string formatting
+Traceback (most recent call last):
+  File "C:\Users\PC\Documents\biometrico\scripts\sync\summarizer.py", line 3, in <module>
+    from db_repository import DBRepository
+  File "C:\Users\PC\Documents\biometrico\scripts\sync\db_repository.py", line 449
+    cur.execute("""
+                ^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
