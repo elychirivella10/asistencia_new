@@ -1,0 +1,268 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model areas {
+  id                               String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nombre                           String                @db.VarChar(255)
+  parent_id                        String?               @db.Uuid
+  jefe_id                          String?               @db.Uuid
+  created_at                       DateTime?             @default(now()) @db.Timestamptz(6)
+  tipo_id                          Int?
+  areas                            areas?                @relation("areasToareas", fields: [parent_id], references: [id], onUpdate: NoAction)
+  other_areas                      areas[]               @relation("areasToareas")
+  cat_tipos_area                   cat_tipos_area?       @relation(fields: [tipo_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usuarios_areas_jefe_idTousuarios usuarios?             @relation("areas_jefe_idTousuarios", fields: [jefe_id], references: [id], onUpdate: NoAction, map: "fk_jefe_area")
+  permisos_supervision             permiso_supervision[]
+  usuarios_usuarios_area_idToareas usuarios[]            @relation("usuarios_area_idToareas")
+}
+
+model permiso_supervision {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  usuario_id String    @db.Uuid
+  area_id    String    @db.Uuid
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  areas      areas     @relation(fields: [area_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  usuarios   usuarios  @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([usuario_id, area_id])
+}
+
+model cat_tipos_area {
+  id               Int     @id @default(autoincrement())
+  nombre           String  @unique @db.VarChar(50)
+  nivel_jerarquico Int
+  areas            areas[]
+}
+
+model novedades {
+  id                String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  usuario_id        String            @db.Uuid
+  fecha_inicio      DateTime          @db.Date
+  fecha_fin         DateTime          @db.Date
+  estado            String            @default("PENDIENTE")
+  aprobado_por      String?           @db.Uuid
+  observaciones     String?
+  es_dia_completo   Boolean           @default(true)
+  hora_fin          DateTime?         @db.Time(6)
+  hora_inicio       DateTime?         @db.Time(6)
+  tipo_id           Int
+  validador         usuarios?         @relation("ValidadoPor", fields: [aprobado_por], references: [id])
+  cat_tipos_permiso cat_tipos_permiso @relation(fields: [tipo_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usuario           usuarios          @relation("MisNovedades", fields: [usuario_id], references: [id])
+}
+
+model cat_tipos_permiso {
+  id               Int                        @id @default(autoincrement())
+  nombre           String                     @unique @db.VarChar(50)
+  requiere_soporte Boolean?                   @default(true)
+  goce_sueldo      Boolean?                   @default(true)
+  permite_parcial  Boolean?                   @default(false)
+  mapeos           cat_tipos_permiso_estado[] @relation("tipo_permiso_mapeo")
+  novedades        novedades[]
+}
+
+model marcajes_brutos {
+  usuario_id     String?   @db.Uuid
+  fecha_hora     DateTime  @db.Timestamptz(6)
+  tipo           String?   @default("INDETERMINADO") @db.VarChar(20)
+  origen         String?   @default("BIOMETRICO") @db.VarChar(20)
+  dispositivo_id String?   @db.VarChar(50)
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  updated_at     DateTime? @default(now()) @db.Timestamptz(6)
+  usuarios       usuarios? @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([usuario_id, fecha_hora])
+}
+
+model marcajes_comedor {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  usuario_id     String?   @db.Uuid
+  fecha_hora     DateTime  @db.Timestamptz(6)
+  dispositivo_id String?   @db.VarChar(50)
+  origen         String?   @default("COMEDOR") @db.VarChar(20)
+  updated_at     DateTime? @default(now()) @db.Timestamptz(6)
+  usuarios       usuarios? @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([usuario_id, fecha_hora], map: "idx_comedor_usuario_fecha")
+  @@index([fecha_hora], map: "idx_comedor_fecha")
+}
+
+model resumen_diario {
+  usuario_id              String?                 @db.Uuid
+  fecha                   DateTime                @db.Date
+  hora_entrada            DateTime?               @db.Timestamptz(6)
+  hora_salida             DateTime?               @db.Timestamptz(6)
+  minutos_trabajados      Int?                    @default(0)
+  extras_informativas_min Int?                    @default(0)
+  minutos_esperados       Int?                    @default(0)
+  minutos_debe            Int?                    @default(0)
+  saldo_minutos           Int?                    @default(0)
+  permiso_parcial_min     Int?                    @default(0)
+  estado                  String?                 @db.VarChar(30)
+  notificado_tardia       Boolean?                @default(false)
+  observaciones           String?
+  id                      String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  last_processed_at       DateTime?               @default(now()) @db.Timestamptz(6)
+  comedor_descuento_min   Int?                    @default(0)
+  minutos_trabajados_neto Int?                    @default(0)
+  es_incompleto           Boolean?                @default(false)
+  estado_excepcion_slug   String?                 @db.VarChar(30)
+  llegada_slug            String?                 @db.VarChar(30)
+  salida_slug             String?                 @db.VarChar(30)
+  cat_llegada             cat_estados_asistencia? @relation("ResumenLlegada", fields: [llegada_slug], references: [slug], onDelete: NoAction, onUpdate: NoAction)
+  cat_salida              cat_estados_asistencia? @relation("ResumenSalida", fields: [salida_slug], references: [slug], onDelete: NoAction, onUpdate: NoAction)
+  usuarios                usuarios?               @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([usuario_id, fecha])
+  @@index([fecha], map: "idx_resumen_fecha")
+}
+
+model usuarios {
+  id                    String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nombre                String                @db.VarChar(255)
+  apellido              String                @db.VarChar(255)
+  email                 String                @unique @db.VarChar(255)
+  biometric_id          String?               @unique(map: "unique_biometric_id") @db.VarChar(20)
+  area_id               String?               @db.Uuid
+  turno_id              String?               @db.Uuid
+  es_activo             Boolean?              @default(true)
+  created_at            DateTime?             @default(now()) @db.Timestamptz(6)
+  cedula                String                @unique @db.VarChar(20)
+  fecha_ingreso         DateTime?             @default(dbgenerated("CURRENT_DATE")) @db.Date
+  rol_id                Int?
+  password              String?               @db.VarChar(255)
+  areas_jefe_de         areas[]               @relation("areas_jefe_idTousuarios")
+  logs_notificaciones   logs_notificaciones[]
+  marcajes_brutos       marcajes_brutos[]
+  marcajes_comedor      marcajes_comedor[]
+  novedades_validadas   novedades[]           @relation("ValidadoPor")
+  novedades_solicitadas novedades[]           @relation("MisNovedades")
+  permisos_supervision  permiso_supervision[]
+  resumen_diario        resumen_diario[]
+  areas_pertenece       areas?                @relation("usuarios_area_idToareas", fields: [area_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  roles                 roles?                @relation(fields: [rol_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  turnos                turnos?               @relation(fields: [turno_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+}
+
+model turnos {
+  id                    String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nombre                String     @db.VarChar(100)
+  hora_entrada          DateTime   @db.Time(6)
+  hora_salida           DateTime   @db.Time(6)
+  margen_tolerancia_min Int?       @default(15)
+  dias_laborales        Int[]      @default([1, 2, 3, 4, 5])
+  cruza_medianoche        Boolean?   @default(false)
+  created_at            DateTime?  @default(now()) @db.Timestamptz(6)
+  usuarios              usuarios[]
+
+}
+
+model roles {
+  id             Int              @id @default(autoincrement())
+  nombre         String           @unique @db.VarChar(50)
+  descripcion    String?
+  created_at     DateTime?        @default(now()) @db.Timestamptz(6)
+  roles_permisos roles_permisos[]
+  usuarios       usuarios[]
+}
+
+model roles_permisos {
+  rol_id           Int
+  permiso_id       Int
+  permisos_sistema permisos_sistema @relation(fields: [permiso_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  roles            roles            @relation(fields: [rol_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([rol_id, permiso_id])
+}
+
+model permisos_sistema {
+  id             Int              @id @default(autoincrement())
+  slug           String           @unique @db.VarChar(100)
+  descripcion    String?
+  roles_permisos roles_permisos[]
+}
+
+model feriados {
+  id            Int      @id @default(autoincrement())
+  fecha         DateTime @unique @db.Date
+  descripcion   String?  @db.VarChar(255)
+  es_recurrente Boolean? @default(true)
+}
+
+model system_logs {
+  id         BigInt    @id @default(autoincrement())
+  nivel      String?   @db.VarChar(10)
+  origen     String?   @db.VarChar(50)
+  mensaje    String?
+  metadata   Json?
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+}
+
+model logs_notificaciones {
+  id                   Int       @id @default(autoincrement())
+  usuario_id           String?   @db.Uuid
+  tipo_notificacion    String?   @db.VarChar(50)
+  destinatario         String?   @db.VarChar(255)
+  enviado_exitosamente Boolean?  @default(true)
+  fecha_envio          DateTime? @default(now()) @db.Timestamptz(6)
+  usuarios             usuarios? @relation(fields: [usuario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model sistema_config {
+  clave       String  @id @db.VarChar(50)
+  valor       String?
+  categoria   String? @db.VarChar(20)
+  descripcion String?
+}
+
+model cat_estados_asistencia {
+  slug              String                     @id @db.VarChar(30)
+  nombre            String                     @db.VarChar(50)
+  color_hex         String?                    @db.VarChar(7)
+  categoria         EstadoCategoria            @default(ASISTENCIA)
+  es_no_laborable   Boolean?                   @default(false)
+  tipo_evento       TipoEstadoEvento           @default(DIA)
+  mapeos            cat_tipos_permiso_estado[] @relation("estado_asistencia_mapeo")
+  resumenes_llegada resumen_diario[]           @relation("ResumenLlegada")
+  resumenes_salida  resumen_diario[]           @relation("ResumenSalida")
+}
+
+model cat_estados_permiso {
+  slug        String  @id @db.VarChar(30)
+  nombre      String  @db.VarChar(50)
+  descripcion String?
+  color_hex   String? @db.VarChar(7)
+}
+
+model cat_tipos_permiso_estado {
+  tipo_id           Int
+  estado_slug       String                 @db.VarChar(30)
+  estado            cat_estados_asistencia @relation("estado_asistencia_mapeo", fields: [estado_slug], references: [slug], onDelete: NoAction, onUpdate: NoAction)
+  cat_tipos_permiso cat_tipos_permiso      @relation("tipo_permiso_mapeo", fields: [tipo_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([tipo_id, estado_slug])
+}
+
+
+
+enum TipoEstadoEvento {
+  DIA
+  LLEGADA
+  SALIDA
+  EXCEPCION
+}
+
+enum EstadoCategoria {
+  ASISTENCIA
+  PERMISO
+  TARDANZAS
+  FALTAS
+  REPOSO
+  JUSTIFICADO
+}
