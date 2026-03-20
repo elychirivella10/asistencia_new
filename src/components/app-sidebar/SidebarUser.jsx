@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/sidebar"
 import { logoutAction } from "@/features/auth/actions/auth-logout.action"
 import { useTheme } from "next-themes"
-import { useThemePreset } from "@/providers/theme-provider"
+import { useThemePreset } from "@/components/shared/providers/theme-provider"
 
 export function SidebarUser({ user }) {
   const { isMobile } = useSidebar()

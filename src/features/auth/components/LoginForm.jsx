@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/features/shared/lib/utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { LoginFields } from "./LoginFields"
 

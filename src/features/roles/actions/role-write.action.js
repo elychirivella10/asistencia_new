@@ -8,8 +8,8 @@ import {
   updateRole as updateRoleService,
   deleteRole as deleteRoleService,
 } from "../services/role-write.service";
-import { createProtectedAction, createProtectedFunction } from "@/lib/safe-action";
-import { ROUTES } from "@/config/routes";
+import { createProtectedAction, createProtectedFunction } from "@/features/shared/lib/safe-action";
+import { ROUTES } from "@/features/shared/config/routes";
 import { ROLE_CONFIG } from "../config/role.constants";
 
 /**

@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 
 /**
  * Validates if a supervision permission can be created (check duplicates).

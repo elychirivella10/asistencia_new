@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useRoleTable } from "../hooks/useRoleTable";
 import { useRoleTableDialogs } from "../hooks/useRoleTableDialogs";
 import { getRoleTableColumns } from "../config/role-table.config";
-import { usePermission } from "@/providers/permissions-provider";
+import { usePermission } from "@/features/auth/components/permissions-provider";
 import { RoleTableView } from "./RoleTableView";
 
 export function RoleTable({ data, permissions }) {

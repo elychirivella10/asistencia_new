@@ -1,4 +1,4 @@
-import { isSameDay, buildDateWhereSingle, buildDateWhereRange } from "@/lib/date-range-utils";
+import { isSameDay, buildDateWhereSingle, buildDateWhereRange } from "@/features/shared/lib/date-range-utils";
 import { getAttendanceScope } from "./attendance-policy.service";
 import { ATTENDANCE_CONFIG } from "../config/attendance.constants";
 

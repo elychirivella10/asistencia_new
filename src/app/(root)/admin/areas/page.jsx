@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { AreaTable } from "@/features/areas/components/AreaTable";
 import { getAreasPageData } from "@/features/areas/services/area-read.service";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
-import { checkPageAccess } from "@/lib/auth-guard";
+import { checkPageAccess } from "@/features/auth/lib/auth-guard";
 import { AccessDenied } from "@/components/shared/AccessDenied";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { AREA_CONFIG } from "@/features/areas/config/area.constants";

@@ -1,6 +1,6 @@
-import prisma from '@/lib/prisma'
+import prisma from '@/features/shared/lib/prisma'
 import bcrypt from 'bcryptjs'
-import { createSession } from '@/lib/auth'
+import { createSession } from '@/features/auth/lib/auth'
 import { AUTH_CONFIG } from '../config/auth.constants'
 
 /**

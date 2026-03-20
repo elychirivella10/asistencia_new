@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { toast } from "sonner";
-import { usePermission } from "@/providers/permissions-provider";
+import { usePermission } from "@/features/auth/components/permissions-provider";
 import { assignUsersToArea } from "../actions/user-write.action";
 import { getUserTableColumns } from "../config/user-table.config";
 import { useUserTableDialogs } from "../hooks/useUserTableDialogs";

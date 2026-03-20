@@ -2,10 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { userSchema, bulkAssignSchema } from "../schemas/user.schema";
-import { createProtectedAction, createProtectedFunction } from "@/lib/safe-action";
+import { createProtectedAction, createProtectedFunction } from "@/features/shared/lib/safe-action";
 import { validateUserUniqueness } from "../services/user-validation.service";
 import { createUser, updateUser, bulkAssignArea,  deleteUser as deleteUserService } from "../services/user-write.service";
-import { ROUTES } from "@/config/routes";
+import { ROUTES } from "@/features/shared/config/routes";
 import { USER_CONFIG } from "../config/user.constants";
 
 /**

@@ -1,6 +1,6 @@
 'use server'
 
-import { createProtectedFunction } from "@/lib/safe-action";
+import { createProtectedFunction } from "@/features/shared/lib/safe-action";
 import { searchUsers as searchUsersService } from '../services/user-read.service'
 import { USER_CONFIG } from "../config/user.constants";
 

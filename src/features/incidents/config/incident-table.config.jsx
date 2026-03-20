@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, Pencil, Trash2, Printer } from "lucide-react";
 import Link from "next/link";
-import { formatDateUTC, formatTimeUTC } from "@/lib/date-utils";
+import { formatDateUTC, formatTimeUTC } from "@/features/shared/lib/date-utils";
 import { INCIDENT_CONFIG } from "./incidents.constants";
 
 export const getIncidentColumns = (onView, onEdit, onDelete, can = () => true) => {

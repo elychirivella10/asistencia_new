@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 import bcrypt from "bcryptjs";
 import { validateUserDeletion } from "./user-validation.service";
 import { validateAreaAssignment } from "./user-policy.service";

@@ -4,8 +4,8 @@ import { areaSchema } from '../schemas/area.schema'
 import { revalidatePath } from 'next/cache'
 import { validateAreaHierarchy } from '../services/area-validation.service'
 import { createArea, updateArea, deleteArea as deleteAreaService } from '../services/area-write.service'
-import { createProtectedAction, createProtectedFunction } from '@/lib/safe-action'
-import { ROUTES } from "@/config/routes"
+import { createProtectedAction, createProtectedFunction } from '@/features/shared/lib/safe-action'
+import { ROUTES } from "@/features/shared/config/routes"
 import { AREA_CONFIG } from '../config/area.constants'
 
 /**

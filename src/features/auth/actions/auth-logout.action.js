@@ -1,6 +1,6 @@
 'use server'
 
-import { logout } from '@/lib/auth'
+import { logout } from '@/features/auth/lib/auth'
 import { redirect } from 'next/navigation'
 
 /**

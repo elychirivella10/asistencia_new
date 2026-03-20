@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 
 /**
  * Validates user uniqueness (ID card and email).

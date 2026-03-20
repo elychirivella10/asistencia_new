@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 import { getIncidentScope } from "./incident-policy.service";
 
 import { getIncidentTypes } from "./incident-types.service";

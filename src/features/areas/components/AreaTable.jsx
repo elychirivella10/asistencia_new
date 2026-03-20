@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAreaTable } from "../hooks/useAreaTable";
 import { useAreaTableDialogs } from "../hooks/useAreaTableDialogs";
 import { getAreaTableColumns } from "../config/area-table.config";
-import { usePermission } from "@/providers/permissions-provider";
+import { usePermission } from "@/features/auth/components/permissions-provider";
 import { AreaTableView } from "./AreaTableView";
 
 export function AreaTable({ data, tiposArea }) {

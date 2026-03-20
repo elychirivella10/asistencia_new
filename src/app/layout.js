@@ -1,9 +1,9 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/features/auth/lib/auth";
 import { getUserPermissions } from "@/features/auth/services/permission.service";
-import { PermissionsProvider } from "@/providers/permissions-provider";
-import { ThemeProvider } from "@/providers/theme-provider";
+import { PermissionsProvider } from "@/features/auth/components/permissions-provider";
+import { ThemeProvider } from "@/components/shared/providers/theme-provider";
 import "./globals.css";
 
 const geistSans = Geist({

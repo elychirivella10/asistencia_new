@@ -6,7 +6,7 @@ import { useSupervisionTable } from "../hooks/useSupervisionTable";
 import { useSupervisionTableDialogs } from "../hooks/useSupervisionTableDialogs";
 import { getSupervisionTableColumns } from "../config/supervision-table.config";
 import { SupervisionTableView } from "./SupervisionTableView";
-import { usePermission } from "@/providers/permissions-provider";
+import { usePermission } from "@/features/auth/components/permissions-provider";
 
 export function SupervisionTable({ data }) {
   const tableState = useSupervisionTable(data);

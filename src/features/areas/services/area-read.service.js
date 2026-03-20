@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 import { getVisibleAreas } from "./area-visibility.service";
 import { getAreaTypes } from "./area-types.service";
 

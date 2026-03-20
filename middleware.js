@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { decrypt } from '@/lib/auth'
+import { decrypt } from '@/features/auth/lib/auth'
 
 const protectedRoutes = ['/']
 const publicRoutes = ['/login']

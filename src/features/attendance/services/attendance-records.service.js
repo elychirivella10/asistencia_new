@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 import { startOfMonth, endOfMonth } from "date-fns";
 import { attendanceFilterSchema } from "../schemas/attendance.schema";
 import { ATTENDANCE_RECORD_SELECT } from "../config/attendance-record.select";

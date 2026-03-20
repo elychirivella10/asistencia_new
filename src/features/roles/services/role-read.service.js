@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 
 /**
  * Retrieves all data required for the Roles Management Page.

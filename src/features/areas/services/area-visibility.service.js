@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 import { getAreasPermitidas } from "./area-hierarchy.service";
 import { verifyPermission } from "@/features/auth/services/permission.service";
 import { AREA_CONFIG } from "../config/area.constants";

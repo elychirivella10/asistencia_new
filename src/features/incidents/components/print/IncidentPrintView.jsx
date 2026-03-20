@@ -1,5 +1,5 @@
 import { PrintButton } from "@/components/shared/PrintButton";
-import { formatDateUTC, formatTimeUTC } from "@/lib/date-utils";
+import { formatDateUTC, formatTimeUTC } from "@/features/shared/lib/date-utils";
 
 export function IncidentPrintView({ incident }) {
   // Para fechas locales (timestamps)

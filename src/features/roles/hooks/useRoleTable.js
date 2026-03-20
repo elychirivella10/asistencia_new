@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { useDataTable } from "@/hooks/useDataTable";
+import { useDataTable } from "@/features/shared/hooks/useDataTable";
 import { ROLE_CONFIG } from "../config/role.constants";
 
 export function useRoleTable(roles = []) {

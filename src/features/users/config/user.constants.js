@@ -19,6 +19,13 @@ export const USER_CONFIG = {
     INACTIVE: 'inactive',
   },
 
+  // Configuración de Paginación
+  PAGINATION: {
+    DEFAULT_PAGE_SIZE: 10,
+    MAX_PAGE_SIZE: 100,
+    SEARCH_TAKE: 10,
+  },
+
   // Configuración de visualización (Frontend)
   UI: {
     BADGE_VARIANTS: {

@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { getAttendancePageData } from "@/features/attendance/services/attendance-read.service";
 import { AttendanceTableView } from "@/features/attendance/components/AttendanceTableView";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
-import { checkPageAccess } from "@/lib/auth-guard";
+import { checkPageAccess } from "@/features/auth/lib/auth-guard";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { AccessDenied } from "@/components/shared/AccessDenied";
 import { ATTENDANCE_CONFIG } from "@/features/attendance/config/attendance.constants";

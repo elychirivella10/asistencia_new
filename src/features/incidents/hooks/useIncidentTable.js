@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { useDataTable } from "@/hooks/useDataTable";
+import { useDataTable } from "@/features/shared/hooks/useDataTable";
 
 const getNestedValue = (obj, path) => {
   return path.split('.').reduce((acc, part) => acc && acc[part], obj);

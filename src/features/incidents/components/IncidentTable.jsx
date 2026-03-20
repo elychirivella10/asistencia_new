@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { getIncidentColumns } from "../config/incident-table.config";
 import { useIncidentTable } from "../hooks/useIncidentTable";
 import { useIncidentTableDialogs } from "../hooks/useIncidentTableDialogs";
-import { usePermission } from "@/providers/permissions-provider";
+import { usePermission } from "@/features/auth/components/permissions-provider";
 import { IncidentTableView } from "./IncidentTableView";
 
 export function IncidentTable({ data, incidentTypes }) {

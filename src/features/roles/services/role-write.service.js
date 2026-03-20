@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 import { validateRoleName, validateRoleDeletion } from "./role-validation.service";
 
 /**

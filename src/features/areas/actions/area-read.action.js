@@ -1,6 +1,6 @@
 "use server";
 
-import { createProtectedFunction } from "@/lib/safe-action";
+import { createProtectedFunction } from "@/features/shared/lib/safe-action";
 import { getVisibleAreas } from "../services/area-visibility.service";
 import { findAreas, findParentAreas } from "../services/area-search.service";
 import { AREA_CONFIG } from "../config/area.constants";

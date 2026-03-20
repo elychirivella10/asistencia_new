@@ -4,8 +4,8 @@ import { supervisionSchema } from '../schemas/supervision.schema'
 import { revalidatePath } from 'next/cache'
 import { createSupervision, deleteSupervision as deleteSupervisionService, updateSupervision } from '../services/supervision-write.service'
 import { validateSupervisionUniqueness } from '../services/supervision-validation.service'
-import { createProtectedAction, createProtectedFunction } from '@/lib/safe-action'
-import { ROUTES } from '@/config/routes'
+import { createProtectedAction, createProtectedFunction } from '@/features/shared/lib/safe-action'
+import { ROUTES } from '@/features/shared/config/routes'
 import { SUPERVISION_CONFIG } from '../config/supervision.constants'
 
 export const saveSupervision = createProtectedAction(

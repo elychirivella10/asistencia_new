@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 import { INCIDENT_CONFIG } from "../config/incidents.constants";
 import { validateIncidentExistence, validateIncidentUser } from "./incident-validation.service";
 import { invalidateAttendanceCache } from "./incident-attendance-cache.service";

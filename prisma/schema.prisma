@@ -89,6 +89,7 @@ model marcajes_comedor {
   usuarios       usuarios? @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([usuario_id, fecha_hora], map: "idx_comedor_usuario_fecha")
+  @@unique([usuario_id, fecha_hora])
   @@index([fecha_hora], map: "idx_comedor_fecha")
 }
 
@@ -99,10 +100,6 @@ model resumen_diario {
   hora_salida             DateTime?               @db.Timestamptz(6)
   minutos_trabajados      Int?                    @default(0)
   extras_informativas_min Int?                    @default(0)
-  minutos_esperados       Int?                    @default(0)
-  minutos_debe            Int?                    @default(0)
-  saldo_minutos           Int?                    @default(0)
-  permiso_parcial_min     Int?                    @default(0)
   estado                  String?                 @db.VarChar(30)
   notificado_tardia       Boolean?                @default(false)
   observaciones           String?
@@ -114,6 +111,10 @@ model resumen_diario {
   estado_excepcion_slug   String?                 @db.VarChar(30)
   llegada_slug            String?                 @db.VarChar(30)
   salida_slug             String?                 @db.VarChar(30)
+  minutos_debe            Int?                    @default(0)
+  minutos_esperados       Int?                    @default(0)
+  permiso_parcial_min     Int?                    @default(0)
+  saldo_minutos           Int?                    @default(0)
   cat_llegada             cat_estados_asistencia? @relation("ResumenLlegada", fields: [llegada_slug], references: [slug], onDelete: NoAction, onUpdate: NoAction)
   cat_salida              cat_estados_asistencia? @relation("ResumenSalida", fields: [salida_slug], references: [slug], onDelete: NoAction, onUpdate: NoAction)
   usuarios                usuarios?               @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
@@ -147,7 +148,6 @@ model usuarios {
   areas_pertenece       areas?                @relation("usuarios_area_idToareas", fields: [area_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   roles                 roles?                @relation(fields: [rol_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   turnos                turnos?               @relation(fields: [turno_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
 }
 
 model turnos {
@@ -157,10 +157,9 @@ model turnos {
   hora_salida           DateTime   @db.Time(6)
   margen_tolerancia_min Int?       @default(15)
   dias_laborales        Int[]      @default([1, 2, 3, 4, 5])
-  cruza_medianoche        Boolean?   @default(false)
   created_at            DateTime?  @default(now()) @db.Timestamptz(6)
+  cruza_medianoche      Boolean?   @default(false)
   usuarios              usuarios[]
-
 }
 
 model roles {
@@ -248,8 +247,6 @@ model cat_tipos_permiso_estado {
 
   @@id([tipo_id, estado_slug])
 }
-
-
 
 enum TipoEstadoEvento {
   DIA

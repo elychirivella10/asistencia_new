@@ -11,7 +11,7 @@ import { AsyncSelect } from "@/components/shared/form/AsyncSelect";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { UserPlus, Search } from "lucide-react";
-import { usePermission } from "@/providers/permissions-provider";
+import { usePermission } from "@/features/auth/components/permissions-provider";
 import { searchVisibleAreas } from "@/features/areas/actions/area-read.action";
 import { USER_CONFIG } from "../config/user.constants";
 

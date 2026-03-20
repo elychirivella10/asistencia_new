@@ -16,7 +16,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import Link from "next/link"
-import { navItems } from "@/lib/data/sidebar"
+import { navItems } from "@/features/shared/lib/data/sidebar"
 import { ChevronRight } from "lucide-react"
 
 export function SidebarNav() {

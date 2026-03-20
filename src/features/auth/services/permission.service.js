@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 
 /**
  * Verifies if a role has access to a specific permission (Backend Check).

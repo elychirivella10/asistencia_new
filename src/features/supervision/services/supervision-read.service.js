@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 import { getSupervisionScope } from "./supervision-policy.service";
 import { SUPERVISION_CONFIG } from "../config/supervision.constants";
 

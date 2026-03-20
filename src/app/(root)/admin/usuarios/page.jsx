@@ -4,7 +4,7 @@ import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { AccessDenied } from "@/components/shared/AccessDenied";
 import { getUsersPageData } from "@/features/users/services/user-read.service";
-import { checkPageAccess } from "@/lib/auth-guard";
+import { checkPageAccess } from "@/features/auth/lib/auth-guard";
 import { USER_CONFIG } from "@/features/users/config/user.constants";
 
 export const metadata = {

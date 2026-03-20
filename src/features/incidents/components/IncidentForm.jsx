@@ -13,7 +13,7 @@ import { IncidentFormField } from "./IncidentFormField";
 import { incidentSchema } from "../schemas/incident.schema";
 import { saveIncident } from "../actions/incident-write.action";
 import { getIncidentFormConfig } from "../config/incident-form.config";
-import { formatTimeUTC } from "@/lib/date-utils";
+import { formatTimeUTC } from "@/features/shared/lib/date-utils";
 
 export function IncidentForm({ incident, incidentTypes = [], onSuccess }) {
   const [isPending, startTransition] = useTransition();

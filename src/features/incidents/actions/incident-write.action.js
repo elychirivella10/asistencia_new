@@ -1,11 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createProtectedAction, createProtectedFunction } from "@/lib/safe-action";
+import { createProtectedAction, createProtectedFunction } from "@/features/shared/lib/safe-action";
 import { incidentBaseSchema, timeValidationRefine, timeValidationParams } from "../schemas/incident.schema";
 import { createIncident, updateIncident, deleteIncident as deleteIncidentService } from "../services/incident-write.service";
-import { ROUTES } from "@/config/routes";
-import { parseTime } from "@/lib/date-utils";
+import { ROUTES } from "@/features/shared/config/routes";
+import { parseTime } from "@/features/shared/lib/date-utils";
 import { z } from "zod";
 import { INCIDENT_CONFIG } from "../config/incidents.constants";
 

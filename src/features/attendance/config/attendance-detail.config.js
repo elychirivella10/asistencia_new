@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { formatDateUTC, formatTimeUTC, formatHM } from "@/lib/date-utils";
+import { formatDateUTC, formatTimeUTC, formatHM } from "@/features/shared/lib/date-utils";
 import { ATTENDANCE_CONFIG } from "./attendance.constants";
 
 // Archivo de configuración "inteligente".

@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { useDataTable } from "@/hooks/useDataTable";
+import { useDataTable } from "@/features/shared/hooks/useDataTable";
 
 export function useSupervisionTable(initialData) {
   // Estados de Filtros

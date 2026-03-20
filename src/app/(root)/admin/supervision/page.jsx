@@ -4,7 +4,7 @@ import { SupervisionTable } from "@/features/supervision/components/SupervisionT
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
 import { AccessDenied } from "@/components/shared/AccessDenied";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
-import { checkPageAccess } from "@/lib/auth-guard";
+import { checkPageAccess } from "@/features/auth/lib/auth-guard";
 import { SUPERVISION_CONFIG } from "@/features/supervision/config/supervision.constants";
 
 export const metadata = {

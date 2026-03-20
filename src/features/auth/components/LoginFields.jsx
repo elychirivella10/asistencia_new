@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import { CustomFormField } from '@/components/shared/form/CustomFormField'
 import { Loader2 } from 'lucide-react'
-import { cn, toFormData } from '@/lib/utils'
+import { cn, toFormData } from '@/features/shared/lib/utils'
 import { toast } from 'sonner'
 import { loginFormConfig } from '../config/login-form.config'
 

@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { getRolesPageData } from "@/features/roles/services/role-read.service";
 import { RoleTable } from "@/features/roles/components/RoleTable";
 import { TableSkeleton } from "@/components/shared/TableSkeleton";
-import { checkPageAccess } from "@/lib/auth-guard";
+import { checkPageAccess } from "@/features/auth/lib/auth-guard";
 import { AccessDenied } from "@/components/shared/AccessDenied";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { ROLE_CONFIG } from "@/features/roles/config/role.constants";

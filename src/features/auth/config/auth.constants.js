@@ -13,7 +13,8 @@ export const AUTH_CONFIG = {
   // Cookies y Sesión
   SESSION: {
     COOKIE_NAME: 'session',
-    EXPIRES_IN: 8 * 60 * 60 * 1000, // 8 horas (alineado con reglas y JWT)
+    EXPIRES_IN_MS: 8 * 60 * 60 * 1000, // 8 horas en milisegundos
+    EXPIRES_IN_STR: '8h', // Expiración en cadena para jose signJWT
   },
 
   // Mensajes de error

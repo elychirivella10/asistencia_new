@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 import { getUserScope } from "./user-policy.service";
 import { USER_CONFIG } from "../config/user.constants";
 
@@ -21,7 +21,7 @@ export async function getUsersPageData(
     // Apply security scope
     const securityFilter = await getUserScope(currentUser);
 
-    const safePageSize = Number.isFinite(Number(pageSize)) ? Math.max(1, Math.min(100, Number(pageSize))) : 10;
+    const safePageSize = Number.isFinite(Number(pageSize)) ? Math.max(1, Math.min(USER_CONFIG.PAGINATION.MAX_PAGE_SIZE, Number(pageSize))) : USER_CONFIG.PAGINATION.DEFAULT_PAGE_SIZE;
     const safePage = Number.isFinite(Number(page)) ? Math.max(1, Number(page)) : 1;
     const safeSearchTerm = typeof searchTerm === "string" ? searchTerm.trim() : "";
     const safeAreaId = typeof areaId === "string" ? areaId : USER_CONFIG.STATUS.ALL;
@@ -145,7 +145,7 @@ export async function searchUsers(query, currentUser) {
 
     const users = await prisma.usuarios.findMany({
       where,
-      take: 10,
+      take: USER_CONFIG.PAGINATION.SEARCH_TAKE,
       select: {
         id: true,
         nombre: true,

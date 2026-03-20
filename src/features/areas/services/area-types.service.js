@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 
 export const getAreaTypes = async () => {
   return await prisma.cat_tipos_area.findMany({

@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+import prisma from "@/features/shared/lib/prisma";
 
 /**
  * Obtiene todos los IDs de áreas que un usuario tiene permitido ver/gestionar.

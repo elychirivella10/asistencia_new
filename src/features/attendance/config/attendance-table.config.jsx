@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Eye, MoreHorizontal } from "lucide-react";
-import { formatDateUTC, formatTimeUTC } from "@/lib/date-utils";
+import { formatDateUTC, formatTimeUTC } from "@/features/shared/lib/date-utils";
 import { ATTENDANCE_CONFIG } from "./attendance.constants";
 
 export const getAttendanceTableColumns = (statusMap, onDetails) => {
