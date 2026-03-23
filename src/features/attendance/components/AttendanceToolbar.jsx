@@ -7,7 +7,7 @@ import { CustomFormSelect } from "@/components/shared/form/CustomFormSelect";
 import { useAttendanceToolbar } from "../hooks/useAttendanceToolbar";
 
 export function AttendanceToolbar({ areas = [], statusMap = {} }) {
-  const { from, to, areaId, searchTerm, status, llegada, salida, excepcion, setFrom, setTo, setAreaId, setSearchTerm, setStatus, setLlegada, setSalida, setExcepcion, statusOptions, arrivalOptions, departureOptions, exceptionOptions, selectedArea, areasFetcher, handleSearch, handleReset } =
+  const { from, to, areaId, searchTerm, status, llegada, salida, excepcion, setFrom, setTo, setAreaId, setSearchTerm, setStatus, setLlegada, setSalida, setExcepcion, statusOptions, arrivalOptions, departureOptions, exceptionOptions, selectedArea, areasFetcher, handleSearch, handleReset, isPending } =
     useAttendanceToolbar({ areas, statusMap });
 
   const selectFilters = [
@@ -66,9 +66,9 @@ export function AttendanceToolbar({ areas = [], statusMap = {} }) {
             <X className="mr-2 h-4 w-4" />
             Limpiar
           </Button>
-          <Button onClick={handleSearch} className="h-9 px-4 flex-1 md:flex-none">
+          <Button onClick={handleSearch} disabled={isPending} className="h-9 px-4 flex-1 md:flex-none">
             <Filter className="mr-2 h-4 w-4" />
-            Filtrar
+            {isPending ? "Filtrando..." : "Filtrar"}
           </Button>
         </div>
       </div>

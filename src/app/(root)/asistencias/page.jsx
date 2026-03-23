@@ -8,19 +8,19 @@ import { AccessDenied } from "@/components/shared/AccessDenied";
 import { ATTENDANCE_CONFIG } from "@/features/attendance/config/attendance.constants";
 
 export const metadata = {
-  title: "Control de Asistencias",
+  title: "Control de Asistencias | Biométrico",
   description: "Registro diario de asistencia y puntualidad",
 };
 
 export default async function AsistenciasPage({ searchParams }) {
   const { authorized, session } = await checkPageAccess(ATTENDANCE_CONFIG.PERMISSIONS.READ);
-  
+
   if (!authorized) {
     return <AccessDenied />;
   }
 
   const params = (await searchParams) || {};
-  
+
   const from = params.from || undefined;
   const to = params.to || undefined;
   const areaId = params.areaId;
@@ -36,11 +36,11 @@ export default async function AsistenciasPage({ searchParams }) {
 
   let areas, attendanceData, statusMap, stats, totalCount, totalPages;
   try {
-    ({ areas, attendanceData, statusMap, stats, totalCount, totalPages } = await getAttendancePageData(session, { 
-      from, 
-      to, 
-      areaId, 
-      searchTerm, 
+    ({ areas, attendanceData, statusMap, stats, totalCount, totalPages } = await getAttendancePageData(session, {
+      from,
+      to,
+      areaId,
+      searchTerm,
       status,
       llegada,
       salida,
@@ -53,7 +53,7 @@ export default async function AsistenciasPage({ searchParams }) {
   } catch (error) {
     console.error("Error loading attendance data:", error);
     return (
-      <ErrorAlert 
+      <ErrorAlert
         title="Error al cargar asistencias"
         message="No se pudieron cargar los registros de asistencia. Inténtelo más tarde."
       />

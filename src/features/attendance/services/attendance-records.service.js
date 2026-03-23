@@ -1,5 +1,5 @@
 import prisma from "@/features/shared/lib/prisma";
-import { startOfMonth, endOfMonth } from "date-fns";
+import { startOfDay, endOfDay } from "date-fns";
 import { attendanceFilterSchema } from "../schemas/attendance.schema";
 import { ATTENDANCE_RECORD_SELECT } from "../config/attendance-record.select";
 import { buildAttendanceWhere } from "./attendance-where.service";
@@ -21,8 +21,8 @@ export async function getAttendanceRecords({
   pageSize,
   currentUser,
 } = {}) {
-  const fromDate = from ? (typeof from === "string" ? new Date(from) : from) : startOfMonth(new Date());
-  const toDate = to ? (typeof to === "string" ? new Date(to) : to) : endOfMonth(new Date());
+  const fromDate = from ? (typeof from === "string" ? new Date(from) : from) : startOfDay(new Date());
+  const toDate = to ? (typeof to === "string" ? new Date(to) : to) : endOfDay(new Date());
 
   const validation = attendanceFilterSchema.safeParse({
     from: fromDate, to: toDate, areaId, searchTerm, status, llegada, salida, excepcion,

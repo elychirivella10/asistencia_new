@@ -52,6 +52,9 @@ async function main() {
     { slug: 'supervision:create', descripcion: 'Asignar nuevos supervisores' },
     { slug: 'supervision:update', descripcion: 'Editar asignaciones de supervisión' },
     { slug: 'supervision:delete', descripcion: 'Eliminar asignaciones de supervisión' },
+
+    // Módulo Reportes
+    { slug: 'reports:read', descripcion: 'Generar y exportar reportes del sistema' },
   ]
 
   for (const p of permisos) {

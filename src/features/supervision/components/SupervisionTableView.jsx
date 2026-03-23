@@ -19,7 +19,8 @@ export function SupervisionTableView({
     searchTerm,
     handleSearchChange,
     sortConfig,
-    handleSort
+    handleSort,
+    isPending
   } = tableState;
 
   const handleServerSort = (key) => {
@@ -36,8 +37,9 @@ export function SupervisionTableView({
         onCreate={dialogState.handleCreate}
       />
       
-      <DataTable
-        data={paginatedSupervisions}
+      <div className={`transition-opacity duration-200 ${isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+        <DataTable
+          data={paginatedSupervisions}
         columns={columns}
         totalPages={totalPages}
         currentPage={currentPage}
@@ -45,6 +47,7 @@ export function SupervisionTableView({
         sortConfig={sortConfig}
         onSort={handleServerSort}
       />
+      </div>
 
       <SupervisionTableDialogs
         open={dialogState.open}

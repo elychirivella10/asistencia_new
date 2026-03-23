@@ -8,7 +8,7 @@ import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { INCIDENT_CONFIG } from "@/features/incidents/config/incidents.constants";
 
 export const metadata = {
-  title: "Gestión de Novedades",
+  title: "Gestión de Novedades | Biométrico",
   description: "Registro de vacaciones, reposos y permisos",
 };
 
@@ -28,7 +28,7 @@ export default async function NovedadesPage({ searchParams }) {
   } catch (error) {
     console.error("Error loading incidents data:", error);
     return (
-      <ErrorAlert 
+      <ErrorAlert
         title="Error al cargar novedades"
         message="No se pudieron cargar los datos de novedades. Verifique la conexión a la base de datos."
       />
@@ -45,8 +45,8 @@ export default async function NovedadesPage({ searchParams }) {
       </div>
 
       <Suspense fallback={<TableSkeleton />}>
-        <IncidentTable 
-          data={incidents} 
+        <IncidentTable
+          data={incidents}
           incidentTypes={incidentTypes}
         />
       </Suspense>

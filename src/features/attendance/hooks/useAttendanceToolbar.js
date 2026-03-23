@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { format } from "date-fns";
 import { ATTENDANCE_CONFIG } from "../config/attendance.constants";
 
 const buildEventOptions = (statusMap, tipoEvento, allLabel) => {
@@ -17,8 +18,11 @@ const buildEventOptions = (statusMap, tipoEvento, allLabel) => {
 export function useAttendanceToolbar({ areas = [], statusMap = {} }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [from, setFrom] = useState(searchParams.get("from") || "");
-  const [to, setTo] = useState(searchParams.get("to") || "");
+  const [isPending, startTransition] = useTransition();
+  
+  const todayStr = format(new Date(), "yyyy-MM-dd");
+  const [from, setFrom] = useState(searchParams.get("from") || todayStr);
+  const [to, setTo] = useState(searchParams.get("to") || todayStr);
   const [areaId, setAreaId] = useState(searchParams.get("areaId") || ATTENDANCE_CONFIG.FILTERS.ALL);
   const [searchTerm, setSearchTerm] = useState(searchParams.get("searchTerm") || "");
   const [status, setStatus] = useState(searchParams.get("status") || ATTENDANCE_CONFIG.FILTERS.ALL);
@@ -58,19 +62,23 @@ export function useAttendanceToolbar({ areas = [], statusMap = {} }) {
     if (salida && salida !== ATTENDANCE_CONFIG.FILTERS.ALL) params.set("salida", salida);
     if (excepcion && excepcion !== ATTENDANCE_CONFIG.FILTERS.ALL) params.set("excepcion", excepcion);
     params.set("page", "1");
-    router.push(`?${params.toString()}`);
+    startTransition(() => {
+      router.push(`?${params.toString()}`);
+    });
   };
 
   const handleReset = () => {
-    setFrom("");
-    setTo("");
+    setFrom(todayStr);
+    setTo(todayStr);
     setAreaId(ATTENDANCE_CONFIG.FILTERS.ALL);
     setSearchTerm("");
     setStatus(ATTENDANCE_CONFIG.FILTERS.ALL);
     setLlegada(ATTENDANCE_CONFIG.FILTERS.ALL);
     setSalida(ATTENDANCE_CONFIG.FILTERS.ALL);
     setExcepcion(ATTENDANCE_CONFIG.FILTERS.ALL);
-    router.push("?");
+    startTransition(() => {
+      router.push("?");
+    });
   };
 
   return {
@@ -81,5 +89,6 @@ export function useAttendanceToolbar({ areas = [], statusMap = {} }) {
     areasFetcher,
     handleSearch,
     handleReset,
+    isPending,
   };
 }

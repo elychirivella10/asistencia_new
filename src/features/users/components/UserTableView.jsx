@@ -62,7 +62,7 @@ export function UserTableView({
         onBulkAssign={() => setIsBulkAssignOpen(true)}
       />
 
-      <div className={`rounded-md border transition-opacity duration-200 ${isPending ? "opacity-50" : "opacity-100"}`}>
+      <div className={`transition-opacity duration-200 ${isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
         <DataTable
           data={users || []}
           columns={columns}

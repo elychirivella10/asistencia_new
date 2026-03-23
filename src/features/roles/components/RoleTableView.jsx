@@ -21,7 +21,8 @@ export function RoleTableView({
     handleSort,
     filterText,
     setFilterText,
-    processedData
+    processedData,
+    isPending
   } = tableState;
 
   const {
@@ -48,7 +49,7 @@ export function RoleTableView({
         onCreate={handleCreate}
       />
 
-      <div className="rounded-md border">
+      <div className={`transition-opacity duration-200 ${isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
         <DataTable
           data={paginatedData}
           columns={columns}

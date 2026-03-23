@@ -11,6 +11,9 @@ export function buildAttendanceOrderBy(sortKey, sortDirection) {
     "saldo_minutos",
     "minutos_trabajados_neto",
     "comedor_descuento_min",
+    "hora_entrada",
+    "hora_salida",
+    "estado",
   ]);
 
   if (!sortKey || !allowed.has(sortKey)) return [{ fecha: "desc" }];

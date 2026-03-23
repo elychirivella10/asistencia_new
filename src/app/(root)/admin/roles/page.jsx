@@ -8,7 +8,7 @@ import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { ROLE_CONFIG } from "@/features/roles/config/role.constants";
 
 export const metadata = {
-  title: "Gestión de Roles y Permisos",
+  title: "Gestión de Roles y Permisos | Biométrico",
   description: "Administración de roles y asignación de permisos del sistema",
 };
 
@@ -28,7 +28,7 @@ export default async function RolesPage({ searchParams }) {
   } catch (error) {
     console.error("Error loading roles data:", error);
     return (
-      <ErrorAlert 
+      <ErrorAlert
         title="Error al cargar roles"
         message="No se pudieron cargar los datos de roles. Verifique la conexión a la base de datos."
       />

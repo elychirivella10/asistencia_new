@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useTransition } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AttendanceToolbar } from "./AttendanceToolbar";
 import { AttendanceStats } from "./AttendanceStats";
@@ -20,6 +20,29 @@ export function AttendanceTableView({
   const router = useRouter();
   const searchParams = useSearchParams();
   const dialogState = useAttendanceTableDialogs();
+  const [isPending, startTransition] = useTransition();
+
+  const sortConfig = {
+    key: searchParams.get("sortKey") || "",
+    direction: searchParams.get("sortDirection") || "desc"
+  };
+
+  const handleSort = (key) => {
+    const params = new URLSearchParams(searchParams.toString());
+    const isDesc = sortConfig.key === key && sortConfig.direction === "desc";
+    const nextDir = sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
+    
+    if (isDesc) {
+      params.delete("sortKey");
+      params.delete("sortDirection");
+    } else {
+      params.set("sortKey", key);
+      params.set("sortDirection", nextDir);
+    }
+    startTransition(() => {
+      router.push(`?${params.toString()}`, { scroll: false });
+    });
+  };
 
   const columns = useMemo(
     () => getAttendanceTableColumns(statusMap, dialogState.handleDetails),
@@ -29,7 +52,9 @@ export function AttendanceTableView({
   const handlePageChange = (newPage) => {
     const params = new URLSearchParams(searchParams);
     params.set('page', newPage.toString());
-    router.push(`?${params.toString()}`);
+    startTransition(() => {
+      router.push(`?${params.toString()}`);
+    });
   };
 
   return (
@@ -38,10 +63,12 @@ export function AttendanceTableView({
 
       <AttendanceStats stats={stats} />
       
-      <div className="rounded-md border">
+      <div className={`transition-opacity duration-200 ${isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
         <DataTable 
           data={data || []} 
           columns={columns} 
+          sortConfig={sortConfig}
+          onSort={handleSort}
           emptyMessage="No se encontraron registros de asistencia."
         />
       </div>

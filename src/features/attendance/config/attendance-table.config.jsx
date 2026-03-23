@@ -8,14 +8,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Eye, MoreHorizontal } from "lucide-react";
-import { formatDateUTC, formatTimeUTC } from "@/features/shared/lib/date-utils";
+import { formatDateUTC, formatTimeUTC, formatHM } from "@/features/shared/lib/date-utils";
+import { getGrossMinutes, getNetMinutes } from "@/features/shared/lib/attendance-utils";
 import { ATTENDANCE_CONFIG } from "./attendance.constants";
 
 export const getAttendanceTableColumns = (statusMap, onDetails) => {
   const columns = [
     {
       header: "Usuario",
-      accessorKey: "usuario",
+      accessorKey: "usuarios.nombre",
+      sortable: true,
       cell: (record) => (
         <div className="flex flex-col">
           <span className="font-medium truncate">
@@ -28,11 +30,13 @@ export const getAttendanceTableColumns = (statusMap, onDetails) => {
     {
       header: "Fecha",
       accessorKey: "fecha",
+      sortable: true,
       cell: (record) => formatDateUTC(record.fecha),
     },
     {
       header: "Entrada",
       accessorKey: "hora_entrada",
+      sortable: true,
       cell: (record) => (
         <span className={record.notificado_tardia ? ATTENDANCE_CONFIG.BUSINESS.LATE_NOTIFICATION_COLOR : ""}>
           {formatTimeUTC(record.hora_entrada)}
@@ -42,11 +46,13 @@ export const getAttendanceTableColumns = (statusMap, onDetails) => {
     {
       header: "Salida",
       accessorKey: "hora_salida",
+      sortable: true,
       cell: (record) => formatTimeUTC(record.hora_salida),
     },
     {
       header: "Estado",
       accessorKey: "estado",
+      sortable: true,
       cell: (record) => {
         const slug = record.estado?.toLowerCase();
         const statusInfo = (statusMap && statusMap[slug]) || {
@@ -68,14 +74,16 @@ export const getAttendanceTableColumns = (statusMap, onDetails) => {
       },
     },
     {
+      accessorKey: "minutos_trabajados",
+      header: "T. Bruto",
+      sortable: true,
+      cell: (record) => formatHM(getGrossMinutes(record)),
+    },
+    {
       accessorKey: "minutos_trabajados_neto",
-      header: "Tiempo Neto",
-      cell: (record) => {
-        const mins = record.minutos_trabajados;
-        const hours = Math.floor(mins / 60);
-        const m = mins % 60;
-        return `${hours}h ${m}m`;
-      },
+      header: "T. Neto",
+      sortable: true,
+      cell: (record) => formatHM(getNetMinutes(record)),
     },
     {
       id: "actions",
