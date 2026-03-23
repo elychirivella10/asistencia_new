@@ -1,7 +1,13 @@
+import { useState, useEffect } from "react";
 import { PrintButton } from "@/components/shared/PrintButton";
 import { formatDateUTC, formatTimeUTC } from "@/features/shared/lib/date-utils";
 
 export function IncidentPrintView({ incident }) {
+  const [printDate, setPrintDate] = useState("");
+
+  useEffect(() => {
+    setPrintDate(new Date().toLocaleString());
+  }, []);
   // Para fechas locales (timestamps)
   const formatLocal = (date) => {
       if (!date) return "";
@@ -161,7 +167,7 @@ export function IncidentPrintView({ incident }) {
       {/* Footer */}
       <div className="mt-16 text-center text-xs text-gray-300 border-t pt-4 print:fixed print:bottom-4 print:left-0 print:w-full">
         <p>Generado automáticamente por el Sistema Biométrico</p>
-        <p>{new Date().toLocaleString()}</p>
+        <p>{printDate}</p>
       </div>
 
       {/* Botón Imprimir (Oculto al imprimir) */}

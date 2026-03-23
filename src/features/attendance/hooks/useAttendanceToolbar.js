@@ -1,4 +1,4 @@
-import { useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useTransition, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import { ATTENDANCE_CONFIG } from "../config/attendance.constants";
@@ -20,9 +20,14 @@ export function useAttendanceToolbar({ areas = [], statusMap = {} }) {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   
-  const todayStr = format(new Date(), "yyyy-MM-dd");
-  const [from, setFrom] = useState(searchParams.get("from") || todayStr);
-  const [to, setTo] = useState(searchParams.get("to") || todayStr);
+  const [from, setFrom] = useState(searchParams.get("from") || "");
+  const [to, setTo] = useState(searchParams.get("to") || "");
+
+  useEffect(() => {
+    const todayStr = format(new Date(), "yyyy-MM-dd");
+    if (!searchParams.get("from")) setFrom(todayStr);
+    if (!searchParams.get("to")) setTo(todayStr);
+  }, [searchParams]);
   const [areaId, setAreaId] = useState(searchParams.get("areaId") || ATTENDANCE_CONFIG.FILTERS.ALL);
   const [searchTerm, setSearchTerm] = useState(searchParams.get("searchTerm") || "");
   const [status, setStatus] = useState(searchParams.get("status") || ATTENDANCE_CONFIG.FILTERS.ALL);
@@ -68,6 +73,7 @@ export function useAttendanceToolbar({ areas = [], statusMap = {} }) {
   };
 
   const handleReset = () => {
+    const todayStr = format(new Date(), "yyyy-MM-dd");
     setFrom(todayStr);
     setTo(todayStr);
     setAreaId(ATTENDANCE_CONFIG.FILTERS.ALL);

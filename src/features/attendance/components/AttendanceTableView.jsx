@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useTransition } from "react";
+import { useMemo, useTransition, useEffect } from "react";
+import { toast } from "sonner";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AttendanceToolbar } from "./AttendanceToolbar";
 import { AttendanceStats } from "./AttendanceStats";
@@ -22,6 +23,15 @@ export function AttendanceTableView({
   const dialogState = useAttendanceTableDialogs();
   const [isPending, startTransition] = useTransition();
 
+  useEffect(() => {
+    // Solo notificar si se ha aplicado al menos un filtro (el string no está vacío)
+    if (searchParams.toString() !== "") {
+      const count = pagination?.totalCount || 0;
+      if (count > 0) toast.success(`${count} registros encontrados.`);
+      else toast.info("No se hallaron registros con estos filtros.");
+    }
+  }, [data]);
+
   const sortConfig = {
     key: searchParams.get("sortKey") || "",
     direction: searchParams.get("sortDirection") || "desc"
@@ -31,7 +41,7 @@ export function AttendanceTableView({
     const params = new URLSearchParams(searchParams.toString());
     const isDesc = sortConfig.key === key && sortConfig.direction === "desc";
     const nextDir = sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
-    
+
     if (isDesc) {
       params.delete("sortKey");
       params.delete("sortDirection");
@@ -62,11 +72,11 @@ export function AttendanceTableView({
       <AttendanceToolbar areas={areas} statusMap={statusMap} />
 
       <AttendanceStats stats={stats} />
-      
+
       <div className={`transition-opacity duration-200 ${isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
-        <DataTable 
-          data={data || []} 
-          columns={columns} 
+        <DataTable
+          data={data || []}
+          columns={columns}
           sortConfig={sortConfig}
           onSort={handleSort}
           emptyMessage="No se encontraron registros de asistencia."

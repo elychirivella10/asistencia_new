@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { REPORT_CONFIG } from "../config/report.constants";
 
 const { ALL } = REPORT_CONFIG.FILTERS;
@@ -26,11 +26,15 @@ const buildEventOptions = (statusMap, tipoEvento, allLabel) => {
  * @param {Object}   statusMap
  */
 export function useReportToolbar({ onFilter, areas = [], statusMap = {} }) {
-  const today = new Date().toISOString().split('T')[0];
-  const firstDayOfMonth = new Date(new Date().setDate(1)).toISOString().split('T')[0];
+  const [fechaDesde, setFechaDesde] = useState("");
+  const [fechaHasta, setFechaHasta] = useState("");
 
-  const [fechaDesde, setFechaDesde] = useState(firstDayOfMonth);
-  const [fechaHasta, setFechaHasta] = useState(today);
+  useEffect(() => {
+    const todayVal = new Date().toISOString().split('T')[0];
+    const firstDayVal = new Date(new Date().setDate(1)).toISOString().split('T')[0];
+    setFechaDesde((prev) => prev || firstDayVal);
+    setFechaHasta((prev) => prev || todayVal);
+  }, []);
   const [areaId, setAreaId] = useState(ALL);
   const [searchTerm, setSearchTerm] = useState('');
   const [status, setStatus] = useState(ALL);

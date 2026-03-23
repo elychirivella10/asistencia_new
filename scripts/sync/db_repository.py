@@ -125,6 +125,68 @@ class DBRepository:
             print(f"🔥 Error al insertar en DB (Live): {e}")
             return False
 
+    def get_late_arrival_info(self, cedula, timestamp):
+        """
+        Verifica si un marcaje es tardío y retorna la info necesaria para el correo.
+        Retorna (email, nombre, hora_entrada_turno, es_tarde) o None
+        """
+        try:
+            with psycopg2.connect(self.db_url) as conn:
+                with conn.cursor() as cur:
+                    # Buscamos al usuario, su turno y tolerancia
+                    cur.execute("""
+                        SELECT 
+                            u.id, u.email, u.nombre, 
+                            t.hora_entrada, t.margen_tolerancia_min
+                        FROM usuarios u
+                        JOIN turnos t ON u.turno_id = t.id
+                        WHERE u.cedula = %s AND u.es_activo = True
+                    """, (str(cedula),))
+                    
+                    user_data = cur.fetchone()
+                    if not user_data:
+                        return None
+                    
+                    u_id, email, nombre, hora_entrada, tolerancia = user_data
+                    
+                    if not hora_entrada:
+                        return None
+
+                    # Extraer solo la hora del marcaje para comparar con la hora de entrada del turno
+                    # Nota: timestamp viene como datetime object
+                    hora_marcaje = timestamp.time()
+                    
+                    # Convertir hora_entrada (time) a datetime para sumarle la tolerancia
+                    dt_base = datetime.datetime.combine(datetime.date.today(), hora_entrada)
+                    entrada_con_tolerancia = (dt_base + datetime.timedelta(minutes=tolerancia or 0)).time()
+
+                    if hora_marcaje > entrada_con_tolerancia:
+                        return {
+                            "usuario_id": u_id,
+                            "email": email,
+                            "nombre": nombre,
+                            "hora_entrada": hora_entrada,
+                            "es_tarde": True
+                        }
+                    
+                    return None
+        except Exception as e:
+            print(f"🔥 Error al verificar tardanza: {e}")
+            return None
+
+    def log_notification(self, usuario_id, tipo, destinatario, exito):
+        """Registra el envío de una notificación en la DB."""
+        try:
+            with psycopg2.connect(self.db_url) as conn:
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        INSERT INTO logs_notificaciones (usuario_id, tipo_notificacion, destinatario, enviado_exitosamente, fecha_envio)
+                        VALUES (%s, %s, %s, %s, NOW())
+                    """, (usuario_id, tipo, destinatario, exito))
+                conn.commit()
+        except Exception as e:
+            print(f"🔥 Error al loguear notificación: {e}")
+
     def ensure_comedor_table(self):
         with psycopg2.connect(self.db_url) as conn:
             with conn.cursor() as cur:

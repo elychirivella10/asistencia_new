@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import { format } from "date-fns";
 import { REPORT_CONFIG } from "../config/report.constants";
 
@@ -8,11 +8,15 @@ const { ALL } = REPORT_CONFIG.FILTERS;
  * Manages the specific filters for the Novedades Report.
  */
 export function useNovedadesToolbar({ onFilter, areas = [], tiposPermiso = [] }) {
-  const today = format(new Date(), 'yyyy-MM-dd');
-  const firstDayOfMonth = format(new Date(new Date().setDate(1)), 'yyyy-MM-dd');
+  const [fechaDesde, setFechaDesde] = useState("");
+  const [fechaHasta, setFechaHasta] = useState("");
 
-  const [fechaDesde, setFechaDesde] = useState(firstDayOfMonth);
-  const [fechaHasta, setFechaHasta] = useState(today);
+  useEffect(() => {
+    const todayVal = format(new Date(), 'yyyy-MM-dd');
+    const firstDayVal = format(new Date(new Date().setDate(1)), 'yyyy-MM-dd');
+    setFechaDesde((prev) => prev || firstDayVal);
+    setFechaHasta((prev) => prev || todayVal);
+  }, []);
   
   const [areaId, setAreaId] = useState(ALL);
   const [searchTerm, setSearchTerm] = useState("");
