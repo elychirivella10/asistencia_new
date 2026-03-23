@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import {
   Select,
   SelectContent,
@@ -26,6 +27,19 @@ export function UserToolbar({
 }) {
   const { can } = usePermission();
 
+  const [localSearch, setLocalSearch] = React.useState(searchTerm);
+
+  // Sync local state with prop (for external changes like browser navigation)
+  React.useEffect(() => {
+    setLocalSearch(searchTerm);
+  }, [searchTerm]);
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setLocalSearch(value);
+    onSearchChange(value);
+  };
+
   // Wrapper para llamar al Server Action
   const handleAreaSearch = async (term) => {
     return await searchVisibleAreas(term);
@@ -37,11 +51,10 @@ export function UserToolbar({
         <div className="relative w-full max-w-sm">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            key={searchTerm}
             placeholder="Buscar por nombre o cédula..."
             className="pl-9 h-10 bg-background/60 border-none focus-visible:ring-1 focus-visible:ring-ring"
-            onChange={(e) => onSearchChange(e.target.value)}
-            defaultValue={searchTerm}
+            value={localSearch}
+            onChange={handleInputChange}
           />
         </div>
         

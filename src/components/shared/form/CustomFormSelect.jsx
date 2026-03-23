@@ -16,12 +16,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+const EMPTY_ARRAY = [];
+
 export function CustomFormSelect({
   control,
   name,
   label,
   placeholder,
-  options = [],
+  options = EMPTY_ARRAY,
   description,
   disabled = false,
   className,

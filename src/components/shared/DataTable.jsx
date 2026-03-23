@@ -28,6 +28,16 @@ import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
  * @param {Object} selection - Configuración de selección { selectedIds, onSelectRow, onSelectAll, isAllSelected, isIndeterminate }.
  * @param {string} emptyMessage - Mensaje para mostrar cuando no hay datos.
  */
+const SortIcon = ({ columnKey, sortConfig }) => {
+  if (sortConfig?.key !== columnKey)
+    return <ArrowUpDown className="ml-2 h-4 w-4 text-muted-foreground/50" />;
+  return sortConfig.direction === "asc" ? (
+    <ArrowUp className="ml-2 h-4 w-4 text-primary" />
+  ) : (
+    <ArrowDown className="ml-2 h-4 w-4 text-primary" />
+  );
+};
+
 export function DataTable({
   data,
   columns,
@@ -36,15 +46,6 @@ export function DataTable({
   selection,
   emptyMessage = "No hay resultados.",
 }) {
-  const SortIcon = ({ columnKey }) => {
-    if (sortConfig?.key !== columnKey)
-      return <ArrowUpDown className="ml-2 h-4 w-4 text-muted-foreground/50" />;
-    return sortConfig.direction === "asc" ? (
-      <ArrowUp className="ml-2 h-4 w-4 text-primary" />
-    ) : (
-      <ArrowDown className="ml-2 h-4 w-4 text-primary" />
-    );
-  };
 
   return (
     <div className="rounded-md border">
@@ -81,7 +82,7 @@ export function DataTable({
               >
                 <div className={`flex items-center ${col.className || ""}`}>
                   {col.header}
-                  {col.sortable && <SortIcon columnKey={col.accessorKey} />}
+                  {col.sortable && <SortIcon columnKey={col.accessorKey} sortConfig={sortConfig} />}
                 </div>
               </TableHead>
             ))}

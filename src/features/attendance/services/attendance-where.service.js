@@ -27,14 +27,30 @@ export async function buildAttendanceWhere({
 
   const safeSearchTerm = typeof searchTerm === "string" ? searchTerm.trim() : "";
   if (safeSearchTerm) {
-    where.usuarios = {
-      ...where.usuarios,
-      OR: [
-        { nombre: { contains: safeSearchTerm, mode: "insensitive" } },
-        { apellido: { contains: safeSearchTerm, mode: "insensitive" } },
-        { cedula: { contains: safeSearchTerm, mode: "insensitive" } },
-      ],
-    };
+    const words = safeSearchTerm.split(/\s+/).filter(Boolean);
+    if (words.length > 1) {
+      where.AND = [
+        ...(where.AND || []),
+        ...words.map(word => ({
+          usuarios: {
+            OR: [
+              { nombre: { contains: word, mode: "insensitive" } },
+              { apellido: { contains: word, mode: "insensitive" } },
+              { cedula: { contains: word, mode: "insensitive" } },
+            ]
+          }
+        }))
+      ];
+    } else {
+      where.usuarios = {
+        ...where.usuarios,
+        OR: [
+          { nombre: { contains: safeSearchTerm, mode: "insensitive" } },
+          { apellido: { contains: safeSearchTerm, mode: "insensitive" } },
+          { cedula: { contains: safeSearchTerm, mode: "insensitive" } },
+        ],
+      };
+    }
   }
 
   return where;

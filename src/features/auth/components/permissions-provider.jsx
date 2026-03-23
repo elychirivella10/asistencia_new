@@ -11,7 +11,9 @@ const PermissionsContext = createContext([]);
  * @param {string[]} props.permissions - Array de slugs de permisos (ej. ['users:read', 'users:create'])
  * @param {React.ReactNode} props.children
  */
-export function PermissionsProvider({ permissions = [], children }) {
+const EMPTY_ARRAY = [];
+
+export function PermissionsProvider({ permissions = EMPTY_ARRAY, children }) {
   return (
     <PermissionsContext.Provider value={permissions}>
       {children}

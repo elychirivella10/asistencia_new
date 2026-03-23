@@ -4,6 +4,7 @@ import {
   ChevronsUpDown,
   LogOut,
   Palette,
+  Sparkles,
 } from "lucide-react"
 
 import {
@@ -36,7 +37,7 @@ import { useThemePreset } from "@/components/shared/providers/theme-provider"
 export function SidebarUser({ user }) {
   const { isMobile } = useSidebar()
   const { theme = "system", setTheme } = useTheme()
-  const { preset, setPreset } = useThemePreset()
+  const { preset, setPreset, effect, setEffect } = useThemePreset()
 
   const handleLogout = async () => {
     await logoutAction()
@@ -86,24 +87,34 @@ export function SidebarUser({ user }) {
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <Palette className="mr-2 h-4 w-4" />
-                Tema
+                Modo de Luz
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
-                <DropdownMenuLabel>Modo</DropdownMenuLabel>
                 <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
                   <DropdownMenuRadioItem value="system">Sistema</DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value="light">Claro</DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value="dark">Oscuro</DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>Estilo</DropdownMenuLabel>
-                <DropdownMenuRadioGroup value={preset} onValueChange={setPreset}>
-                  <DropdownMenuRadioItem value="default">Default</DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="minimal">Minimal</DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value="corporate">Corporativo</DropdownMenuRadioItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+
+
+
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <Sparkles className="mr-2 h-4 w-4" />
+                Efectos Especiales
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuRadioGroup value={effect} onValueChange={setEffect}>
+                  <DropdownMenuRadioItem value="none">Ninguno</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="glass">Cristal (Blur)</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="gradient">Degradado</DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
               </DropdownMenuSubContent>
             </DropdownMenuSub>
+
+
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />

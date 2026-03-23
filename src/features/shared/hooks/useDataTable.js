@@ -9,7 +9,9 @@ import { useState, useMemo, useTransition } from "react";
  * @param {Function} options.getValue - Función personalizada para obtener valores de ordenamiento.
  * @param {Function} options.filterFunction - Función personalizada para filtrado.
  */
-export function useDataTable(data = [], { 
+const EMPTY_ARRAY = [];
+
+export function useDataTable(data = EMPTY_ARRAY, { 
   itemsPerPage = 10, 
   getValue = (item, key) => item[key],
   filterFunction = () => true 

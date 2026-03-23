@@ -11,11 +11,13 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+const EMPTY_ARRAY = [];
+
 export function CustomFormCheckboxGroup({
   control,
   name,
   label,
-  options = [],
+  options = EMPTY_ARRAY,
   description,
   className,
 }) {

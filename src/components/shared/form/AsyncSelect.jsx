@@ -141,11 +141,14 @@ export function AsyncSelect({
     handleSearch(initialQuery)
   }, [fetchOnOpen, handleSearch, initialData, initialQuery, open, options.length, query])
 
+  const listboxId = React.useId()
+
   const TriggerButton = (
     <Button
       variant="outline"
       role="combobox"
       aria-expanded={open}
+      aria-controls={listboxId}
       // Añadimos 'truncate' y quitamos flexibilidad si es necesario
       className={cn(
         "w-full justify-between overflow-hidden", 
@@ -179,7 +182,7 @@ export function AsyncSelect({
                 handleSearch(val)
             }}
           />
-          <CommandList>
+          <CommandList id={listboxId}>
             {loading && (
                 <div className="py-6 text-center text-sm text-muted-foreground flex justify-center items-center gap-2">
                     <Loader2 className="h-4 w-4 animate-spin" /> Buscando...

@@ -7,13 +7,16 @@ export function useSupervisionTable(initialData) {
 
   // Definición de Filtros
   const filterFunction = useCallback((item) => {
-    const searchLower = searchTerm.toLowerCase();
-    
-    // Búsqueda en nombre de supervisor o nombre de área
+    const words = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
+    if (words.length === 0) return true;
+
     const supervisorName = `${item.usuarios?.nombre} ${item.usuarios?.apellido}`.toLowerCase();
     const areaName = item.areas?.nombre?.toLowerCase() || "";
     
-    return supervisorName.includes(searchLower) || areaName.includes(searchLower);
+    // Each word must match either the supervisor or the area
+    return words.every(word => 
+      supervisorName.includes(word) || areaName.includes(word)
+    );
   }, [searchTerm]);
 
   const getValue = useCallback((item, key) => {

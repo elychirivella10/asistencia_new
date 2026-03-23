@@ -27,3 +27,18 @@ Traceback (most recent call last):
     cur.execute("""
                 ^^^
 SyntaxError: invalid syntax. Perhaps you forgot a comma?
+Traceback (most recent call last):
+  File "C:\Users\PC\Documents\GitHub\asistencia_new\scripts\sync\summarizer.py", line 52, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\PC\Documents\GitHub\asistencia_new\scripts\sync\summarizer.py", line 31, in process_summary
+    compute_row(
+    ~~~~~~~~~~~^
+        fecha=fecha,
+        ^^^^^^^^^^^^
+    ...<6 lines>...
+        db_repo=self.db_repo,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+TypeError: compute_row() got an unexpected keyword argument 'db_repo'

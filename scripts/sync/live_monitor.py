@@ -37,7 +37,8 @@ def procesar_notificacion_tardanza(db_repo, cedula, timestamp):
                 late_info["email"],
                 late_info["nombre"],
                 timestamp,
-                late_info["hora_entrada"]
+                late_info["hora_entrada"],
+                late_info.get("supervisor_email")
             )
             # Loguear el resultado del envío
             db_repo.log_notification(
@@ -87,8 +88,8 @@ def iniciar_monitor():
                     if db_repo.register_live_attendance(cedula, timestamp, estado, DEVICE_ID):
                          print(f"✅ DB: Guardado -> Cédula: {cedula}")
                          
-                         # Si es ENTRADA, verificamos tardanza para notificar
-                         if estado == "ENTRADA":
+                         # Verificamos si es el primer marcaje del día para notificar tardanza
+                         if db_repo.get_punch_count_by_cedula(cedula, timestamp.date()) == 1:
                              hilo_notify = threading.Thread(
                                  target=procesar_notificacion_tardanza, 
                                  args=(db_repo, cedula, timestamp),

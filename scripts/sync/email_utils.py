@@ -15,9 +15,10 @@ SMTP_USER = os.getenv("SMTP_USER")
 SMTP_PASS = os.getenv("SMTP_PASS")
 SMTP_FROM = os.getenv("SMTP_FROM")
 
-def send_late_arrival_email(to_email, user_name, arrival_time, shift_start):
+def send_late_arrival_email(to_email, user_name, arrival_time, shift_start, cc_email=None):
     """
     Sends an email notification when an employee arrives late.
+    Can optionally send a copy (CC) to a supervisor.
     """
     if not all([SMTP_SERVER, SMTP_USER, SMTP_PASS, to_email]):
         print(f"⚠️ Email skip: SMTP not configured or no recipient for {user_name}")
@@ -27,6 +28,8 @@ def send_late_arrival_email(to_email, user_name, arrival_time, shift_start):
         msg = MIMEMultipart()
         msg['From'] = SMTP_FROM
         msg['To'] = to_email
+        if cc_email:
+            msg['Cc'] = cc_email
         msg['Subject'] = f"Notificación de Llegada Tardía - {user_name}"
 
         body = f"""
@@ -44,12 +47,20 @@ def send_late_arrival_email(to_email, user_name, arrival_time, shift_start):
         """
         msg.attach(MIMEText(body, 'plain'))
 
+        # Los destinatarios finales deben incluir tanto el 'To' como el 'Cc'
+        recipients = [to_email]
+        if cc_email:
+            recipients.append(cc_email)
+
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()
             server.login(SMTP_USER, SMTP_PASS)
-            server.send_message(msg)
+            server.sendmail(SMTP_FROM, recipients, msg.as_string())
         
-        print(f"📧 Email enviado exitosamente a {to_email}")
+        log_msg = f"📧 Email enviado a {to_email}"
+        if cc_email:
+            log_msg += f" (con copia a {cc_email})"
+        print(log_msg)
         return True
     except Exception as e:
         print(f"❌ Error al enviar email: {e}")

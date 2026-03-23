@@ -21,15 +21,15 @@ export async function validateUserUniqueness(cedula, email, current_id) {
 
   if (existing) {
     if (existing.cedula === cedula) {
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: "La cédula ya está registrada.",
         details: { cedula: ["La cédula ya está registrada."] }
       };
     }
     if (existing.email === email) {
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: "El email ya está registrado.",
         details: { email: ["El email ya está registrado."] }
       };
@@ -46,23 +46,23 @@ export async function validateUserUniqueness(cedula, email, current_id) {
  * @returns {Promise<{success: boolean, error?: string}>}
  */
 export async function validateUserDeletion(id) {
-    // Validate if it has punch records
-    const marcajes = await prisma.marcajes.count({
-      where: { usuario_id: id }
-    });
+  // Validate if it has punch records
+  const marcajes = await prisma.marcajes_brutos.count({
+    where: { usuario_id: id }
+  });
 
-    if (marcajes > 0) {
-        return { success: false, error: "No se puede eliminar: El usuario tiene marcajes asociados. Intenta inactivarlo." };
-    }
+  if (marcajes > 0) {
+    return { success: false, error: "No se puede eliminar: El usuario tiene marcajes asociados. Intenta inactivarlo." };
+  }
 
-    // Validate if is area boss
-    const jefeDe = await prisma.areas.count({
-        where: { jefe_id: id }
-    });
+  // Validate if is area boss
+  const jefeDe = await prisma.areas.count({
+    where: { jefe_id: id }
+  });
 
-    if (jefeDe > 0) {
-        return { success: false, error: "No se puede eliminar: El usuario es jefe de una o más áreas." };
-    }
+  if (jefeDe > 0) {
+    return { success: false, error: "No se puede eliminar: El usuario es jefe de una o más áreas." };
+  }
 
-    return { success: true };
+  return { success: true };
 }

@@ -6,7 +6,9 @@ import { Search, X, Filter } from "lucide-react";
 import { CustomFormSelect } from "@/components/shared/form/CustomFormSelect";
 import { useAttendanceToolbar } from "../hooks/useAttendanceToolbar";
 
-export function AttendanceToolbar({ areas = [], statusMap = {} }) {
+const EMPTY_ARRAY = [];
+
+export function AttendanceToolbar({ areas = EMPTY_ARRAY, statusMap = {} }) {
   const { from, to, areaId, searchTerm, status, llegada, salida, excepcion, setFrom, setTo, setAreaId, setSearchTerm, setStatus, setLlegada, setSalida, setExcepcion, statusOptions, arrivalOptions, departureOptions, exceptionOptions, selectedArea, areasFetcher, handleSearch, handleReset, isPending } =
     useAttendanceToolbar({ areas, statusMap });
 

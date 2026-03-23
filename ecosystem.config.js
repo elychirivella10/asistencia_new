@@ -1,5 +1,5 @@
 module.exports = {
-  apps : [
+  apps: [
     {
       name: "biometrico-realtime",
       script: "./scripts/sync/live_monitor.py",
@@ -16,7 +16,7 @@ module.exports = {
       script: "./scripts/sync/summarizer.py",
       interpreter: "python",
       // Configuración de Cron (cada 10 minutos según tu imagen)
-      cron_restart: "*/10 * * * *", 
+      cron_restart: "*/10 * * * *",
       autorestart: false, // Importante: evita que se ejecute en bucle infinito
       out_file: "./logs/cron_out.log",
       error_file: "./logs/cron_err.log"
@@ -38,7 +38,14 @@ module.exports = {
       autorestart: false,
       out_file: "./logs/comedor_sync_out.log",
       error_file: "./logs/comedor_sync_err.log"
+    },
+    {
+      name: "sync-feriados",
+      script: "./scripts/holidays/sync_holidays.py",
+      interpreter: "python",
+      cron_restart: "0 0 1 1 *", // Ejecuta el 1 de enero a medianoche
+      autorestart: false,        // No reiniciar inmediatamente al terminar
+      watch: false
     }
-
   ]
 };

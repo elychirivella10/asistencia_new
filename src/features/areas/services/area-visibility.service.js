@@ -24,7 +24,11 @@ export const getVisibleAreas = async (currentUser, term = "", { take } = {}) => 
     where,
     orderBy: { nombre: "asc" },
     ...(safeTake ? { take: safeTake } : {}),
-    include: { cat_tipos_area: true },
+    include: { 
+      cat_tipos_area: true,
+      areas: true,
+      usuarios_areas_jefe_idTousuarios: true
+    },
   });
 };
 

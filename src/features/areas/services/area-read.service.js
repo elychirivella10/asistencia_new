@@ -8,6 +8,11 @@ export const getAreasPageData = async (currentUser, { sortKey, sortDirection } =
       getVisibleAreas(currentUser),
       getAreaTypes()
     ]);
+    const mappedAreas = areas.map(area => ({
+      ...area,
+      parent: area.areas,
+      jefe: area.usuarios_areas_jefe_idTousuarios
+    }));
     
     const allowed = new Set(["nombre","tipo","parent","jefe"]);
     if (sortKey && allowed.has(sortKey)) {
@@ -19,7 +24,7 @@ export const getAreasPageData = async (currentUser, { sortKey, sortDirection } =
           default: return area[key] || "";
         }
       };
-      areas.sort((a, b) => {
+      mappedAreas.sort((a, b) => {
         let av = getVal(a, sortKey);
         let bv = getVal(b, sortKey);
         if (typeof av === "string") av = av.toLowerCase();
@@ -30,7 +35,7 @@ export const getAreasPageData = async (currentUser, { sortKey, sortDirection } =
       });
     }
 
-    return { areas, tiposArea };
+    return { areas: mappedAreas, tiposArea };
   } catch (error) {
     console.error("Error loading areas page data:", error);
     throw error;

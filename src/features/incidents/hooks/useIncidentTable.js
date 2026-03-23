@@ -12,10 +12,13 @@ export function useIncidentTable(data) {
 
   // Definición de Filtros
   const filterFunction = useCallback((item) => {
-    const matchesSearch = 
-      item.usuario?.nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.usuario?.apellido?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.usuario?.cedula?.includes(searchTerm);
+    const words = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
+    
+    const matchesSearch = words.length === 0 || words.every(word => 
+      item.usuario?.nombre?.toLowerCase().includes(word) ||
+      item.usuario?.apellido?.toLowerCase().includes(word) ||
+      item.usuario?.cedula?.includes(word)
+    );
     
     const matchesStatus = statusFilter === "all" || item.estado === statusFilter;
 

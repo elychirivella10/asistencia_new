@@ -73,3 +73,32 @@
 ✅ Datos obtenidos: 351 usuarios, 99004 marcajes.
 ✨ Sincronización con Base de Datos completada.
 🔌 Desconectado del biométrico.
+
+--- 🔄 INICIANDO SYNC COMPLETA (18:22:44) ---
+
+📡 Conectando al biométrico en 10.100.2.157:4370...
+✅ Datos obtenidos: 351 usuarios, 18 marcajes.
+✨ Sincronización con Base de Datos completada.
+🔌 Desconectado del biométrico.
+
+--- 🔄 INICIANDO SYNC COMPLETA (18:24:50) ---
+
+📡 Conectando al biométrico en 10.100.12.249:4370...
+
+--- 🔄 INICIANDO SYNC COMPLETA (18:25:26) ---
+
+📡 Conectando al biométrico en 10.100.12.249:4370...
+
+--- 🔄 INICIANDO SYNC COMPLETA (18:26:33) ---
+
+📡 Conectando al biométrico en 10.100.12.249:4370...
+✅ Datos obtenidos: 351 usuarios, 99231 marcajes.
+✨ Sincronización con Base de Datos completada.
+🔌 Desconectado del biométrico.
+
+--- 🔄 INICIANDO SYNC COMPLETA (19:00:00) ---
+
+📡 Conectando al biométrico en 10.100.12.249:4370...
+✅ Datos obtenidos: 351 usuarios, 99237 marcajes.
+✨ Sincronización con Base de Datos completada.
+🔌 Desconectado del biométrico.

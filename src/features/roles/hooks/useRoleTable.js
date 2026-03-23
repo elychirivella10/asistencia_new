@@ -2,7 +2,9 @@ import { useCallback, useState } from "react";
 import { useDataTable } from "@/features/shared/hooks/useDataTable";
 import { ROLE_CONFIG } from "../config/role.constants";
 
-export function useRoleTable(roles = []) {
+const EMPTY_ARRAY = [];
+
+export function useRoleTable(roles = EMPTY_ARRAY) {
   const [filterText, setFilterText] = useState("");
 
   const filterFunction = useCallback((item) => {

@@ -48,20 +48,20 @@ export function LoginFields({ className }) {
 
       if (result?.error) {
         if (result.details) {
-           // Errores de validación del servidor (si los hubiera)
-           Object.entries(result.details).forEach(([field, messages]) => {
-             form.setError(field, { type: 'server', message: messages[0] })
-           })
+          // Errores de validación del servidor (si los hubiera)
+          Object.entries(result.details).forEach(([field, messages]) => {
+            form.setError(field, { type: 'server', message: messages[0] })
+          })
         } else {
-           // Error general (credenciales incorrectas, etc.)
-           setServerError(result.error)
-           toast.error(result.error)
+          // Error general (credenciales incorrectas, etc.)
+          setServerError(result.error)
+          toast.error(result.error)
         }
       } else if (result?.success) {
         toast.success('Bienvenido al sistema')
         router.push('/')
       }
-      
+
     } catch (error) {
       console.error(error)
       setServerError('Error inesperado al iniciar sesión')
@@ -74,6 +74,7 @@ export function LoginFields({ className }) {
     <div className={cn("flex flex-col gap-6", className)}>
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Bienvenido</h1>
+        <h2 className="text-xl font-bold">sistema de registro de asistencia</h2>
         <p className="text-muted-foreground text-balance text-sm">
           Ingresa tu cédula para acceder al sistema
         </p>

@@ -36,7 +36,6 @@ class AttendanceSummarizer:
                     feriado_desc=feriado_desc,
                     comedor_marks_map=comedor_marks_map,
                     novelty_types_map=novelty_types_map,
-                    db_repo=self.db_repo,
                 )
                 for u in usuarios
             ]

@@ -30,11 +30,25 @@ export async function getUsersPageData(
     const where = { ...securityFilter };
 
     if (safeSearchTerm) {
-      where.OR = [
-        { nombre: { contains: safeSearchTerm, mode: "insensitive" } },
-        { apellido: { contains: safeSearchTerm, mode: "insensitive" } },
-        { cedula: { contains: safeSearchTerm } },
-      ];
+      const words = safeSearchTerm.split(/\s+/).filter(Boolean);
+      if (words.length > 1) {
+        where.AND = [
+          ...(where.AND || []),
+          ...words.map((word) => ({
+            OR: [
+              { nombre: { contains: word, mode: "insensitive" } },
+              { apellido: { contains: word, mode: "insensitive" } },
+              { cedula: { contains: word, mode: "insensitive" } },
+            ],
+          })),
+        ];
+      } else {
+        where.OR = [
+          { nombre: { contains: safeSearchTerm, mode: "insensitive" } },
+          { apellido: { contains: safeSearchTerm, mode: "insensitive" } },
+          { cedula: { contains: safeSearchTerm, mode: "insensitive" } },
+        ];
+      }
     }
 
     if (safeAreaId && safeAreaId !== USER_CONFIG.STATUS.ALL) {
@@ -129,11 +143,13 @@ export async function searchUsers(query, currentUser) {
       AND: [
         { es_activo: true },
         {
-          OR: [
-            { nombre: { contains: query, mode: 'insensitive' } },
-            { apellido: { contains: query, mode: 'insensitive' } },
-            { cedula: { contains: query } }
-          ]
+          AND: query.split(/\s+/).filter(Boolean).map(word => ({
+            OR: [
+              { nombre: { contains: word, mode: 'insensitive' } },
+              { apellido: { contains: word, mode: 'insensitive' } },
+              { cedula: { contains: word, mode: 'insensitive' } }
+            ]
+          }))
         }
       ]
     };

@@ -15,7 +15,9 @@ import { saveIncident } from "../actions/incident-write.action";
 import { getIncidentFormConfig } from "../config/incident-form.config";
 import { formatTimeUTC } from "@/features/shared/lib/date-utils";
 
-export function IncidentForm({ incident, incidentTypes = [], onSuccess }) {
+const EMPTY_ARRAY = [];
+
+export function IncidentForm({ incident, incidentTypes = EMPTY_ARRAY, onSuccess }) {
   const [isPending, startTransition] = useTransition();
   
   const isEditing = !!incident;
