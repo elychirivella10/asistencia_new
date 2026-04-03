@@ -71,13 +71,31 @@ export const novedadesReportColumns = [
  * PDF column mapping for the Novedades report.
  */
 export const novedadesPdfColumns = [
-  { header: "Empleado",       dataKey: "Empleado" },
-  { header: "Cédula",         dataKey: "Cedula" },
-  { header: "Área",           dataKey: "Area" },
-  { header: "Desde",          dataKey: "Desde" },
-  { header: "Hasta",          dataKey: "Hasta" },
-  { header: "Tipo Permiso",   dataKey: "TipoPermiso" },
-  { header: "Duración",       dataKey: "Duracion" },
-  { header: "Aprobador",      dataKey: "Aprobador" },
-  { header: "Estado",         dataKey: "Estado" },
+  { header: "Empleado", dataKey: "Empleado" },
+  { header: "Cédula", dataKey: "Cédula", halign: "center" },
+  { header: "Área", dataKey: "Área" },
+  { header: "Desde", dataKey: "Desde", halign: "center" },
+  { header: "Hasta", dataKey: "Hasta", halign: "center" },
+  { header: "Tipo Permiso", dataKey: "Tipo Permiso" },
+  { header: "Duración", dataKey: "Duración", halign: "center" },
+  { header: "Aprobador", dataKey: "Aprobador" },
+  { header: "Estado", dataKey: "Estado", halign: "center" },
 ];
+
+/**
+ * Maps raw data into a friendly format for Excel/PDF exports,
+ * exactly aligned with the visible table columns.
+ */
+export const getNovedadesExportData = (data) => {
+  return data.map(row => ({
+    "Empleado": row.Empleado ?? '—',
+    "Cédula": row.Cedula ?? '—',
+    "Área": row.Area ?? '—',
+    "Desde": row.Desde ?? '—',
+    "Hasta": row.Hasta ?? '—',
+    "Tipo Permiso": row.TipoPermiso ?? '—',
+    "Duración": row.Duracion ?? '—',
+    "Aprobador": row.Aprobador ?? '—',
+    "Estado": row.Estado ?? '—'
+  }));
+};

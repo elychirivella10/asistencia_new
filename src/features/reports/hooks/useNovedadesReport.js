@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { getNovedadesReportAction } from "../actions/novedades-read.action";
 import { exportToExcel } from "../utils/exportToExcel";
 import { exportToPDF } from "../utils/exportToPDF";
-import { novedadesPdfColumns } from "../config/novedades-report.config";
+import { novedadesPdfColumns, getNovedadesExportData } from "../config/novedades-report.config";
 import { REPORT_CONFIG } from "../config/report.constants";
 
 const PAGE_SIZE = REPORT_CONFIG.PAGINATION.PAGE_SIZE;
@@ -37,12 +37,14 @@ export function useNovedadesReport() {
   };
 
   const handleExportExcel = () => {
-    exportToExcel(allData, "Reporte_Novedades", "Novedades");
+    const dataToExport = getNovedadesExportData(allData);
+    exportToExcel(dataToExport, "Reporte_Novedades", "Novedades");
   };
 
   const handleExportPDF = async () => {
+    const dataToExport = getNovedadesExportData(allData);
     await exportToPDF(
-      allData,
+      dataToExport,
       novedadesPdfColumns,
       "Reporte_Novedades",
       "Historial de Permisos y Novedades"

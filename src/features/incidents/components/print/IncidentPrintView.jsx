@@ -75,7 +75,7 @@ export function IncidentPrintView({ incident }) {
             </div>
             <div className="flex justify-between">
               <span className="text-sm text-gray-500">Fecha Solicitud</span>
-              <span className="font-medium">
+              <span className="font-medium" suppressHydrationWarning={true}>
                 {formatLocal(incident.created_at)}
               </span>
             </div>
@@ -167,7 +167,7 @@ export function IncidentPrintView({ incident }) {
       {/* Footer */}
       <div className="mt-16 text-center text-xs text-gray-300 border-t pt-4 print:fixed print:bottom-4 print:left-0 print:w-full">
         <p>Generado automáticamente por el Sistema Biométrico</p>
-        <p>{printDate}</p>
+        <p suppressHydrationWarning={true}>{printDate}</p>
       </div>
 
       {/* Botón Imprimir (Oculto al imprimir) */}

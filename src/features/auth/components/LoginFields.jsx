@@ -74,7 +74,7 @@ export function LoginFields({ className }) {
     <div className={cn("flex flex-col gap-6", className)}>
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Bienvenido</h1>
-        <h2 className="text-xl font-bold">sistema de registro de asistencia</h2>
+        <h2 className="text-xl font-bold">Sistema de Registro de Asistencia</h2>
         <p className="text-muted-foreground text-balance text-sm">
           Ingresa tu cédula para acceder al sistema
         </p>

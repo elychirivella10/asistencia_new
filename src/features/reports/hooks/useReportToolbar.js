@@ -5,8 +5,8 @@ import { REPORT_CONFIG } from "../config/report.constants";
 
 const { ALL } = REPORT_CONFIG.FILTERS;
 
-const buildEventOptions = (statusMap, tipoEvento, allLabel) => {
-  const options = [{ value: ALL, label: allLabel }];
+const buildEventOptions = (statusMap, tipoEvento) => {
+  const options = [];
   Object.entries(statusMap || {}).forEach(([key, val]) => {
     if (tipoEvento === 'DIA') {
       if (val.tipo_evento === 'DIA' || !val.tipo_evento) options.push({ value: key, label: val.label });
@@ -35,41 +35,40 @@ export function useReportToolbar({ onFilter, areas = [], statusMap = {} }) {
     setFechaDesde((prev) => prev || firstDayVal);
     setFechaHasta((prev) => prev || todayVal);
   }, []);
-  const [areaId, setAreaId] = useState(ALL);
+  const [areaId, setAreaId] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [status, setStatus] = useState(ALL);
-  const [llegada, setLlegada] = useState(ALL);
-  const [salida, setSalida] = useState(ALL);
-  const [excepcion, setExcepcion] = useState(ALL);
+  const [status, setStatus] = useState([]);
+  const [llegada, setLlegada] = useState([]);
+  const [salida, setSalida] = useState([]);
+  const [excepcion, setExcepcion] = useState([]);
 
   const options = useMemo(() => ({
-    statusOptions:    buildEventOptions(statusMap, 'DIA',       'Todos los Estados'),
-    arrivalOptions:   buildEventOptions(statusMap, 'LLEGADA',   'Todas las Llegadas'),
-    departureOptions: buildEventOptions(statusMap, 'SALIDA',    'Todas las Salidas'),
-    exceptionOptions: buildEventOptions(statusMap, 'EXCEPCION', 'Todas las Excepciones'),
+    statusOptions:    buildEventOptions(statusMap, 'DIA'),
+    arrivalOptions:   buildEventOptions(statusMap, 'LLEGADA'),
+    departureOptions: buildEventOptions(statusMap, 'SALIDA'),
+    exceptionOptions: buildEventOptions(statusMap, 'EXCEPCION'),
   }), [statusMap]);
 
   const selectedArea = useMemo(() => {
-    if (areaId === ALL) return { id: ALL, nombre: 'Todas las Áreas' };
-    return areas.find((a) => a.id === areaId) ?? null;
+    if (!areaId || areaId.length === 0) return [];
+    return areas.filter((a) => areaId.includes(a.id));
   }, [areaId, areas]);
 
   const areasFetcher = async (query) => {
     const q = typeof query === 'string' ? query.trim().toLowerCase() : '';
-    const allOption = { id: ALL, nombre: 'Todas las Áreas' };
-    if (!q) return [allOption, ...areas];
-    return [allOption, ...areas.filter((a) => a.nombre.toLowerCase().includes(q))];
+    if (!q) return areas;
+    return areas.filter((a) => a.nombre.toLowerCase().includes(q));
   };
 
   const buildFilters = () => ({
     fechaDesde,
     fechaHasta,
-    areaId:     areaId !== ALL ? areaId : undefined,
+    areaId:     areaId?.length > 0 ? areaId : undefined,
     searchTerm: searchTerm || undefined,
-    status:     status !== ALL ? status : undefined,
-    llegada:    llegada !== ALL ? llegada : undefined,
-    salida:     salida !== ALL ? salida : undefined,
-    excepcion:  excepcion !== ALL ? excepcion : undefined,
+    status:     status?.length > 0 ? status : undefined,
+    llegada:    llegada?.length > 0 ? llegada : undefined,
+    salida:     salida?.length > 0 ? salida : undefined,
+    excepcion:  excepcion?.length > 0 ? excepcion : undefined,
   });
 
   const handleFilter = () => {
@@ -78,8 +77,8 @@ export function useReportToolbar({ onFilter, areas = [], statusMap = {} }) {
   };
 
   const handleReset = () => {
-    setAreaId(ALL); setSearchTerm(''); setStatus(ALL);
-    setLlegada(ALL); setSalida(ALL); setExcepcion(ALL);
+    setAreaId([]); setSearchTerm(''); setStatus([]);
+    setLlegada([]); setSalida([]); setExcepcion([]);
     onFilter({ fechaDesde, fechaHasta });
   };
 

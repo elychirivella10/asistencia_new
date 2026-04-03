@@ -98,6 +98,7 @@ export function IncidentFormField({ field, form, incident }) {
             <FormControl>
               <Input
                 type="date"
+                suppressHydrationWarning={true}
                 value={formField.value ? (() => {
                     const d = new Date(formField.value);
                     const year = d.getFullYear();

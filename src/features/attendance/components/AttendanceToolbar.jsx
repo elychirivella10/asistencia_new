@@ -1,9 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AsyncSelect } from "@/components/shared/form/AsyncSelect";
+import { AsyncMultiSelect } from "@/components/shared/form/AsyncMultiSelect";
 import { Search, X, Filter } from "lucide-react";
-import { CustomFormSelect } from "@/components/shared/form/CustomFormSelect";
+import { CustomMultiSelect } from "@/components/shared/form/CustomMultiSelect";
 import { useAttendanceToolbar } from "../hooks/useAttendanceToolbar";
 
 const EMPTY_ARRAY = [];
@@ -33,7 +33,7 @@ export function AttendanceToolbar({ areas = EMPTY_ARRAY, statusMap = {} }) {
         {areas.length > 0 && (
           <div className="flex flex-col gap-1.5">
             <span className="text-sm font-medium text-muted-foreground">Área</span>
-            <AsyncSelect
+            <AsyncMultiSelect
               value={areaId}
               onChange={setAreaId}
               fetcher={areasFetcher}
@@ -52,7 +52,7 @@ export function AttendanceToolbar({ areas = EMPTY_ARRAY, statusMap = {} }) {
         {selectFilters.map((f) => (
           <div key={f.label} className="flex flex-col gap-1.5">
             <span className="text-sm font-medium text-muted-foreground">{f.label}</span>
-            <CustomFormSelect value={f.value} onChange={f.onChange} options={f.options} placeholder={f.placeholder} triggerClassName="h-9 bg-background/60 border-none focus-visible:ring-1 focus-visible:ring-ring" useFormControl={false} />
+            <CustomMultiSelect value={f.value} onChange={f.onChange} options={f.options} placeholder={f.placeholder} triggerClassName="h-9 bg-background/60 border-none focus-visible:ring-1 focus-visible:ring-ring" useFormControl={false} />
           </div>
         ))}
       </div>

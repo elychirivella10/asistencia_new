@@ -56,7 +56,7 @@ export const getIncidentColumns = (onView, onEdit, onDelete, can = () => true) =
           <Badge variant="outline">{row.cat_tipos_permiso?.nombre || "N/A"}</Badge>
           {!row.es_dia_completo && row.hora_inicio && row.hora_fin && (
             <span className="text-xs text-muted-foreground mt-1">
-              {formatTimeUTC(row.hora_inicio)} - 
+              {formatTimeUTC(row.hora_inicio)} -
               {formatTimeUTC(row.hora_fin)}
             </span>
           )}
@@ -101,16 +101,7 @@ export const getIncidentColumns = (onView, onEdit, onDelete, can = () => true) =
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                {canRead && (
-                  <DropdownMenuItem onClick={() => onView && onView(row)}>
-                    <Link href={`/print/novedades/${row.id}`} target="_blank" className="flex items-center cursor-pointer">
-                      <Printer className="mr-2 h-4 w-4" />
-                      <span>Imprimir Soporte</span>
-                    </Link>
-                  </DropdownMenuItem>
-                )}
-
+                <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                 {canUpdate && (
                   <DropdownMenuItem onClick={() => onEdit(row)}>
                     <Pencil className="mr-2 h-4 w-4" />

@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AttendanceReportView } from "./AttendanceReportView";
-
 import { NovedadesReportView } from "./NovedadesReportView";
 
 /**

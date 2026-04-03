@@ -17,13 +17,13 @@ export function AppSidebar({ user, ...props }) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <div className="flex gap-2 py-2 text-sidebar-accent-foreground ">
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <GalleryVerticalEnd className="size-4" />
-            </div>
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">Biométrico</span>
-              <span className="truncate text-xs">Sistema v1.0</span>
-            </div>
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-secondary text-primary-foreground">
+            <img src="/logo.png" alt="Logo" className="size-4" />
+          </div>
+          <div className="grid flex-1 text-left text-sm leading-tight">
+            <span className="truncate font-semibold">Biométrico</span>
+            <span className="truncate text-xs">Sistema v1.0</span>
+          </div>
         </div>
       </SidebarHeader>
       <SidebarContent>

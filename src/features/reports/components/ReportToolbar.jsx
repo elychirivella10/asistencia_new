@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Filter, X, FileSpreadsheet, FileText, Search } from "lucide-react";
-import { AsyncSelect } from "@/components/shared/form/AsyncSelect";
-import { CustomFormSelect } from "@/components/shared/form/CustomFormSelect";
+import { AsyncMultiSelect } from "@/components/shared/form/AsyncMultiSelect";
+import { CustomMultiSelect } from "@/components/shared/form/CustomMultiSelect";
 import { useReportToolbar } from "../hooks/useReportToolbar";
 import { REPORT_CONFIG } from "../config/report.constants";
 
@@ -72,7 +72,7 @@ export function ReportToolbar({
         {areas.length > 0 && (
           <div className="flex flex-col gap-1.5">
             <span className="text-sm font-medium text-muted-foreground">Área</span>
-            <AsyncSelect
+            <AsyncMultiSelect
               value={areaId}
               onChange={setAreaId}
               fetcher={areasFetcher}
@@ -92,7 +92,7 @@ export function ReportToolbar({
         {selectFilters.map((f) => (
           <div key={f.label} className="flex flex-col gap-1.5">
             <span className="text-sm font-medium text-muted-foreground">{f.label}</span>
-            <CustomFormSelect
+            <CustomMultiSelect
               value={f.value}
               onChange={f.onChange}
               options={f.options}

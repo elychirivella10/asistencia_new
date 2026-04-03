@@ -132,14 +132,6 @@
   border-color: var(--border) !important;
 }
 
-
-
-
-
-
-
-
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -188,13 +180,10 @@
   background-color: oklch(from var(--sidebar) l c h / 15%) !important;
 }
 
-
 /* Fix for potential clipping in sidebar during glass effect */
 [data-effect="glass"] [data-slot="sidebar-inner"] {
   overflow: visible !important;
 }
-
-
 
 [data-effect="gradient"] [data-sidebar="sidebar"],
 [data-effect="gradient"] [data-slot="sidebar-inner"] {
@@ -205,5 +194,3 @@
 [data-effect="gradient"].dark [data-slot="sidebar-inner"] {
   background-image: linear-gradient(to bottom, var(--sidebar), oklch(from var(--sidebar) calc(l + 0.08) c h)) !important;
 }
-
-

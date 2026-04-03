@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { getAttendanceReportAction } from "../actions/report-read.action";
 import { exportToExcel } from "../utils/exportToExcel";
 import { exportToPDF } from "../utils/exportToPDF";
-import { attendancePdfColumns } from "../config/attendance-report.config";
+import { attendancePdfColumns, getAttendanceExportData } from "../config/attendance-report.config";
 import { REPORT_CONFIG } from "../config/report.constants";
 
 const PAGE_SIZE = REPORT_CONFIG.PAGINATION.PAGE_SIZE;
@@ -43,12 +43,14 @@ export function useAttendanceReport() {
   };
 
   const handleExportExcel = () => {
-    exportToExcel(allData, "Reporte_Asistencia", "Consolidado");
+    const dataToExport = getAttendanceExportData(allData);
+    exportToExcel(dataToExport, "Reporte_Asistencia", "Consolidado");
   };
 
   const handleExportPDF = async () => {
+    const dataToExport = getAttendanceExportData(allData);
     await exportToPDF(
-      allData,
+      dataToExport,
       attendancePdfColumns,
       "Reporte_Asistencia",
       "Reporte Consolidado de Asistencia"

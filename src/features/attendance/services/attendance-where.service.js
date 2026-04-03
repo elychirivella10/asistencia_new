@@ -17,10 +17,31 @@ export async function buildAttendanceWhere({
     fecha: isSameDay(fromDate, toDate) ? buildDateWhereSingle(fromDate) : buildDateWhereRange(fromDate, toDate),
   };
 
-  if (status && status !== ATTENDANCE_CONFIG.FILTERS.ALL) where.estado = { equals: status };
-  if (llegada && llegada !== ATTENDANCE_CONFIG.FILTERS.ALL) where.llegada_slug = { equals: llegada };
-  if (salida && salida !== ATTENDANCE_CONFIG.FILTERS.ALL) where.salida_slug = { equals: salida };
-  if (excepcion && excepcion !== ATTENDANCE_CONFIG.FILTERS.ALL) where.estado_excepcion_slug = { equals: excepcion };
+  const toArray = (val) => {
+    if (!val) return [];
+    if (Array.isArray(val)) return val;
+    if (typeof val === 'string' && val.includes(',')) return val.split(',').map(s => s.trim()).filter(Boolean);
+    return [val];
+  };
+  const buildInsensitiveOr = (field, values) => {
+    return toArray(values).map(v => ({ [field]: { equals: v, mode: 'insensitive' } }));
+  };
+  
+  const andConditions = [];
+
+  const statusArr = toArray(status);
+  const llegadaArr = toArray(llegada);
+  const salidaArr = toArray(salida);
+  const excepcionArr = toArray(excepcion);
+
+  if (statusArr.length > 0 && !statusArr.includes(ATTENDANCE_CONFIG.FILTERS.ALL)) andConditions.push({ OR: buildInsensitiveOr('estado', statusArr) });
+  if (llegadaArr.length > 0 && !llegadaArr.includes(ATTENDANCE_CONFIG.FILTERS.ALL)) andConditions.push({ OR: buildInsensitiveOr('llegada_slug', llegadaArr) });
+  if (salidaArr.length > 0 && !salidaArr.includes(ATTENDANCE_CONFIG.FILTERS.ALL)) andConditions.push({ OR: buildInsensitiveOr('salida_slug', salidaArr) });
+  if (excepcionArr.length > 0 && !excepcionArr.includes(ATTENDANCE_CONFIG.FILTERS.ALL)) andConditions.push({ OR: buildInsensitiveOr('estado_excepcion_slug', excepcionArr) });
+
+  if (andConditions.length > 0) {
+    where.AND = andConditions;
+  }
 
   const securityFilter = await getAttendanceScope(currentUser, areaId);
   Object.assign(where, securityFilter);

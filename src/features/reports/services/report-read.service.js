@@ -33,20 +33,33 @@ export async function getAttendanceReport({
   };
 
   // Optional filters
-  if (areaId && areaId !== 'all') {
-    where.usuarios = { area_id: areaId };
+  const toArray = (val) => Array.isArray(val) ? val : [val];
+
+  if (areaId && areaId.length > 0 && areaId !== 'all') {
+    where.usuarios = { area_id: { in: toArray(areaId) } };
   }
-  if (status && status !== 'all') {
-    where.estado = status;
+
+  const andConditions = [];
+
+  const buildInsensitiveOr = (field, values) => {
+    return toArray(values).map(v => ({ [field]: { equals: v, mode: 'insensitive' } }));
+  };
+
+  if (status && status.length > 0 && status !== 'all') {
+    andConditions.push({ OR: buildInsensitiveOr('estado', status) });
   }
-  if (llegada && llegada !== 'all') {
-    where.llegada_slug = llegada;
+  if (llegada && llegada.length > 0 && llegada !== 'all') {
+    andConditions.push({ OR: buildInsensitiveOr('llegada_slug', llegada) });
   }
-  if (salida && salida !== 'all') {
-    where.salida_slug = salida;
+  if (salida && salida.length > 0 && salida !== 'all') {
+    andConditions.push({ OR: buildInsensitiveOr('salida_slug', salida) });
   }
-  if (excepcion && excepcion !== 'all') {
-    where.estado_excepcion_slug = excepcion;
+  if (excepcion && excepcion.length > 0 && excepcion !== 'all') {
+    andConditions.push({ OR: buildInsensitiveOr('estado_excepcion_slug', excepcion) });
+  }
+
+  if (andConditions.length > 0) {
+    where.AND = andConditions;
   }
 
   const rows = await prisma.resumen_diario.findMany({
@@ -112,7 +125,8 @@ export async function getAttendanceReport({
       MinutosBruto: getGrossMinutes(r),
       MinutosNeto: getNetMinutes(r),
       MinutosExtras: r.extras_informativas_min ?? 0,
-      MinutosTardanza: r.llegada_slug === 'llegada_tardia' ? Math.abs(r.minutos_debe ?? 0) : 0,
+      MinutosDebe: Math.abs(r.minutos_debe ?? 0),
+      NotificadoTardia: r.notificado_tardia ?? false,
       Estado: r.estado ?? 'DESCONOCIDO',
     };
   });

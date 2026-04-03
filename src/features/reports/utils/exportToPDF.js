@@ -28,12 +28,20 @@ export async function exportToPDF(data, columns, filename, title = 'Reporte') {
     30
   );
 
+  const columnStyles = {};
+  columns.forEach((c, index) => {
+    if (c.halign) {
+      columnStyles[index] = { halign: c.halign };
+    }
+  });
+
   autoTable(doc, {
     startY: 35,
     head: [columns.map((c) => c.header)],
     body: data.map((row) => columns.map((c) => row[c.dataKey] ?? '—')),
     styles: { fontSize: 8, cellPadding: 2 },
-    headStyles: { fillColor: [41, 128, 185] },
+    headStyles: { fillColor: [41, 128, 185], halign: 'center' },
+    columnStyles: columnStyles,
     alternateRowStyles: { fillColor: [245, 245, 245] },
   });
 

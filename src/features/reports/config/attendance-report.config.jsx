@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { formatHM } from "@/features/shared/lib/date-utils";
+import { ATTENDANCE_CONFIG } from "@/features/attendance/config/attendance.constants";
 
 /**
  * Column definitions for the Consolidated Attendance report table.
@@ -34,6 +35,11 @@ export const getAttendanceReportColumns = (statusMap) => [
     header: "Entrada",
     accessorKey: "HoraEntrada",
     className: "text-center",
+    cell: (row) => (
+      <span className={row.NotificadoTardia ? ATTENDANCE_CONFIG.BUSINESS.LATE_NOTIFICATION_COLOR : ""}>
+        {row.HoraEntrada}
+      </span>
+    ),
   },
   {
     header: "Salida",
@@ -71,12 +77,12 @@ export const getAttendanceReportColumns = (statusMap) => [
       ),
   },
   {
-    header: "Tardanza",
-    accessorKey: "MinutosTardanza",
+    header: "Debe (m)",
+    accessorKey: "MinutosDebe",
     className: "text-right",
     cell: (row) =>
-      row.MinutosTardanza > 0 ? (
-        <span className="text-destructive font-medium">{formatHM(row.MinutosTardanza)}</span>
+      row.MinutosDebe > 0 ? (
+        <span className="text-destructive font-medium">{formatHM(row.MinutosDebe)}</span>
       ) : (
         <span className="text-muted-foreground">—</span>
       ),
@@ -111,16 +117,37 @@ export const getAttendanceReportColumns = (statusMap) => [
  */
 export const attendancePdfColumns = [
   { header: "Empleado", dataKey: "Empleado" },
-  { header: "Cédula", dataKey: "Cedula" },
-  { header: "Área", dataKey: "Area" },
-  { header: "Fecha", dataKey: "Fecha" },
-  { header: "Entrada", dataKey: "HoraEntrada" },
-  { header: "Salida", dataKey: "HoraSalida" },
-  { header: "Permiso", dataKey: "Permiso" },
-  { header: "T. Bruto", dataKey: "MinutosBruto" },
-  { header: "T. Neto", dataKey: "MinutosNeto" },
-  { header: "Extra", dataKey: "MinutosExtras" },
-  { header: "Tardanza (m)", dataKey: "MinutosTardanza" },
-  { header: "Estado", dataKey: "Estado" },
+  { header: "Cédula", dataKey: "Cédula", halign: "center" },
+  { header: "Área", dataKey: "Área" },
+  { header: "Fecha", dataKey: "Fecha", halign: "center" },
+  { header: "Entrada", dataKey: "Entrada", halign: "center" },
+  { header: "Salida", dataKey: "Salida", halign: "center" },
+  { header: "Permiso", dataKey: "Permiso", halign: "center" },
+  { header: "T. Bruto", dataKey: "T. Bruto", halign: "right" },
+  { header: "T. Neto", dataKey: "T. Neto", halign: "right" },
+  { header: "Extra", dataKey: "Extra", halign: "right" },
+  { header: "Debe (m)", dataKey: "Debe (m)", halign: "right" },
+  { header: "Estado", dataKey: "Estado", halign: "center" },
 ];
+
+/**
+ * Maps raw data into a friendly format for Excel/PDF exports,
+ * exactly aligned with the visible table columns.
+ */
+export const getAttendanceExportData = (data) => {
+  return data.map(row => ({
+    "Empleado": row.Empleado ?? '—',
+    "Cédula": row.Cedula ?? '—',
+    "Área": row.Area ?? '—',
+    "Fecha": row.Fecha ?? '—',
+    "Entrada": row.HoraEntrada ?? '—',
+    "Salida": row.HoraSalida ?? '—',
+    "Permiso": row.Permiso ? row.Permiso.replace(/_/g, ' ') : '—',
+    "T. Bruto": formatHM(row.MinutosBruto),
+    "T. Neto": formatHM(row.MinutosNeto),
+    "Extra": row.MinutosExtras > 0 ? `+${formatHM(row.MinutosExtras)}` : '—',
+    "Debe (m)": row.MinutosDebe > 0 ? formatHM(row.MinutosDebe) : '—',
+    "Estado": row.Estado ?? '—'
+  }));
+};
 
