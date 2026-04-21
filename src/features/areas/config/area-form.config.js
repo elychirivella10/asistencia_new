@@ -62,6 +62,12 @@ export const getAreaFormConfig = (areas = [], currentAreaId = null, tiposArea = 
                 <span className="text-xs text-muted-foreground">{user.email}</span>
             </div>
         ),
+      },
+      {
+        name: "excluir_tardanza",
+        label: "Exento de Tardanza/Inasistencia",
+        description: "Si se activa, no se enviarán correos automáticos si los empleados de esta área llegan tarde.",
+        component: "checkbox"
       }
     ]
   ];

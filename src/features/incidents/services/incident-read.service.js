@@ -42,7 +42,7 @@ export async function getIncidents(currentUser, { limit = 50, sortKey, sortDirec
           nombre: true,
           apellido: true,
           cedula: true,
-          areas_pertenece: {
+          area: {
             select: {
               nombre: true
             }
@@ -86,7 +86,7 @@ export async function getIncidentById(id) {
           nombre: true,
           apellido: true,
           cedula: true,
-          areas_pertenece: {
+          area: {
             select: {
               nombre: true
             }

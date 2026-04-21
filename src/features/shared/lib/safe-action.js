@@ -1,5 +1,5 @@
 import { getSession } from "@/features/auth/lib/auth";
-import { verifyPermission } from "@/features/auth/services/permission.service";
+import { verifyPermission } from "@/features/permissions/services/authorization.service";
 
 /**
  * Crea una Server Action protegida con validación de sesión, permisos y esquema Zod.

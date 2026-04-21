@@ -16,11 +16,11 @@ export const saveArea = createProtectedAction(
   areaSchema,
   async (data, session) => {
     try {
-      const { id, nombre, parent_id, jefe_id, tipo_id } = data
+      const { id, nombre, parent_id, jefe_id, tipo_id, excluir_tardanza } = data
 
       // Validate recursion: An area cannot be its own parent
       if (id && parent_id === id) {
-         return { success: false, error: 'Un área no puede ser padre de sí misma.' }
+        return { success: false, error: 'Un área no puede ser padre de sí misma.' }
       }
 
       // --- HIERARCHY VALIDATION ---
@@ -28,12 +28,13 @@ export const saveArea = createProtectedAction(
       if (!validation.success) {
         return validation;
       }
-      
+
       const dataToSave = {
         nombre,
         parent_id,
         jefe_id,
         tipo_id,
+        excluir_tardanza,
       }
 
       let result;
@@ -44,10 +45,10 @@ export const saveArea = createProtectedAction(
       }
 
       if (result.success) {
-        revalidatePath(ROUTES.ADMIN.AREAS)
+        revalidatePath(ROUTES.ADMIN.AREAS.path)
         return { success: true, message: 'Área guardada correctamente' }
       }
-      
+
       return { success: false, error: 'Error al guardar el área' }
 
     } catch (error) {
@@ -65,12 +66,12 @@ export const deleteArea = createProtectedFunction(
   async (id) => {
     try {
       const result = await deleteAreaService(id);
-      
+
       if (!result.success) {
         return result;
       }
 
-      revalidatePath(ROUTES.ADMIN.AREAS)
+      revalidatePath(ROUTES.ADMIN.AREAS.path)
       return { success: true, message: 'Área eliminada correctamente' }
     } catch (error) {
       console.error('Error deleting area:', error)

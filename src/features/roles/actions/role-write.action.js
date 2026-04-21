@@ -36,18 +36,18 @@ export const saveRole = createProtectedAction(
       }
 
       if (result.success) {
-        revalidatePath(ROUTES.ADMIN.ROLES);
-        return { 
-          success: true, 
-          message: data.id ? "Rol actualizado correctamente" : "Rol creado correctamente" 
+        revalidatePath(ROUTES.ADMIN.ROLES.path);
+        return {
+          success: true,
+          message: data.id ? "Rol actualizado correctamente" : "Rol creado correctamente"
         };
       }
 
       return result;
 
     } catch (error) {
-        console.error("Error saving role:", error);
-        return { success: false, error: "Error inesperado al guardar el rol" };
+      console.error("Error saving role:", error);
+      return { success: false, error: "Error inesperado al guardar el rol" };
     }
   }
 );
@@ -60,12 +60,12 @@ export const deleteRole = createProtectedFunction(
   async (id) => {
     try {
       const result = await deleteRoleService(id);
-      
+
       if (result.success) {
-        revalidatePath(ROUTES.ADMIN.ROLES);
+        revalidatePath(ROUTES.ADMIN.ROLES.path);
         return { success: true, message: "Rol eliminado correctamente" };
       }
-      
+
       return result;
 
     } catch (error) {

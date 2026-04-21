@@ -1,6 +1,6 @@
 import prisma from "@/features/shared/lib/prisma";
 import { getAreasPermitidas } from "./area-hierarchy.service";
-import { verifyPermission } from "@/features/auth/services/permission.service";
+import { verifyPermission } from "@/features/permissions/services/authorization.service";
 import { AREA_CONFIG } from "../config/area.constants";
 
 export const getVisibleAreas = async (currentUser, term = "", { take } = {}) => {
@@ -26,8 +26,8 @@ export const getVisibleAreas = async (currentUser, term = "", { take } = {}) => 
     ...(safeTake ? { take: safeTake } : {}),
     include: { 
       cat_tipos_area: true,
-      areas: true,
-      usuarios_areas_jefe_idTousuarios: true
+      parent: true,
+      jefe: true
     },
   });
 };

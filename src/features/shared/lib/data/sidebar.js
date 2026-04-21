@@ -8,7 +8,8 @@ import {
   Building2,
   Eye,
   UserLock,
-  BarChart3
+  BarChart3,
+  Clock
 } from "lucide-react"
 import { ROUTES } from "@/features/shared/config/routes"
 
@@ -19,20 +20,23 @@ import { ROUTES } from "@/features/shared/config/routes"
 export const navItems = [
   {
     title: "Asistencias",
-    url: ROUTES.ATTENDANCE,
+    url: ROUTES.ATTENDANCE.path,
+    permission: ROUTES.ATTENDANCE.permission,
     icon: ClipboardList,
   },
   {
     title: "Reportes",
-    url: ROUTES.REPORTES,
+    url: ROUTES.REPORTES.path,
+    permission: ROUTES.REPORTES.permission,
     icon: FileText,
-  }, 
+  },
   {
     title: "Novedades",
-    url: ROUTES.INCIDENTS,
+    url: ROUTES.INCIDENTS.path,
+    permission: ROUTES.INCIDENTS.permission,
     icon: Users,
   },
- 
+
   {
     title: "Configuración",
     url: "#",
@@ -41,28 +45,33 @@ export const navItems = [
     items: [
       {
         title: "Usuarios",
-        url: ROUTES.ADMIN.USUARIOS,
+        url: ROUTES.ADMIN.USUARIOS.path,
+        permission: ROUTES.ADMIN.USUARIOS.permission,
         icon: Users,
       },
       {
         title: "Permisos y Roles",
-        url: ROUTES.ADMIN.ROLES,
+        url: ROUTES.ADMIN.ROLES.path,
+        permission: ROUTES.ADMIN.ROLES.permission,
         icon: UserLock
       },
       {
         title: "Áreas",
-        url: ROUTES.ADMIN.AREAS,
+        url: ROUTES.ADMIN.AREAS.path,
+        permission: ROUTES.ADMIN.AREAS.permission,
         icon: Building2,
       },
       {
         title: "Supervisión",
-        url: ROUTES.ADMIN.SUPERVISION,
+        url: ROUTES.ADMIN.SUPERVISION.path,
+        permission: ROUTES.ADMIN.SUPERVISION.permission,
         icon: Eye
       },
       {
-        title: "Base de Datos",
-        url: ROUTES.CONFIG.DATABASE,
-        icon: Database
+        title: "Turnos",
+        url: ROUTES.ADMIN.TURNOS.path,
+        permission: ROUTES.ADMIN.TURNOS.permission,
+        icon: Clock
       },
     ],
   },

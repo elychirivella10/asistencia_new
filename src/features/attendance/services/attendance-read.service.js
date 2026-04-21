@@ -56,7 +56,7 @@ export const getAttendancePageData = async (currentUser, params = {}) => {
  */
 export const getAttendanceRecordById = async (id) => {
   try {
-    const record = await prisma.asistencia.findUnique({
+    const record = await prisma.resumen_diario.findUnique({
       where: { id },
       include: {
         usuario: {
@@ -68,20 +68,8 @@ export const getAttendanceRecordById = async (id) => {
             area: { select: { nombre: true } },
           },
         },
-        dispositivo: {
-          select: {
-            nombre: true,
-            ip: true,
-            ubicacion: true,
-          },
-        },
-        estadoAsistencia: {
-          select: {
-            nombre: true,
-            color_hex: true,
-            categoria: true,
-          },
-        },
+        cat_llegada: true,
+        cat_salida: true
       },
     });
 

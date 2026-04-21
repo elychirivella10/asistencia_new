@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "biometrico-realtime",
-      script: "./scripts/sync/live_monitor.py",
+      script: "./scripts/clocks/live_monitor.py",
       interpreter: "python", // Asegúrate que 'python' funcione en tu CMD
       restart_delay: 10000,  // Espera 10 seg antes de reiniciar si falla
       autorestart: true,     // Reinicia automáticamente si el script muere
@@ -13,7 +13,7 @@ module.exports = {
     },
     {
       name: "asistencia-scheduler",
-      script: "./scripts/sync/summarizer.py",
+      script: "./scripts/clocks/summarizer.py",
       interpreter: "python",
       // Configuración de Cron (cada 10 minutos según tu imagen)
       cron_restart: "*/10 * * * *",
@@ -23,7 +23,7 @@ module.exports = {
     },
     {
       name: "asistencia-sync-full",
-      script: "./scripts/sync/run.py", // Script refactorizado
+      script: "./scripts/clocks/run.py", // Script refactorizado
       interpreter: "python",
       cron_restart: "0 * * * *", // Se ejecuta al minuto 0 de cada hora
       autorestart: false,
@@ -32,7 +32,7 @@ module.exports = {
     },
     {
       name: "comedor-sync",
-      script: "./scripts/sync/run_comedor.py",
+      script: "./scripts/clocks/run_comedor.py",
       interpreter: "python",
       cron_restart: "5 * * * *", // Ejecuta al minuto 5 de cada hora, después de asistencia
       autorestart: false,
@@ -41,7 +41,7 @@ module.exports = {
     },
     {
       name: "sync-feriados",
-      script: "./scripts/holidays/sync_holidays.py",
+      script: "./scripts/clocks/sync_holidays.py",
       interpreter: "python",
       cron_restart: "0 0 1 1 *", // Ejecuta el 1 de enero a medianoche
       autorestart: false,        // No reiniciar inmediatamente al terminar

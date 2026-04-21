@@ -1,0 +1,34 @@
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/run.py", line 8, in <module>
+    from config import IP_RELOJ, PUERTO, DB_URL, DIAS_PARA_DEPURAR, PATH_ULTIMA_LIMPIEZA, DEVICE_ID
+  File "/var/www/html/scripts/sync/config.py", line 3, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/run.py", line 8, in <module>
+    from config import IP_RELOJ, PUERTO, DB_URL, DIAS_PARA_DEPURAR, PATH_ULTIMA_LIMPIEZA, DEVICE_ID
+  File "/var/www/html/scripts/sync/config.py", line 3, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/run.py", line 61, in <module>
+    main()
+  File "/var/www/html/scripts/sync/run.py", line 30, in main
+    attendances = zk_service.get_attendance()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/www/html/scripts/sync/zk_service.py", line 41, in get_attendance
+    return self.conn.get_attendance()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrador/.local/lib/python3.12/site-packages/zk/base.py", line 1553, in get_attendance
+    attendance_data, size = self.read_with_buffer(const.CMD_ATTLOG_RRQ)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrador/.local/lib/python3.12/site-packages/zk/base.py", line 1532, in read_with_buffer
+    data.append(self.__read_chunk(start,MAX_CHUNK))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrador/.local/lib/python3.12/site-packages/zk/base.py", line 1489, in __read_chunk
+    data = self.__recieve_chunk()
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrador/.local/lib/python3.12/site-packages/zk/base.py", line 1440, in __recieve_chunk
+    data_recv = broken_header + self.__sock.recv(16)
+                                ^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

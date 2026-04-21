@@ -1,8 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { getSession } from "@/features/auth/lib/auth";
-import { getUserPermissions } from "@/features/auth/services/permission.service";
-import { PermissionsProvider } from "@/features/auth/components/permissions-provider";
+import { getUserPermissions } from "@/features/permissions/services/authorization.service";
+import { PermissionsProvider } from "@/features/permissions/components/PermissionsProvider";
 import { ThemeProvider } from "@/components/shared/providers/theme-provider";
 import "./globals.css";
 

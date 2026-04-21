@@ -36,7 +36,7 @@ export const getUserTableColumns = (onEdit, onDelete, can = () => false) => {
       accessorKey: "area",
       sortable: true,
       cell: (user) =>
-        user.areas_pertenece?.nombre || (
+        user.area?.nombre || (
           <span className="text-muted-foreground italic">{UI.LABELS.NO_AREA}</span>
         ),
     },

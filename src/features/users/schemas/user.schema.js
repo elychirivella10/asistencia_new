@@ -23,6 +23,10 @@ export const userSchema = z.object({
     (val) => val === 'on' || val === 'true' || val === true,
     z.boolean()
   ).default(true),
+  excluir_tardanza: z.preprocess(
+    (val) => val === 'on' || val === 'true' || val === true,
+    z.boolean()
+  ).default(false),
 });
 
 export const bulkAssignSchema = z.object({

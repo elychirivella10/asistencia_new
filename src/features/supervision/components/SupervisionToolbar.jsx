@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus, Search } from "lucide-react";
-import { usePermission } from "@/features/auth/components/permissions-provider";
+import { usePermission } from "@/features/permissions/components/PermissionsProvider";
 import { SUPERVISION_CONFIG } from "../config/supervision.constants";
 
 export function SupervisionToolbar({

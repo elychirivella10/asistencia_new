@@ -5,6 +5,12 @@
   "scripts": {
     "dev": "cross-env TZ=UTC next dev -p 3001",
     "diagnose:status": "node scripts/diagnose-status.js",
+    "personnel:sync": "python scripts/manager.py sync-personnel",
+    "personnel:apply": "python scripts/manager.py sync-personnel --apply",
+    "personnel:check-areas": "python scripts/manager.py check-areas",
+    "personnel:audit": "python scripts/manager.py audit-personnel",
+    "clocks:sync": "python scripts/manager.py sync-attendance",
+    "clocks:summarize": "python scripts/manager.py summarize",
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "eslint"

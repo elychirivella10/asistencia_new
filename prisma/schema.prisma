@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  engineType = "library"
 }
 
 datasource db {
@@ -11,14 +12,15 @@ model areas {
   nombre                           String                @db.VarChar(255)
   parent_id                        String?               @db.Uuid
   jefe_id                          String?               @db.Uuid
+  excluir_tardanza                 Boolean?              @default(false)
   created_at                       DateTime?             @default(now()) @db.Timestamptz(6)
   tipo_id                          Int?
-  areas                            areas?                @relation("areasToareas", fields: [parent_id], references: [id], onUpdate: NoAction)
-  other_areas                      areas[]               @relation("areasToareas")
+  parent                           areas?                @relation("areasToareas", fields: [parent_id], references: [id], onUpdate: NoAction)
+  sub_areas                        areas[]               @relation("areasToareas")
   cat_tipos_area                   cat_tipos_area?       @relation(fields: [tipo_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  usuarios_areas_jefe_idTousuarios usuarios?             @relation("areas_jefe_idTousuarios", fields: [jefe_id], references: [id], onUpdate: NoAction, map: "fk_jefe_area")
+  jefe                             usuarios?             @relation("areas_jefe_idTousuarios", fields: [jefe_id], references: [id], onUpdate: NoAction, map: "fk_jefe_area")
   permisos_supervision             permiso_supervision[]
-  usuarios_usuarios_area_idToareas usuarios[]            @relation("usuarios_area_idToareas")
+  usuarios                         usuarios[]            @relation("usuarios_area_idToareas")
 }
 
 model permiso_supervision {
@@ -26,8 +28,8 @@ model permiso_supervision {
   usuario_id String    @db.Uuid
   area_id    String    @db.Uuid
   created_at DateTime? @default(now()) @db.Timestamptz(6)
-  areas      areas     @relation(fields: [area_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  usuarios   usuarios  @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  area       areas     @relation(fields: [area_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  usuario    usuarios  @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([usuario_id, area_id])
 }
@@ -74,7 +76,7 @@ model marcajes_brutos {
   dispositivo_id String?   @db.VarChar(50)
   id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   updated_at     DateTime? @default(now()) @db.Timestamptz(6)
-  usuarios       usuarios? @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  usuario        usuarios? @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([usuario_id, fecha_hora])
 }
@@ -86,7 +88,7 @@ model marcajes_comedor {
   dispositivo_id String?   @db.VarChar(50)
   origen         String?   @default("COMEDOR") @db.VarChar(20)
   updated_at     DateTime? @default(now()) @db.Timestamptz(6)
-  usuarios       usuarios? @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  usuario        usuarios? @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([usuario_id, fecha_hora], map: "idx_comedor_usuario_fecha")
   @@unique([usuario_id, fecha_hora])
@@ -117,7 +119,7 @@ model resumen_diario {
   saldo_minutos           Int?                    @default(0)
   cat_llegada             cat_estados_asistencia? @relation("ResumenLlegada", fields: [llegada_slug], references: [slug], onDelete: NoAction, onUpdate: NoAction)
   cat_salida              cat_estados_asistencia? @relation("ResumenSalida", fields: [salida_slug], references: [slug], onDelete: NoAction, onUpdate: NoAction)
-  usuarios                usuarios?               @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  usuario                 usuarios?               @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([usuario_id, fecha])
   @@index([fecha], map: "idx_resumen_fecha")
@@ -131,13 +133,14 @@ model usuarios {
   biometric_id          String?               @unique(map: "unique_biometric_id") @db.VarChar(20)
   area_id               String?               @db.Uuid
   turno_id              String?               @db.Uuid
+  excluir_tardanza      Boolean?              @default(false)
   es_activo             Boolean?              @default(true)
   created_at            DateTime?             @default(now()) @db.Timestamptz(6)
   cedula                String                @unique @db.VarChar(20)
   fecha_ingreso         DateTime?             @default(dbgenerated("CURRENT_DATE")) @db.Date
   rol_id                Int?
   password              String?               @db.VarChar(255)
-  areas_jefe_de         areas[]               @relation("areas_jefe_idTousuarios")
+  jefe_de_areas         areas[]               @relation("areas_jefe_idTousuarios")
   logs_notificaciones   logs_notificaciones[]
   marcajes_brutos       marcajes_brutos[]
   marcajes_comedor      marcajes_comedor[]
@@ -145,7 +148,7 @@ model usuarios {
   novedades_solicitadas novedades[]           @relation("MisNovedades")
   permisos_supervision  permiso_supervision[]
   resumen_diario        resumen_diario[]
-  areas_pertenece       areas?                @relation("usuarios_area_idToareas", fields: [area_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  area                  areas?                @relation("usuarios_area_idToareas", fields: [area_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   roles                 roles?                @relation(fields: [rol_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   turnos                turnos?               @relation(fields: [turno_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -210,7 +213,7 @@ model logs_notificaciones {
   destinatario         String?   @db.VarChar(255)
   enviado_exitosamente Boolean?  @default(true)
   fecha_envio          DateTime? @default(now()) @db.Timestamptz(6)
-  usuarios             usuarios? @relation(fields: [usuario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usuario              usuarios? @relation(fields: [usuario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model sistema_config {

@@ -16,8 +16,8 @@ export const getUserDefaultValues = (user) => ({
   email: user?.email || "",
   area_id: user?.area_id || "",
   turno_id: user?.turnos?.id || user?.turno_id || "",
-  es_activo: user?.es_activo ?? true,
   biometric_id: user?.biometric_id || USER_CONFIG.UI.LABELS.NOT_LINKED,
+  excluir_tardanza: user?.excluir_tardanza ?? false,
 });
 
 export const getUserFormConfig = (areas = [], turnos = [], roles = [], user = null) => [
@@ -88,8 +88,14 @@ export const getUserFormConfig = (areas = [], turnos = [], roles = [], user = nu
     {
       name: "es_activo",
       label: "Estado del Usuario",
-      component: "switch",
+      component: "checkbox",
       description: (val) => val ? "Usuario activo en el sistema" : "Usuario inactivo (no marca asistencia)"
+    },
+    {
+      name: "excluir_tardanza",
+      label: "Exento de Tardanza/Inasistencia",
+      component: "checkbox",
+      description: "Si se activa, el supervisor de esta persona no recibirá notificaciones por sus llegadas fuera de hora."
     }
   ]
 ].filter(row => row.length > 0);

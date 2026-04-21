@@ -7,12 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { toast } from "sonner";
 import { saveArea } from "../actions/area-write.action";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CustomFormField } from "@/components/shared/form/CustomFormField";
 import { CustomFormSelect } from "@/components/shared/form/CustomFormSelect";
 import { AsyncSelect } from "@/components/shared/form/AsyncSelect";
 import { getAreaFormConfig } from "../config/area-form.config";
 import { Loader2 } from "lucide-react";
+import { CustomFormCheckbox } from "@/components/shared/form/CustomFormCheckbox";
 
 export function AreaForm({ area, areas, tiposArea, onSuccess }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,11 +30,24 @@ export function AreaForm({ area, areas, tiposArea, onSuccess }) {
       parent_id: area?.parent_id || "",
       jefe_id: area?.jefe_id || "",
       tipo_id: area?.tipo_id ? String(area.tipo_id) : "", // Convertir a string
+      excluir_tardanza: area?.excluir_tardanza ?? false,
     },
   });
 
   const selectedTipoId = form.watch("tipo_id");
   const formConfig = getAreaFormConfig(areas, area?.id, tiposArea, selectedTipoId);
+
+  // Forzar actualización de campos al cambiar el prop area
+  useEffect(() => {
+    form.reset({
+      id: area?.id || "",
+      nombre: area?.nombre || "",
+      parent_id: area?.parent_id || "",
+      jefe_id: area?.jefe_id || "",
+      tipo_id: area?.tipo_id ? String(area.tipo_id) : "",
+      excluir_tardanza: area?.excluir_tardanza ?? false,
+    });
+  }, [area, form]);
 
   // Resetear parent_id si el tipo cambia y el padre actual ya no es válido
   // Esto es una mejora de UX para evitar inconsistencias visuales
@@ -53,7 +67,7 @@ export function AreaForm({ area, areas, tiposArea, onSuccess }) {
          // Enviar valores incluso si son vacíos para permitir limpiar campos (el backend los convierte a null)
          // Solo evitamos undefined/null puros que no deberían estar en FormData
          if (value !== undefined && value !== null) {
-            formData.append(key, value);
+            formData.append(key, typeof value === 'boolean' ? String(value) : value);
          }
       });
 
@@ -95,6 +109,17 @@ export function AreaForm({ area, areas, tiposArea, onSuccess }) {
                     label={field.label}
                     placeholder={field.placeholder}
                     options={field.options}
+                    description={field.description}
+                  />
+                );
+              }
+              if (field.component === "checkbox") {
+                return (
+                  <CustomFormCheckbox
+                    key={field.name}
+                    control={form.control}
+                    name={field.name}
+                    label={field.label}
                     description={field.description}
                   />
                 );

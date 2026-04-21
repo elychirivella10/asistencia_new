@@ -60,10 +60,7 @@ export async function getAttendanceRecords({
     const totalPages = Math.max(1, Math.ceil(totalCount / safePageSize));
     const boundedPage = Math.min(safePage, totalPages);
 
-    const formattedRecords = records.map(record => ({
-      ...record,
-      usuario: record.usuarios,
-    }));
+    const formattedRecords = records;
 
     return {
       records: formattedRecords,

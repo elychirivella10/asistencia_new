@@ -42,3 +42,205 @@ Traceback (most recent call last):
     )
     ^
 TypeError: compute_row() got an unexpected keyword argument 'db_repo'
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 2, in <module>
+    from config import DB_URL
+  File "/var/www/html/scripts/sync/config.py", line 3, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 2, in <module>
+    from config import DB_URL
+  File "/var/www/html/scripts/sync/config.py", line 3, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2026-04-08, null, null, 0, 0, falta, f, , null, 2026-04-08 15:53:55.705985+00, 0, 0, t, null, sin_llegada, sin_salida, 0, 0, 0, 0).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 16:00:13.923472+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 16:10:13.922787+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 16:20:13.881394+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 16:30:13.901903+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 16:40:13.879887+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 16:50:13.836554+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 17:00:14.039774+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 17:10:13.897805+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 17:20:13.928473+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 17:30:13.925875+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 17:40:13.918459+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 17:50:13.949417+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 18:00:13.999634+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 18:10:14.034901+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 18:20:13.945386+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 18:30:13.89253+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 18:30:54.385835+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/summarizer.py", line 51, in <module>
+    AttendanceSummarizer(db_repo).process_summary()
+  File "/var/www/html/scripts/sync/summarizer.py", line 43, in process_summary
+    self.db_repo.batch_upsert_daily_summary(batch_records)
+  File "/var/www/html/scripts/sync/db/summary_repo.py", line 166, in batch_upsert_daily_summary
+    cur.executemany(sql, records)
+psycopg2.errors.NotNullViolation: null value in column "id" of relation "resumen_diario" violates not-null constraint
+DETAIL:  Failing row contains (f6a0265d-3999-40f7-b4d0-041fefb2bbb7, 2025-05-29, 2025-05-29 11:24:19+00, 2025-05-29 20:34:18+00, 549, 69, presente, t, , null, 2026-04-08 18:32:30.982426+00, 0, 549, f, null, llegada_tardia, salida_puntual, 0, 480, 0, 69).
+

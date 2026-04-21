@@ -1,4 +1,4 @@
-import { createScopeFilter, validateAreaAccess } from "@/features/shared/services/policy-core.service";
+import { createScopeFilter, validateAreaAccess } from "@/features/permissions/services/scoping.service";
 import { ATTENDANCE_CONFIG } from "../config/attendance.constants";
 
 /**

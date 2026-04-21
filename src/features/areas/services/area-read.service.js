@@ -8,11 +8,9 @@ export const getAreasPageData = async (currentUser, { sortKey, sortDirection } =
       getVisibleAreas(currentUser),
       getAreaTypes()
     ]);
-    const mappedAreas = areas.map(area => ({
-      ...area,
-      parent: area.areas,
-      jefe: area.usuarios_areas_jefe_idTousuarios
-    }));
+    
+    // Manual mapping removed as schema now provides correct names
+    const mappedAreas = areas; 
     
     const allowed = new Set(["nombre","tipo","parent","jefe"]);
     if (sortKey && allowed.has(sortKey)) {
@@ -43,21 +41,14 @@ export const getAreasPageData = async (currentUser, { sortKey, sortDirection } =
 };
 
 export const getAreas = async () => {
-  const areas = await prisma.areas.findMany({
+  return await prisma.areas.findMany({
     include: {
-      areas: true, // Parent area
-      usuarios_areas_jefe_idTousuarios: true, // Boss
-      cat_tipos_area: true // Area type
+      parent: true,
+      jefe: true,
+      cat_tipos_area: true
     },
     orderBy: {
       nombre: 'asc'
     }
   });
-
-  // Map to clean relation names
-  return areas.map(area => ({
-    ...area,
-    parent: area.areas,
-    jefe: area.usuarios_areas_jefe_idTousuarios
-  }));
 };

@@ -53,7 +53,7 @@ export async function buildAttendanceWhere({
       where.AND = [
         ...(where.AND || []),
         ...words.map(word => ({
-          usuarios: {
+          usuario: {
             OR: [
               { nombre: { contains: word, mode: "insensitive" } },
               { apellido: { contains: word, mode: "insensitive" } },
@@ -63,8 +63,8 @@ export async function buildAttendanceWhere({
         }))
       ];
     } else {
-      where.usuarios = {
-        ...where.usuarios,
+      where.usuario = {
+        ...where.usuario,
         OR: [
           { nombre: { contains: safeSearchTerm, mode: "insensitive" } },
           { apellido: { contains: safeSearchTerm, mode: "insensitive" } },

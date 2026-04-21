@@ -10,9 +10,9 @@ export const attendanceDetailConfig = {
     {
       title: 'Información del Empleado',
       fields: [
-        { label: 'Nombre', key: 'usuarios.nombre', transform: (data) => `${data.usuarios?.nombre || ''} ${data.usuarios?.apellido || ''}` },
-        { label: 'Cédula', key: 'usuarios.cedula' },
-        { label: 'Área', key: 'usuarios.areas_pertenece.nombre' },
+        { label: 'Nombre', key: 'usuario.nombre', transform: (data) => `${data.usuario?.nombre || ''} ${data.usuario?.apellido || ''}` },
+        { label: 'Cédula', key: 'usuario.cedula' },
+        { label: 'Área', key: 'usuario.area.nombre' },
       ],
     },
     {

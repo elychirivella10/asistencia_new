@@ -1,31 +1,37 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { useMemo, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { roleSchema } from "../schemas/role.schema";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { saveRole } from "../actions/role-write.action"; // Usamos la acción unificada
 import { toast } from "sonner";
-import { useTransition } from "react";
 import { CustomFormField } from "@/components/shared/form/CustomFormField";
 import { CustomFormTextarea } from "@/components/shared/form/CustomFormTextarea";
 import { CustomFormCheckboxGroup } from "@/components/shared/form/CustomFormCheckboxGroup";
+import { PermissionSelector } from "@/features/permissions/components/PermissionSelector";
 import { getRoleFormConfig } from "../config/role-form.config";
+import { FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 export function RoleForm({ role, permissions, onSuccess }) {
   const [isPending, startTransition] = useTransition();
+
+  // Estabilizar la referencia de permisos que viene del padre
+  const stablePermissions = useMemo(() => permissions, [permissions]);
 
   const form = useForm({
     resolver: zodResolver(roleSchema),
     defaultValues: {
       nombre: role?.nombre || "",
       descripcion: role?.descripcion || "",
-      permisos: role?.permiso_ids || [],
+      // Asegurar que los IDs iniciales sean números
+      permisos: role?.permiso_ids ? role.permiso_ids.map(id => Number(id)) : [],
     },
   });
 
-  const formConfig = getRoleFormConfig(permissions);
+  const formConfig = useMemo(() => getRoleFormConfig(stablePermissions), [stablePermissions]);
 
   const onSubmit = (data) => {
     startTransition(async () => {
@@ -85,6 +91,27 @@ export function RoleForm({ role, permissions, onSuccess }) {
                     control={form.control}
                     {...field}
                   />
+                );
+              }
+              if (field.component === "permission-selector") {
+                return (
+                  <div key={field.name} className="col-span-full">
+                    <FormField
+                      control={form.control}
+                      name={field.name}
+                      render={({ field: formField }) => (
+                        <FormItem>
+                          <PermissionSelector
+                            label={field.label}
+                            permissions={field.options}
+                            selectedIds={formField.value}
+                            onChange={formField.onChange}
+                          />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 );
               }
               return null;

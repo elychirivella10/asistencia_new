@@ -42,7 +42,7 @@ export const getSupervisions = async (currentUser) => {
   const supervisions = await prisma.permiso_supervision.findMany({
     where: scope,
     include: {
-      usuarios: {
+      usuario: {
         select: {
           id: true,
           nombre: true,
@@ -51,7 +51,7 @@ export const getSupervisions = async (currentUser) => {
           cedula: true
         }
       },
-      areas: {
+      area: {
         select: {
           id: true,
           nombre: true,
@@ -69,11 +69,11 @@ export const getSupervisions = async (currentUser) => {
   // Normalization / DTO
   return supervisions.map(item => ({
     ...item,
-    usuario_nombre: `${item.usuarios?.nombre} ${item.usuarios?.apellido}`,
-    usuario_email: item.usuarios?.email,
-    usuario_cedula: item.usuarios?.cedula,
-    area_nombre: item.areas?.nombre,
-    area_tipo: item.areas?.cat_tipos_area?.nombre || SUPERVISION_CONFIG.UI.LABELS.NO_TYPE
+    usuario_nombre: `${item.usuario?.nombre} ${item.usuario?.apellido}`,
+    usuario_email: item.usuario?.email,
+    usuario_cedula: item.usuario?.cedula,
+    area_nombre: item.area?.nombre,
+    area_tipo: item.area?.cat_tipos_area?.nombre || SUPERVISION_CONFIG.UI.LABELS.NO_TYPE
   }));
 };
 
@@ -81,8 +81,8 @@ export const getSupervisionById = async (id) => {
   return await prisma.permiso_supervision.findUnique({
     where: { id },
     include: {
-        usuarios: true,
-        areas: true
+        usuario: true,
+        area: true
     }
   });
 };

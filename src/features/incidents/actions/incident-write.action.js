@@ -44,8 +44,8 @@ export const saveIncident = createProtectedAction(
       }
 
       if (result.success) {
-        revalidatePath(ROUTES.ATTENDANCE);
-        revalidatePath(ROUTES.INCIDENTS);
+        revalidatePath(ROUTES.ATTENDANCE.path);
+        revalidatePath(ROUTES.INCIDENTS.path);
         return { 
             success: true, 
             message: data.id ? "Novedad actualizada correctamente." : "Novedad registrada y procesada correctamente." 
@@ -70,8 +70,8 @@ export const deleteIncident = createProtectedFunction(
     try {
       const result = await deleteIncidentService(id);
       if (result.success) {
-        revalidatePath(ROUTES.ATTENDANCE);
-        revalidatePath(ROUTES.ADMIN.INCIDENTS);
+        revalidatePath(ROUTES.ATTENDANCE.path);
+        revalidatePath(ROUTES.INCIDENTS.path);
         return { success: true, message: "Novedad eliminada correctamente" };
       }
       return result;

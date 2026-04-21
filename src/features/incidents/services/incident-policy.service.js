@@ -1,4 +1,4 @@
-import { createScopeFilter } from "@/features/shared/services/policy-core.service";
+import { createScopeFilter } from "@/features/permissions/services/scoping.service";
 import { INCIDENT_CONFIG } from "../config/incidents.constants";
 
 /**

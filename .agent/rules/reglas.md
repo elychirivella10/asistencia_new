@@ -55,6 +55,19 @@ trigger: always_on
 - **Hardware (Biométrico):** Ante errores de conexión socket, el agente debe sugerir ejecutar `npm run diagnose:status` antes de proponer cambios de código.
 - **XSS/CSRF:** Prohibido `dangerouslySetInnerHTML`. Mutaciones fuera de Server Actions requieren token CSRF verificado.
 
+## 📊 Sincronización & Reportes (Scripts)
+- **Gestión Centralizada:** Todas las tareas de Python deben ejecutarse a través de `scripts/manager.py` para asegurar trazabilidad y carga correcta de entorno.
+- **Orquestación:** El punto de entrada preferido para desarrolladores es `package.json` vía comandos `npm run [scope]:[task]`.
+- **Organización:**
+    - `scripts/personnel/`: Utilidades administrativas (Excel/ODS).
+    - `scripts/clocks/`: Procesos de sistema y comunicación con hardware.
+- **Formato:** Los reportes de salida deben ser exclusivamente en formato **CSV** en `outputs/`.
+- **Trazabilidad (Logs):**
+    - **Sistema (PM2):** Logs en `logs/`.
+    - **Administrativos (Excel):** Logs en `outputs/logs/`. Prohibido mezclar ambos.
+- **Configuración:** Parámetros como umbrales (`AREA_MATCH_THRESHOLD`) Van en el `.env`.
+- **Simulación:** Todo script de sincronización debe soportar `dry-run` por defecto.
+
 ## 📝 Comunicación
 - **Código:** Nombres de variables, funciones y **comentarios en INGLÉS**.
 - **Interacción:** Explicaciones y respuestas al usuario en **ESPAÑOL**.

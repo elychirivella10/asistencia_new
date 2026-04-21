@@ -7,4 +7,5 @@ export const areaSchema = z.object({
   parent_id: z.preprocess(val => val === '' ? null : val, z.string().optional().nullable()),
   jefe_id: z.preprocess(val => val === '' ? null : val, z.string().optional().nullable()),
   tipo_id: z.preprocess(val => val === '' ? null : val, z.coerce.number().optional().nullable()),
+  excluir_tardanza: z.preprocess(val => val === 'true' || val === true, z.boolean().default(false)),
 });

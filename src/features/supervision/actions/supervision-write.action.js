@@ -17,10 +17,10 @@ export const saveSupervision = createProtectedAction(
 
       // Check uniqueness if creating
       if (!id) {
-          const validation = await validateSupervisionUniqueness(usuario_id, area_id);
-          if (!validation.success) {
-              return validation;
-          }
+        const validation = await validateSupervisionUniqueness(usuario_id, area_id);
+        if (!validation.success) {
+          return validation;
+        }
       }
 
       let result;
@@ -31,10 +31,10 @@ export const saveSupervision = createProtectedAction(
       }
 
       if (result.success) {
-        revalidatePath(ROUTES.ADMIN.SUPERVISION)
+        revalidatePath(ROUTES.ADMIN.SUPERVISION.path)
         return { success: true, message: 'Permiso guardado correctamente' }
       }
-      
+
       return result
 
     } catch (error) {
@@ -49,12 +49,12 @@ export const deleteSupervision = createProtectedFunction(
   async (id) => {
     try {
       const result = await deleteSupervisionService(id);
-      
+
       if (!result.success) {
         return result;
       }
 
-      revalidatePath(ROUTES.ADMIN.SUPERVISION)
+      revalidatePath(ROUTES.ADMIN.SUPERVISION.path)
       return { success: true, message: 'Permiso eliminado correctamente' }
     } catch (error) {
       console.error('Error deleting supervision:', error)

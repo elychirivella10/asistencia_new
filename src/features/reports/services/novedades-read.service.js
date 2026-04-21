@@ -1,5 +1,7 @@
 import prisma from "@/features/shared/lib/prisma";
 import { formatTimeUTC, formatDateUTC } from "@/features/shared/lib/date-utils";
+import { createScopeFilter, validateAreaAccess } from "@/features/permissions/services/scoping.service";
+import { REPORT_CONFIG } from "../config/report.constants";
 
 /**
  * Fetches required metadata for exactly the Novedades tab.
@@ -35,7 +37,7 @@ export async function getNovedadesReport({
   searchTerm,
   status,
   tipoPermisoId,
-}) {
+}, session) {
   const fromDate = new Date(`${fechaDesde}T00:00:00.000Z`);
   const toDate = new Date(`${fechaHasta}T23:59:59.999Z`);
 
@@ -45,10 +47,25 @@ export async function getNovedadesReport({
     fecha_fin: { gte: fromDate }
   };
 
-  // Optional filters
+  // Enforce area scope — mirrors attendance module logic exactly
+  let scopeFilter;
   if (areaId && areaId !== 'all') {
-    where.usuario = { area_id: areaId };
+    const access = await validateAreaAccess({
+      currentUser: session,
+      areaId,
+      globalPermission: REPORT_CONFIG.PERMISSIONS.READ_ALL,
+    });
+    if (!access.success) throw new Error("Access Denied: No tienes permiso para ver esta área.");
+    scopeFilter = { usuario: { area_id: areaId } };
+  } else {
+    scopeFilter = await createScopeFilter({
+      currentUser: session,
+      readAllPermission: REPORT_CONFIG.PERMISSIONS.READ_ALL,
+      fieldMap: { areaField: 'usuario.area_id', userField: 'usuario_id' },
+      allowSelf: true,
+    });
   }
+  Object.assign(where, scopeFilter);
   if (status && status !== 'all') {
     where.estado = status.toUpperCase();
   }
@@ -64,7 +81,7 @@ export async function getNovedadesReport({
           nombre: true,
           apellido: true,
           cedula: true,
-          areas_pertenece: { select: { nombre: true } },
+          area: { select: { nombre: true } },
         },
       },
       validador: {
@@ -97,7 +114,7 @@ export async function getNovedadesReport({
     return {
       Empleado: `${r.usuario?.nombre ?? ''} ${r.usuario?.apellido ?? ''}`.trim(),
       Cedula: r.usuario?.cedula ?? '—',
-      Area: r.usuario?.areas_pertenece?.nombre ?? 'Sin Área',
+      Area: r.usuario?.area?.nombre ?? 'Sin Área',
       Desde: r.fecha_inicio.toISOString().split('T')[0],
       Hasta: r.fecha_fin.toISOString().split('T')[0],
       TipoPermiso: r.cat_tipos_permiso?.nombre ?? 'Desconocido',

@@ -20,7 +20,7 @@ export const getRoleFormConfig = (permissions = []) => {
       {
         name: "permisos",
         label: "Permisos del Sistema",
-        component: "checkbox-group",
+        component: "permission-selector",
         options: permissions.map(p => ({ 
           id: p.id, 
           label: p.slug, 

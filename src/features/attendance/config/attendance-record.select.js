@@ -15,13 +15,13 @@ export const ATTENDANCE_RECORD_SELECT = {
   minutos_trabajados: true,
   minutos_trabajados_neto: true,
   comedor_descuento_min: true,
-  usuarios: {
+  usuario: {
     select: {
       id: true,
       nombre: true,
       apellido: true,
       cedula: true,
-      areas_pertenece: { select: { nombre: true } },
+      area: { select: { nombre: true } },
     },
   },
 };

@@ -69,7 +69,7 @@ export async function getUsersPageData(
           { created_at: "desc" },
         ];
       }
-      if (sortKey === "area") return [{ areas_pertenece: { nombre: direction } }, { created_at: "desc" }];
+      if (sortKey === "area") return [{ area: { nombre: direction } }, { created_at: "desc" }];
       if (sortKey === "rol") return [{ roles: { nombre: direction } }, { created_at: "desc" }];
       return [{ [sortKey]: direction }, { created_at: "desc" }];
     })();
@@ -92,9 +92,10 @@ export async function getUsersPageData(
           rol_id: true,
           turno_id: true,
           es_activo: true,
+          excluir_tardanza: true,
           biometric_id: true,
           created_at: true,
-          areas_pertenece: {
+          area: {
             select: {
               id: true,
               nombre: true,

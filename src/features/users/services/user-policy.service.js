@@ -1,5 +1,5 @@
-import { createScopeFilter } from "@/features/shared/services/policy-core.service";
-import { verifyPermission } from "@/features/auth/services/permission.service";
+import { createScopeFilter } from "@/features/permissions/services/scoping.service";
+import { verifyPermission } from "@/features/permissions/services/authorization.service";
 import { getAreasPermitidas } from "@/features/areas/services/area-hierarchy.service";
 import { USER_CONFIG } from "../config/user.constants";
 import { AREA_CONFIG } from "@/features/areas/config/area.constants";

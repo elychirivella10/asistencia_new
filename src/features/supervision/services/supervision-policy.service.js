@@ -1,4 +1,4 @@
-import { createScopeFilter, validateAreaAccess } from "@/features/shared/services/policy-core.service";
+import { createScopeFilter, validateAreaAccess } from "@/features/permissions/services/scoping.service";
 import { SUPERVISION_CONFIG } from "../config/supervision.constants";
 import { AREA_CONFIG } from "@/features/areas/config/area.constants";
 

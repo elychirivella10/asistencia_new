@@ -1,3 +1,4 @@
+'use client'
 import { useState, useEffect } from "react";
 import { PrintButton } from "@/components/shared/PrintButton";
 import { formatDateUTC, formatTimeUTC } from "@/features/shared/lib/date-utils";
@@ -10,12 +11,12 @@ export function IncidentPrintView({ incident }) {
   }, []);
   // Para fechas locales (timestamps)
   const formatLocal = (date) => {
-      if (!date) return "";
-      return new Date(date).toLocaleDateString("es-ES", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric"
-      });
+    if (!date) return "";
+    return new Date(date).toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    });
   };
 
   return (

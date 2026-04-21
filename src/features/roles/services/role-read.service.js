@@ -1,4 +1,5 @@
 import prisma from "@/features/shared/lib/prisma";
+import { getAllSystemPermissions } from "@/features/permissions/services/permission-read.service";
 
 /**
  * Retrieves all data required for the Roles Management Page.
@@ -107,19 +108,4 @@ export const getRoleById = async (id) => {
   };
 };
 
-/**
- * Retrieves all available system permissions.
- * @returns {Promise<Array>} List of system permissions.
- */
-export const getAllSystemPermissions = async () => {
-  return await prisma.permisos_sistema.findMany({
-    orderBy: {
-      slug: "asc",
-    },
-    select: {
-      id: true,
-      slug: true,
-      descripcion: true,
-    },
-  });
-};
+

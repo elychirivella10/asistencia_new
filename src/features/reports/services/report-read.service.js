@@ -1,6 +1,8 @@
 import prisma from "@/features/shared/lib/prisma";
 import { formatTimeUTC } from "@/features/shared/lib/date-utils";
-import { getGrossMinutes, getNetMinutes } from "@/features/shared/lib/attendance-utils";
+import { getGrossMinutes, getNetMinutes } from "@/features/attendance/lib/attendance-utils";
+import { createScopeFilter, validateAreaAccess } from "@/features/permissions/services/scoping.service";
+import { REPORT_CONFIG } from "../config/report.constants";
 
 /**
  * Fetches the flat attendance data for a date range with optional filters.
@@ -24,7 +26,7 @@ export async function getAttendanceReport({
   llegada,
   salida,
   excepcion,
-}) {
+}, session) {
   const fromDate = new Date(`${fechaDesde}T00:00:00.000Z`);
   const toDate = new Date(`${fechaHasta}T23:59:59.999Z`);
 
@@ -32,12 +34,27 @@ export async function getAttendanceReport({
     fecha: { gte: fromDate, lte: toDate },
   };
 
-  // Optional filters
-  const toArray = (val) => Array.isArray(val) ? val : [val];
-
+  // Enforce area scope — mirrors attendance module logic exactly
+  let scopeFilter;
   if (areaId && areaId.length > 0 && areaId !== 'all') {
-    where.usuarios = { area_id: { in: toArray(areaId) } };
+    // User requested a specific area — validate they have access to it
+    const access = await validateAreaAccess({
+      currentUser: session,
+      areaId: Array.isArray(areaId) ? areaId[0] : areaId,
+      globalPermission: REPORT_CONFIG.PERMISSIONS.READ_ALL,
+    });
+    if (!access.success) throw new Error("Access Denied: No tienes permiso para ver esta área.");
+    scopeFilter = { usuario: { area_id: { in: Array.isArray(areaId) ? areaId : [areaId] } } };
+  } else {
+    // General view — scoped by role/hierarchy
+    scopeFilter = await createScopeFilter({
+      currentUser: session,
+      readAllPermission: REPORT_CONFIG.PERMISSIONS.READ_ALL,
+      fieldMap: { areaField: 'usuario.area_id', userField: 'usuario_id' },
+      allowSelf: true,
+    });
   }
+  Object.assign(where, scopeFilter);
 
   const andConditions = [];
 
@@ -65,13 +82,13 @@ export async function getAttendanceReport({
   const rows = await prisma.resumen_diario.findMany({
     where,
     include: {
-      usuarios: {
+      usuario: {
         select: {
           id: true,
           nombre: true,
           apellido: true,
           cedula: true,
-          areas_pertenece: { select: { nombre: true } },
+          area: { select: { nombre: true } },
         },
       },
     },
@@ -93,7 +110,7 @@ export async function getAttendanceReport({
   // Apply search term filter (client-side on the result set — avoids complex DB query)
   const filtered = searchTerm
     ? rows.filter((r) => {
-      const full = `${r.usuarios?.nombre ?? ''} ${r.usuarios?.apellido ?? ''} ${r.usuarios?.cedula ?? ''}`.toLowerCase();
+      const full = `${r.usuario?.nombre ?? ''} ${r.usuario?.apellido ?? ''} ${r.usuario?.cedula ?? ''}`.toLowerCase();
       return full.includes(searchTerm.toLowerCase());
     })
     : rows;
@@ -105,7 +122,7 @@ export async function getAttendanceReport({
     if (permisoNombre) {
       // Find matching approved novedad for this user and date
       const match = overlappingNovedades.find(n =>
-        n.usuario_id === r.usuarios?.id &&
+        n.usuario_id === r.usuario?.id &&
         r.fecha >= n.fecha_inicio &&
         r.fecha <= n.fecha_fin
       );
@@ -115,9 +132,9 @@ export async function getAttendanceReport({
     }
 
     return {
-      Empleado: `${r.usuarios?.nombre ?? ''} ${r.usuarios?.apellido ?? ''}`.trim(),
-      Cedula: r.usuarios?.cedula ?? '—',
-      Area: r.usuarios?.areas_pertenece?.nombre ?? 'Sin Área',
+      Empleado: `${r.usuario?.nombre ?? ''} ${r.usuario?.apellido ?? ''}`.trim(),
+      Cedula: r.usuario?.cedula ?? '—',
+      Area: r.usuario?.area?.nombre ?? 'Sin Área',
       Fecha: r.fecha.toISOString().split('T')[0],
       HoraEntrada: formatTimeUTC(r.hora_entrada),
       HoraSalida: formatTimeUTC(r.hora_salida),

@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/run_comedor.py", line 7, in <module>
+    from config import COMEDOR_IP, COMEDOR_PORT, DB_URL, COMEDOR_DEVICE_ID
+  File "/var/www/html/scripts/sync/config.py", line 3, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+Traceback (most recent call last):
+  File "/var/www/html/scripts/sync/run_comedor.py", line 7, in <module>
+    from config import COMEDOR_IP, COMEDOR_PORT, DB_URL, COMEDOR_DEVICE_ID
+  File "/var/www/html/scripts/sync/config.py", line 3, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'

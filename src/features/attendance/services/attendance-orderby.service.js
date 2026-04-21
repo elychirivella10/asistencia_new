@@ -2,8 +2,8 @@ export function buildAttendanceOrderBy(sortKey, sortDirection) {
   const direction = sortDirection === "desc" ? "desc" : "asc";
   const allowed = new Set([
     "fecha",
-    "usuarios.nombre",
-    "usuarios.areas_pertenece.nombre",
+    "usuario.nombre",
+    "usuario.area.nombre",
     "minutos_trabajados",
     "extras_informativas_min",
     "minutos_esperados",
@@ -18,10 +18,10 @@ export function buildAttendanceOrderBy(sortKey, sortDirection) {
 
   if (!sortKey || !allowed.has(sortKey)) return [{ fecha: "desc" }];
 
-  if (sortKey === "usuarios.nombre") return [{ usuarios: { nombre: direction } }, { fecha: "desc" }];
+  if (sortKey === "usuario.nombre") return [{ usuario: { nombre: direction } }, { fecha: "desc" }];
 
-  if (sortKey === "usuarios.areas_pertenece.nombre") {
-    return [{ usuarios: { areas_pertenece: { nombre: direction } } }, { fecha: "desc" }];
+  if (sortKey === "usuario.area.nombre") {
+    return [{ usuario: { area: { nombre: direction } } }, { fecha: "desc" }];
   }
 
   return [{ [sortKey]: direction }, { fecha: "desc" }];

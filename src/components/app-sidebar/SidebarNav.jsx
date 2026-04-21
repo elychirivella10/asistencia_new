@@ -15,16 +15,56 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
-import Link from "next/link"
+import { usePermission } from "@/features/permissions/components/PermissionsProvider"
 import { navItems } from "@/features/shared/lib/data/sidebar"
+import Link from "next/link"
 import { ChevronRight } from "lucide-react"
 
+/**
+ * Pure function to check if an item should be visible based on user permissions.
+ * @param {Object} item - Navigation item.
+ * @param {Function} can - Permission checking function from hook.
+ * @returns {boolean}
+ */
+function isAuthorized(item, can) {
+  // If item explicitly requires a permission, check it.
+  if (item.permission && !can(item.permission)) {
+    return false
+  }
+
+  // If item has sub-items, it's only visible if at least one sub-item is authorized.
+  if (item.items?.length > 0) {
+    return item.items.some(sub => isAuthorized(sub, can))
+  }
+
+  return true
+}
+
 export function SidebarNav() {
+  const { can } = usePermission()
+
+  // Filter items based on permissions before rendering
+  const authorizedItems = navItems
+    .filter(item => isAuthorized(item, can))
+    .map(item => {
+      // If it has children, filter them as well
+      if (item.items) {
+        return {
+          ...item,
+          items: item.items.filter(sub => isAuthorized(sub, can))
+        }
+      }
+      return item
+    })
+
+  if (authorizedItems.length === 0) return null
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Plataforma</SidebarGroupLabel>
       <SidebarMenu>
-        {navItems.map((item) => {
+
+        {authorizedItems.map((item) => {
           // Si no tiene items hijos, renderiza un link simple
           if (!item.items?.length) {
             return (

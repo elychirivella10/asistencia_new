@@ -9,21 +9,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Eye, MoreHorizontal } from "lucide-react";
 import { formatDateUTC, formatTimeUTC, formatHM } from "@/features/shared/lib/date-utils";
-import { getGrossMinutes, getNetMinutes } from "@/features/shared/lib/attendance-utils";
+import { getGrossMinutes, getNetMinutes } from "@/features/attendance/lib/attendance-utils";
 import { ATTENDANCE_CONFIG } from "./attendance.constants";
 
 export const getAttendanceTableColumns = (statusMap, onDetails) => {
   const columns = [
     {
       header: "Usuario",
-      accessorKey: "usuarios.nombre",
+      accessorKey: "usuario.nombre",
       sortable: true,
       cell: (record) => (
         <div className="flex flex-col">
           <span className="font-medium truncate">
-            {record.usuarios?.nombre} {record.usuarios?.apellido}
+            {record.usuario?.nombre} {record.usuario?.apellido}
           </span>
-          <span className="text-xs text-muted-foreground">{record.usuarios?.cedula}</span>
+          <span className="text-xs text-muted-foreground">{record.usuario?.cedula}</span>
         </div>
       ),
     },

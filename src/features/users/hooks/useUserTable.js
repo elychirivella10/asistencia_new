@@ -25,7 +25,7 @@ export function useUserTable(initialUsers) {
 
   const getValue = useCallback((item, key) => {
     switch (key) {
-      case 'area': return item.areas_pertenece?.nombre || '';
+      case 'area': return item.area?.nombre || '';
       case 'rol': return item.roles?.nombre || '';
       default: return item[key];
     }

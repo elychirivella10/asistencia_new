@@ -11,7 +11,7 @@ import { Loader2 } from "lucide-react";
 import { useTransition, useEffect } from "react";
 import { CustomFormField } from "@/components/shared/form/CustomFormField";
 import { CustomFormSelect } from "@/components/shared/form/CustomFormSelect";
-import { CustomFormSwitch } from "@/components/shared/form/CustomFormSwitch";
+import { CustomFormCheckbox } from "@/components/shared/form/CustomFormCheckbox";
 import { AsyncSelect } from "@/components/shared/form/AsyncSelect";
 import { getUserFormConfig, getUserDefaultValues } from "../config/user-form.config";
 // import { toFormData } from "@/features/shared/lib/utils"; // Removed unused import
@@ -84,9 +84,9 @@ export function UserForm({ user, areas, turnos, roles, onSuccess }) {
               if (field.component === "select") {
                 return <CustomFormSelect key={field.name} {...commonProps} options={field.options} />;
               }
-              if (field.component === "switch") {
+              if (field.component === "checkbox") {
                 return (
-                  <CustomFormSwitch
+                  <CustomFormCheckbox
                     key={field.name}
                     {...commonProps}
                     description={typeof field.description === 'function' ? field.description(form.watch(field.name)) : field.description}
@@ -106,7 +106,7 @@ export function UserForm({ user, areas, turnos, roles, onSuccess }) {
                             value={value}
                             onChange={onChange}
                             placeholder={field.placeholder}
-                            initialData={field.name === "area_id" ? user?.areas_pertenece : null}
+                            initialData={field.name === "area_id" ? user?.area : null}
                             fetcher={field.fetcher}
                             renderOption={field.renderOption}
                             getLabel={field.getLabel}

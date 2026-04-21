@@ -37,6 +37,7 @@ export const saveUser = createProtectedAction(
       turno_id: data.turno_id,
       rol_id: data.rol_id,
       es_activo: data.es_activo,
+      excluir_tardanza: data.excluir_tardanza,
     };
 
     let result;
@@ -47,7 +48,7 @@ export const saveUser = createProtectedAction(
     }
 
     if (result.success) {
-        revalidatePath(ROUTES.ADMIN.USUARIOS);
+        revalidatePath(ROUTES.ADMIN.USUARIOS.path);
         return { success: true, message: "Usuario guardado exitosamente." };
     }
     
@@ -64,7 +65,7 @@ export const deleteUser = createProtectedFunction(
   async (id, session) => { // createProtectedFunction passes (arg1, arg2..., session)
       const result = await deleteUserService(id);
       if (result.success) {
-          revalidatePath(ROUTES.ADMIN.USUARIOS);
+          revalidatePath(ROUTES.ADMIN.USUARIOS.path);
       }
       return result;
   }
@@ -85,7 +86,7 @@ export const assignUsersToArea = createProtectedAction(
       const result = await bulkAssignArea(userIds, areaId, session);
       
       if (result.success) {
-          revalidatePath(ROUTES.ADMIN.USUARIOS);
+          revalidatePath(ROUTES.ADMIN.USUARIOS.path);
       }
 
       return result;

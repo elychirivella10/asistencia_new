@@ -1,6 +1,6 @@
 import prisma from "@/features/shared/lib/prisma";
 import { getAreasPermitidas } from "./area-hierarchy.service";
-import { verifyPermission } from "@/features/auth/services/permission.service";
+import { verifyPermission } from "@/features/permissions/services/authorization.service";
 import { AREA_CONFIG } from "../config/area.constants";
 
 export const findAreas = async (term, { take } = {}) => {
