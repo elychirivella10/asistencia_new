@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Check } from "lucide-react";
-import { cn } from "@/features/shared/lib/utils";
+import { cn } from "@/features/shared/lib/shared-utils";
 
 /**
  * Atomo memoizado para un solo Permiso.

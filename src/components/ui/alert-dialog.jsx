@@ -3,8 +3,9 @@
 import * as React from "react"
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 
-import { cn } from "@/features/shared/lib/utils"
+import { cn } from "@/features/shared/lib/shared-utils"
 import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 function AlertDialog({
   ...props
@@ -42,6 +43,7 @@ function AlertDialogOverlay({
 function AlertDialogContent({
   className,
   size = "default",
+  children,
   ...props
 }) {
   return (
@@ -51,10 +53,16 @@ function AlertDialogContent({
         data-slot="alert-dialog-content"
         data-size={size}
         className={cn(
-          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 group/alert-dialog-content fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg duration-200 data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-lg",
+          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 group/alert-dialog-content fixed top-[50%] left-[50%] z-50 flex flex-col w-full max-w-[calc(100%-2rem)] max-h-[90dvh] translate-x-[-50%] translate-y-[-50%] rounded-lg border shadow-lg duration-200 data-[size=sm]:max-w-xs data-[size=default]:sm:max-w-lg overflow-hidden",
           className
         )}
-        {...props} />
+        {...props}>
+        <ScrollArea className="flex-1 overflow-y-auto" data-slot="alert-dialog-content-scroll">
+          <div className="p-6 grid gap-4">
+            {children}
+          </div>
+        </ScrollArea>
+      </AlertDialogPrimitive.Content>
     </AlertDialogPortal>
   );
 }

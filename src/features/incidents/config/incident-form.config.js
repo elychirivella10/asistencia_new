@@ -1,12 +1,15 @@
 import { searchUsers } from "@/features/users/actions/user-read.action";
+import { INCIDENT_CONFIG } from "./incidents.constants";
 
 export const getIncidentFormConfig = (incidentTypes = []) => {
+  const { FORM } = INCIDENT_CONFIG.UI.LABELS;
+
   return [
     [
       {
         name: "usuario_id",
-        label: "Empleado",
-        placeholder: "Buscar empleado...",
+        label: FORM.FIELDS.EMPLOYEE,
+        placeholder: FORM.PLACEHOLDERS.SEARCH_EMPLOYEE,
         component: "async-select",
         fetcher: searchUsers,
         getLabel: (user) => `${user.nombre} ${user.apellido} (${user.cedula})`,
@@ -22,8 +25,8 @@ export const getIncidentFormConfig = (incidentTypes = []) => {
     [
       {
         name: "tipo",
-        label: "Tipo de Novedad",
-        placeholder: "Seleccione tipo",
+        label: FORM.FIELDS.TYPE,
+        placeholder: FORM.PLACEHOLDERS.SELECT_TYPE,
         component: "select",
         options: incidentTypes.map((t) => ({
           label: t.nombre,
@@ -34,13 +37,13 @@ export const getIncidentFormConfig = (incidentTypes = []) => {
     [
       {
         name: "fecha_inicio",
-        label: "Fecha Desde",
+        label: FORM.FIELDS.FROM,
         component: "date",
         type: "date",
       },
       {
         name: "fecha_fin",
-        label: "Fecha Hasta",
+        label: FORM.FIELDS.TO,
         component: "date",
         type: "date",
       },
@@ -48,8 +51,8 @@ export const getIncidentFormConfig = (incidentTypes = []) => {
     [
       {
         name: "es_dia_completo",
-        label: "Día Completo",
-        description: "Aplica para toda la jornada",
+        label: FORM.FIELDS.FULL_DAY,
+        description: FORM.DESCRIPTIONS.FULL_DAY,
         component: "switch",
         showIf: (values) => {
           if (!values.tipo) return false;
@@ -61,14 +64,14 @@ export const getIncidentFormConfig = (incidentTypes = []) => {
     [
       {
         name: "hora_inicio",
-        label: "Hora Inicio",
+        label: FORM.FIELDS.START_TIME,
         component: "input",
         type: "time",
         showIf: (values) => !values.es_dia_completo,
       },
       {
         name: "hora_fin",
-        label: "Hora Fin",
+        label: FORM.FIELDS.END_TIME,
         component: "input",
         type: "time",
         showIf: (values) => !values.es_dia_completo,
@@ -77,8 +80,8 @@ export const getIncidentFormConfig = (incidentTypes = []) => {
     [
       {
         name: "observaciones",
-        label: "Observaciones (Opcional)",
-        placeholder: "Detalles adicionales...",
+        label: FORM.FIELDS.OBSERVATIONS,
+        placeholder: FORM.PLACEHOLDERS.OBSERVATIONS,
         component: "textarea",
       },
     ],

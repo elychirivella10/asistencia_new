@@ -1,10 +1,11 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
+import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Search } from "lucide-react";
+import { Plus } from "lucide-react";
 import { usePermission } from "@/features/permissions/components/PermissionsProvider";
 import { INCIDENT_CONFIG } from "../config/incidents.constants";
+import { Toolbar } from "@/components/shared/Toolbar";
 import {
   Select,
   SelectContent,
@@ -20,40 +21,66 @@ export function IncidentToolbar({
   onStatusChange,
   onCreate,
 }) {
+  const { UI: { LABELS } } = INCIDENT_CONFIG;
   const { can } = usePermission();
 
+  const selectFilters = React.useMemo(() => [
+    {
+      key: "status",
+      label: LABELS.TOOLBAR.STATUS_PLACEHOLDER,
+      value: statusFilter,
+      onChange: onStatusChange,
+      placeholder: LABELS.TOOLBAR.STATUS_PLACEHOLDER,
+      options: [
+        { label: LABELS.TOOLBAR.STATUS_ALL, value: "all" },
+        { label: LABELS.TOOLBAR.STATUS_PENDING, value: INCIDENT_CONFIG.STATUS.PENDING },
+        { label: LABELS.TOOLBAR.STATUS_APPROVED, value: INCIDENT_CONFIG.STATUS.APPROVED },
+        { label: LABELS.TOOLBAR.STATUS_REJECTED, value: INCIDENT_CONFIG.STATUS.REJECTED },
+      ]
+    }
+  ], [statusFilter, onStatusChange, LABELS]);
+
   return (
-    <div className="flex flex-col gap-4 rounded-xl bg-muted/30 p-4 md:flex-row md:items-center md:justify-between">
-      <div className="flex flex-1 items-center gap-2">
-        <div className="relative w-full max-w-sm">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Buscar por empleado o cédula..."
-            className="pl-9 h-10 bg-background/60 border-none focus-visible:ring-1 focus-visible:ring-ring"
-            onChange={(e) => onSearchChange(e.target.value)}
-            defaultValue={searchTerm}
-          />
-        </div>
+    <Toolbar>
+      <Toolbar.Main>
+        <Toolbar.Divider label={LABELS.TOOLBAR.DIVIDER_FILTERS} />
+        <Toolbar.Filters>
+          {selectFilters.map((f) => (
+            <Toolbar.FilterItem key={f.key} label={f.label}>
+              <Select value={f.value} onValueChange={f.onChange}>
+                <SelectTrigger className="h-9 w-full bg-background/60 border-none focus-visible:ring-1 focus-visible:ring-ring">
+                  <SelectValue placeholder={f.placeholder} />
+                </SelectTrigger>
+                <SelectContent>
+                  {f.options.map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Toolbar.FilterItem>
+          ))}
+        </Toolbar.Filters>
+      </Toolbar.Main>
 
-        <Select value={statusFilter} onValueChange={onStatusChange}>
-          <SelectTrigger className="h-9 w-[180px] bg-background/60 border-none focus-visible:ring-1 focus-visible:ring-ring">
-              <SelectValue placeholder="Estado" />
-          </SelectTrigger>
-          <SelectContent>
-              <SelectItem value="all">Todos</SelectItem>
-              <SelectItem value={INCIDENT_CONFIG.STATUS.PENDING}>Pendiente</SelectItem>
-              <SelectItem value={INCIDENT_CONFIG.STATUS.APPROVED}>Aprobado</SelectItem>
-              <SelectItem value={INCIDENT_CONFIG.STATUS.REJECTED}>Rechazado</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <Toolbar.Footer>
+        <Toolbar.Search
+          label={LABELS.TOOLBAR.SEARCH_LABEL}
+          placeholder={LABELS.TOOLBAR.SEARCH_PLACEHOLDER}
+          onChange={(e) => onSearchChange(e.target.value)}
+          defaultValue={searchTerm}
+        />
 
-      {can(INCIDENT_CONFIG.PERMISSIONS.WRITE) && (
-        <Button onClick={onCreate}>
-          <Plus className="mr-2 h-4 w-4" />
-          Nueva Novedad
-        </Button>
-      )}
-    </div>
+        <Toolbar.Actions label={LABELS.TOOLBAR.DIVIDER_ACTIONS}>
+          {can(INCIDENT_CONFIG.PERMISSIONS.WRITE) && (
+            <Button onClick={onCreate} className="gap-2">
+              <Plus className="h-4 w-4" />
+              <span>{LABELS.TOOLBAR.NEW_BUTTON}</span>
+            </Button>
+          )}
+        </Toolbar.Actions>
+      </Toolbar.Footer>
+    </Toolbar>
   );
 }

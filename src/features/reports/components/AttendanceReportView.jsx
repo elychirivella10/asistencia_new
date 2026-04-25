@@ -1,10 +1,11 @@
 "use client";
 
-import { ReportToolbar } from "./ReportToolbar";
+import { AttendanceReportToolbar } from "./AttendanceReportToolbar";
 import { useAttendanceReport } from "../hooks/useAttendanceReport";
-import { getAttendanceReportColumns } from "../config/attendance-report.config";
+import { getAttendanceReportColumns } from "../config/attendance-report-table.config";
 import { REPORT_CONFIG } from "../config/report.constants";
 import { TablePagination } from "@/components/shared/TablePagination";
+import { DataTable } from "@/components/shared/DataTable";
 
 /**
  * Orchestrates the Attendance Report view.
@@ -22,14 +23,16 @@ export function AttendanceReportView({ areas, statusMap }) {
     currentPage,
     totalPages,
     totalCount,
+    sortConfig,
     onPageChange,
+    onSort,
   } = useAttendanceReport();
 
   const columns = getAttendanceReportColumns(statusMap);
 
   return (
     <div className="space-y-4">
-      <ReportToolbar
+      <AttendanceReportToolbar
         onFilter={fetchReport}
         onExportExcel={handleExportExcel}
         onExportPDF={handleExportPDF}
@@ -47,29 +50,14 @@ export function AttendanceReportView({ areas, statusMap }) {
 
       {hasData && (
         <>
-          <div className={`rounded-md border overflow-auto transition-opacity duration-200 ${isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
-            <table className="w-full text-sm text-left">
-              <thead className="bg-muted/50 sticky top-0 text-xs uppercase text-muted-foreground">
-                <tr>
-                  {columns.map((col) => (
-                    <th key={col.accessorKey} className={`px-4 py-3 ${col.className ?? ""}`}>
-                      {col.header}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedData.map((row, i) => (
-                  <tr key={i} className="border-b last:border-0 hover:bg-muted/30">
-                    {columns.map((col) => (
-                      <td key={col.accessorKey} className={`px-4 py-3 ${col.className ?? ""}`}>
-                        {col.cell ? col.cell(row) : row[col.accessorKey]}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className={`transition-opacity duration-200 ${isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+            <DataTable
+              data={paginatedData}
+              columns={columns}
+              sortConfig={sortConfig}
+              onSort={onSort}
+              emptyMessage={REPORT_CONFIG.UI.LABELS.NO_DATA}
+            />
           </div>
 
           <TablePagination

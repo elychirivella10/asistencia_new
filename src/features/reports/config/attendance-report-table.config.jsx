@@ -11,6 +11,8 @@ export const getAttendanceReportColumns = (statusMap) => [
   {
     header: "Empleado",
     accessorKey: "Empleado",
+    sortKey: "Empleado",
+    sortable: true,
     cell: (row) => (
       <div className="flex flex-col min-w-[140px]">
         <span className="font-medium text-sm leading-tight">{row.Empleado}</span>
@@ -30,10 +32,14 @@ export const getAttendanceReportColumns = (statusMap) => [
   {
     header: "Fecha",
     accessorKey: "Fecha",
+    sortKey: "fecha",
+    sortable: true,
   },
   {
     header: "Entrada",
     accessorKey: "HoraEntrada",
+    sortKey: "Llegada",
+    sortable: true,
     className: "text-center",
     cell: (row) => (
       <span className={row.NotificadoTardia ? ATTENDANCE_CONFIG.BUSINESS.LATE_NOTIFICATION_COLOR : ""}>
@@ -44,6 +50,8 @@ export const getAttendanceReportColumns = (statusMap) => [
   {
     header: "Salida",
     accessorKey: "HoraSalida",
+    sortKey: "Salida",
+    sortable: true,
     className: "text-center",
   },
   {
@@ -90,6 +98,8 @@ export const getAttendanceReportColumns = (statusMap) => [
   {
     header: "Estado",
     accessorKey: "Estado",
+    sortKey: "estado",
+    sortable: true,
     cell: (row) => {
       const slug = row.Estado?.toLowerCase();
       const statusInfo = (statusMap && statusMap[slug]) || {

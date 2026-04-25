@@ -5,6 +5,8 @@ import { userSchema, bulkAssignSchema } from "../schemas/user.schema";
 import { createProtectedAction, createProtectedFunction } from "@/features/shared/lib/safe-action";
 import { validateUserUniqueness } from "../services/user-validation.service";
 import { createUser, updateUser, bulkAssignArea,  deleteUser as deleteUserService } from "../services/user-write.service";
+import { getUserBiometricId } from "../services/user-read.service";
+import * as biometricService from "../services/user-biometric.service";
 import { ROUTES } from "@/features/shared/config/routes";
 import { USER_CONFIG } from "../config/user.constants";
 
@@ -38,6 +40,7 @@ export const saveUser = createProtectedAction(
       rol_id: data.rol_id,
       es_activo: data.es_activo,
       excluir_tardanza: data.excluir_tardanza,
+      biometric_id: data.biometric_id || null,
     };
 
     let result;
@@ -48,8 +51,17 @@ export const saveUser = createProtectedAction(
     }
 
     if (result.success) {
+        // AUTOMATION: Try to push to clock if biometric_id is present
+        if (data.biometric_id) {
+          // We don't await strictly to not block the UI if the clock is slow, 
+          // but we want the service to handle the connection.
+          biometricService.pushUserToDevice(data.biometric_id).catch(err => 
+            console.error("Error in auto-push to clock:", err)
+          );
+        }
+        
         revalidatePath(ROUTES.ADMIN.USUARIOS.path);
-        return { success: true, message: "Usuario guardado exitosamente." };
+        return { success: true, message: "Usuario guardado y sincronizado." };
     }
     
     return result; // If service failed
@@ -62,7 +74,19 @@ export const saveUser = createProtectedAction(
  */
 export const deleteUser = createProtectedFunction(
   USER_CONFIG.PERMISSIONS.DELETE,
-  async (id, session) => { // createProtectedFunction passes (arg1, arg2..., session)
+  async (id, session) => {
+      // 1. Get user data to obtain biometric_id before deletion
+      const user = await getUserBiometricId(id);
+
+      // 2. If user has biometric_id, delete from hardware
+      if (user?.biometric_id) {
+          // We don't await strictly to not block if clock is off, but we try
+          biometricService.deleteUserFromDevice(user.biometric_id).catch(err => 
+              console.error("Error deleting user from biometric device:", err)
+          );
+      }
+
+      // 3. Delete from DB
       const result = await deleteUserService(id);
       if (result.success) {
           revalidatePath(ROUTES.ADMIN.USUARIOS.path);

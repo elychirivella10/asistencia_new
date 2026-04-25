@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useTransition, useEffect } from "react";
+import { useTransition, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from 'next/navigation';
+import { ATTENDANCE_CONFIG } from "../config/attendance.constants";
 import { AttendanceToolbar } from "./AttendanceToolbar";
 import { AttendanceStats } from "./AttendanceStats";
 import { DataTable } from "@/components/shared/DataTable";
@@ -27,8 +28,8 @@ export function AttendanceTableView({
     // Solo notificar si se ha aplicado al menos un filtro (el string no está vacío)
     if (searchParams.toString() !== "") {
       const count = pagination?.totalCount || 0;
-      if (count > 0) toast.success(`${count} registros encontrados.`);
-      else toast.info("No se hallaron registros con estos filtros.");
+      if (count > 0) toast.success(`${count} ${ATTENDANCE_CONFIG.UI.LABELS.SEARCH_RESULTS}`);
+      else toast.info(ATTENDANCE_CONFIG.UI.LABELS.NO_RESULTS);
     }
   }, [data]);
 
@@ -79,7 +80,7 @@ export function AttendanceTableView({
           columns={columns}
           sortConfig={sortConfig}
           onSort={handleSort}
-          emptyMessage="No se encontraron registros de asistencia."
+          emptyMessage={ATTENDANCE_CONFIG.UI.LABELS.EMPTY_TABLE}
         />
       </div>
 
@@ -89,7 +90,7 @@ export function AttendanceTableView({
         onPageChange={handlePageChange} // <-- CORRECCIÓN APLICADA
         currentCount={(data || []).length}
         totalCount={pagination?.totalCount || 0}
-        entityName="registros"
+        entityName={ATTENDANCE_CONFIG.UI.LABELS.ENTITY_NAME}
       />
 
       <AttendanceTableDialogs {...dialogState} statusMap={statusMap} />

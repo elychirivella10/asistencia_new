@@ -8,13 +8,13 @@ import { Form, formField, FormField, FormItem, FormLabel, FormMessage, FormDescr
 import { toast } from "sonner";
 import { saveUser } from "../actions/user-write.action";
 import { Loader2 } from "lucide-react";
-import { useTransition, useEffect } from "react";
+import { useTransition, useEffect, useMemo } from "react";
 import { CustomFormField } from "@/components/shared/form/CustomFormField";
 import { CustomFormSelect } from "@/components/shared/form/CustomFormSelect";
 import { CustomFormCheckbox } from "@/components/shared/form/CustomFormCheckbox";
 import { AsyncSelect } from "@/components/shared/form/AsyncSelect";
 import { getUserFormConfig, getUserDefaultValues } from "../config/user-form.config";
-// import { toFormData } from "@/features/shared/lib/utils"; // Removed unused import
+// import { toFormData } from "@/features/shared/lib/shared-utils"; // Removed unused import
 
 /**
  * User Form Component using React Hook Form + Zod.
@@ -29,7 +29,10 @@ export function UserForm({ user, areas, turnos, roles, onSuccess }) {
   });
 
   // Config fields (Config-Driven UI)
-  const formConfig = getUserFormConfig(areas, turnos, roles, user);
+  const formConfig = useMemo(() => 
+    getUserFormConfig(areas, turnos, roles, user), 
+    [areas, turnos, roles, user]
+  );
 
   // Effect to update form when user changes (reset)
   useEffect(() => {

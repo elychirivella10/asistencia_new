@@ -1,8 +1,10 @@
-import { Input } from "@/components/ui/input";
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { Search, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { usePermission } from "@/features/permissions/components/PermissionsProvider";
 import { SHIFT_CONFIG } from "../config/shift.constants";
+import { Toolbar } from "@/components/shared/Toolbar";
 
 export function ShiftToolbar({
   searchTerm,
@@ -10,28 +12,27 @@ export function ShiftToolbar({
   onCreate
 }) {
   const { can } = usePermission();
+  const { UI: { LABELS } } = SHIFT_CONFIG;
 
   return (
-    <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-      <div className="flex flex-1 items-center space-x-2 w-full sm:max-w-md">
-        <div className="relative w-full">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Buscar por nombre de turno..."
-            className="pl-8 bg-card"
-            value={searchTerm ?? ""}
-            onChange={(e) => onSearchChange(e.target.value)}
-          />
-        </div>
-      </div>
+    <Toolbar>
+      <Toolbar.Footer>
+        <Toolbar.Search
+          label={LABELS.TOOLBAR.SEARCH_LABEL}
+          placeholder={LABELS.TOOLBAR.SEARCH_PLACEHOLDER}
+          value={searchTerm ?? ""}
+          onChange={(e) => onSearchChange(e.target.value)}
+        />
 
-      <div className="flex items-center gap-2 block sm:flex">
-        {can(SHIFT_CONFIG.PERMISSIONS.CREATE) && (
-          <Button onClick={onCreate}>
-            <Plus className="mr-2 h-4 w-4" /> Nuevo Turno
-          </Button>
-        )}
-      </div>
-    </div>
+        <Toolbar.Actions label={LABELS.TOOLBAR.DIVIDER_ACTIONS}>
+          {can(SHIFT_CONFIG.PERMISSIONS.CREATE) && (
+            <Button onClick={onCreate} className="gap-2">
+              <Plus className="h-4 w-4" />
+              <span>{LABELS.TOOLBAR.NEW_BUTTON}</span>
+            </Button>
+          )}
+        </Toolbar.Actions>
+      </Toolbar.Footer>
+    </Toolbar>
   );
 }

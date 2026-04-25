@@ -1,8 +1,8 @@
 import prisma from "@/features/shared/lib/prisma";
 import { formatTimeUTC } from "@/features/shared/lib/date-utils";
 import { getGrossMinutes, getNetMinutes } from "@/features/attendance/lib/attendance-utils";
-import { createScopeFilter, validateAreaAccess } from "@/features/permissions/services/scoping.service";
-import { REPORT_CONFIG } from "../config/report.constants";
+import { getReportScope } from "./report-policy.service";
+import { buildReportOrderBy } from "./report-orderby.service";
 
 /**
  * Fetches the flat attendance data for a date range with optional filters.
@@ -26,38 +26,25 @@ export async function getAttendanceReport({
   llegada,
   salida,
   excepcion,
+  page,
+  pageSize,
+  sortKey,
+  sortDirection
 }, session) {
-  const fromDate = new Date(`${fechaDesde}T00:00:00.000Z`);
-  const toDate = new Date(`${fechaHasta}T23:59:59.999Z`);
+  // Dates are already Date objects from Zod coercion
+  const fromDate = fechaDesde;
+  const toDate = new Date(fechaHasta.setHours(23, 59, 59, 999));
 
   const where = {
     fecha: { gte: fromDate, lte: toDate },
   };
 
-  // Enforce area scope — mirrors attendance module logic exactly
-  let scopeFilter;
-  if (areaId && areaId.length > 0 && areaId !== 'all') {
-    // User requested a specific area — validate they have access to it
-    const access = await validateAreaAccess({
-      currentUser: session,
-      areaId: Array.isArray(areaId) ? areaId[0] : areaId,
-      globalPermission: REPORT_CONFIG.PERMISSIONS.READ_ALL,
-    });
-    if (!access.success) throw new Error("Access Denied: No tienes permiso para ver esta área.");
-    scopeFilter = { usuario: { area_id: { in: Array.isArray(areaId) ? areaId : [areaId] } } };
-  } else {
-    // General view — scoped by role/hierarchy
-    scopeFilter = await createScopeFilter({
-      currentUser: session,
-      readAllPermission: REPORT_CONFIG.PERMISSIONS.READ_ALL,
-      fieldMap: { areaField: 'usuario.area_id', userField: 'usuario_id' },
-      allowSelf: true,
-    });
-  }
+  // Enforce area scope — delegated to report-policy.service (mirrors attendance pattern)
+  const scopeFilter = await getReportScope(session, areaId);
   Object.assign(where, scopeFilter);
 
   const andConditions = [];
-
+  const toArray = (val) => Array.isArray(val) ? val : [val];
   const buildInsensitiveOr = (field, values) => {
     return toArray(values).map(v => ({ [field]: { equals: v, mode: 'insensitive' } }));
   };
@@ -79,21 +66,45 @@ export async function getAttendanceReport({
     where.AND = andConditions;
   }
 
-  const rows = await prisma.resumen_diario.findMany({
-    where,
-    include: {
-      usuario: {
-        select: {
-          id: true,
-          nombre: true,
-          apellido: true,
-          cedula: true,
-          area: { select: { nombre: true } },
+  // Search term filter (DB side for performance and correct pagination)
+  if (searchTerm) {
+    where.usuario = {
+      ...where.usuario,
+      OR: [
+        { nombre: { contains: searchTerm, mode: "insensitive" } },
+        { apellido: { contains: searchTerm, mode: "insensitive" } },
+        { cedula: { contains: searchTerm, mode: "insensitive" } },
+      ],
+    };
+  }
+
+  // Handle pagination params
+  const skip = page && pageSize ? (Math.max(1, page) - 1) * pageSize : undefined;
+  const take = page && pageSize ? pageSize : undefined;
+  
+  // Handle sorting dynamic
+  const orderBy = buildReportOrderBy(sortKey, sortDirection, "fecha");
+
+  const [totalCount, rows] = await Promise.all([
+    prisma.resumen_diario.count({ where }),
+    prisma.resumen_diario.findMany({
+      where,
+      skip,
+      take,
+      orderBy,
+      include: {
+        usuario: {
+          select: {
+            id: true,
+            nombre: true,
+            apellido: true,
+            cedula: true,
+            area: { select: { nombre: true } },
+          },
         },
       },
-    },
-    orderBy: [{ fecha: 'asc' }],
-  });
+    }),
+  ]);
 
   // Fetch approved novedades overlapping the date range
   const overlappingNovedades = await prisma.novedades.findMany({
@@ -107,15 +118,7 @@ export async function getAttendanceReport({
     }
   });
 
-  // Apply search term filter (client-side on the result set — avoids complex DB query)
-  const filtered = searchTerm
-    ? rows.filter((r) => {
-      const full = `${r.usuario?.nombre ?? ''} ${r.usuario?.apellido ?? ''} ${r.usuario?.cedula ?? ''}`.toLowerCase();
-      return full.includes(searchTerm.toLowerCase());
-    })
-    : rows;
-
-  return filtered.map((r) => {
+  const formattedData = rows.map((r) => {
     // Determine specific permission name if an exception exists
     let permisoNombre = r.estado_excepcion_slug ?? null;
 
@@ -147,6 +150,8 @@ export async function getAttendanceReport({
       Estado: r.estado ?? 'DESCONOCIDO',
     };
   });
+
+  return { data: formattedData, totalCount };
 }
 
 /**

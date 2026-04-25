@@ -18,7 +18,7 @@ export const getRoleTableColumns = (onEdit, onDelete, can = () => true) => {
 
   const columns = [
     {
-      header: "Rol",
+      header: UI.LABELS.TABLE.NAME,
       accessorKey: "nombre",
       sortable: true,
       cell: (item) => (
@@ -31,7 +31,7 @@ export const getRoleTableColumns = (onEdit, onDelete, can = () => true) => {
       ),
     },
     {
-      header: "Descripción",
+      header: UI.LABELS.TABLE.DESCRIPTION,
       accessorKey: "descripcion",
       sortable: false,
       cell: (item) => (
@@ -41,7 +41,7 @@ export const getRoleTableColumns = (onEdit, onDelete, can = () => true) => {
       ),
     },
     {
-      header: "Usuarios",
+      header: UI.LABELS.TABLE.USERS,
       accessorKey: "usuario_count",
       sortable: true,
       cell: (item) => (
@@ -52,7 +52,7 @@ export const getRoleTableColumns = (onEdit, onDelete, can = () => true) => {
       ),
     },
     {
-      header: "Permisos",
+      header: UI.LABELS.TABLE.PERMISSIONS,
       accessorKey: "permisos",
       sortable: false,
       cell: (item) => (
@@ -74,6 +74,7 @@ export const getRoleTableColumns = (onEdit, onDelete, can = () => true) => {
 
   if (canUpdate || canDelete) {
     columns.push({
+      header: UI.LABELS.TABLE.ACTIONS,
       id: "actions",
       cell: (item) => (
         <DropdownMenu>
@@ -84,7 +85,7 @@ export const getRoleTableColumns = (onEdit, onDelete, can = () => true) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+            <DropdownMenuLabel>{UI.LABELS.TABLE.ACTIONS}</DropdownMenuLabel>
             
             {canUpdate && (
               <DropdownMenuItem onClick={() => onEdit(item)}>

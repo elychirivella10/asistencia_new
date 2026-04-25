@@ -9,6 +9,8 @@ export const novedadesReportColumns = [
   {
     header: "Empleado",
     accessorKey: "Empleado",
+    sortKey: "Empleado",
+    sortable: true,
     cell: (row) => (
       <div className="flex flex-col min-w-[140px]">
         <span className="font-medium text-sm leading-tight">{row.Empleado}</span>
@@ -28,16 +30,22 @@ export const novedadesReportColumns = [
   {
     header: "Desde",
     accessorKey: "Desde",
+    sortKey: "fecha_inicio",
+    sortable: true,
     className: "text-center whitespace-nowrap",
   },
   {
     header: "Hasta",
     accessorKey: "Hasta",
+    sortKey: "fecha_fin",
+    sortable: true,
     className: "text-center whitespace-nowrap",
   },
   {
     header: "Permiso",
     accessorKey: "TipoPermiso",
+    sortKey: "TipoPermiso",
+    sortable: true,
     className: "font-medium"
   },
   {
@@ -48,6 +56,8 @@ export const novedadesReportColumns = [
   {
     header: "Estado",
     accessorKey: "Estado",
+    sortKey: "estado",
+    sortable: true,
     className: "text-center",
     cell: (row) => {
       let colorClass = "bg-muted text-muted-foreground";

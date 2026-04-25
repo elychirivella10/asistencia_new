@@ -151,6 +151,7 @@ model usuarios {
   area                  areas?                @relation("usuarios_area_idToareas", fields: [area_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   roles                 roles?                @relation(fields: [rol_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   turnos                turnos?               @relation(fields: [turno_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  huellas               huellas_biometricas[]
 }
 
 model turnos {
@@ -163,6 +164,27 @@ model turnos {
   created_at            DateTime?  @default(now()) @db.Timestamptz(6)
   cruza_medianoche      Boolean?   @default(false)
   usuarios              usuarios[]
+}
+
+model huellas_biometricas {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  usuario_id   String    @db.Uuid
+  finger_index Int       // 0-9 (Índice del dedo según estándar ZK)
+  template     String    @db.Text // El template en formato Base64 o String
+  version      Int?      @default(10) // Versión del algoritmo (ZK suele usar 10 o 9)
+  created_at   DateTime? @default(now()) @db.Timestamptz(6)
+
+  usuario      usuarios  @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  cat_dedos    cat_dedos @relation(fields: [finger_index], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([usuario_id, finger_index])
+}
+
+model cat_dedos {
+  id      Int                   @id // 0-9
+  nombre  String                @db.VarChar(50)
+  mano    String                @db.VarChar(20)
+  huellas huellas_biometricas[]
 }
 
 model roles {

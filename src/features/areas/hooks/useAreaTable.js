@@ -11,7 +11,7 @@ export function useAreaTable(initialAreas) {
     const matchesSearch =
       area.nombre.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesType = typeFilter === "all" || area.cat_tipos_area?.id === typeFilter;
+    const matchesType = typeFilter === "all" || String(area.tipo_id) === String(typeFilter);
     
     return matchesSearch && matchesType;
   }, [searchTerm, typeFilter]);

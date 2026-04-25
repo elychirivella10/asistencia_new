@@ -2,64 +2,110 @@
 
 import { useState, useTransition, useMemo } from "react";
 import { toast } from "sonner";
-import { getNovedadesReportAction } from "../actions/novedades-read.action";
-import { exportToExcel } from "../utils/exportToExcel";
-import { exportToPDF } from "../utils/exportToPDF";
-import { novedadesPdfColumns, getNovedadesExportData } from "../config/novedades-report.config";
+import { getNovedadesReportAction } from "../actions/novedades-report-read.action";
+import { exportToExcel } from "../lib/exportToExcel";
+import { exportToPDF } from "../lib/exportToPDF";
+import { novedadesPdfColumns, getNovedadesExportData } from "../config/novedades-report-table.config";
 import { REPORT_CONFIG } from "../config/report.constants";
 
 const PAGE_SIZE = REPORT_CONFIG.PAGINATION.PAGE_SIZE;
 
 export function useNovedadesReport() {
-  const [allData, setAllData] = useState([]);
+  const [displayData, setDisplayData] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentFilters, setCurrentFilters] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortConfig, setSortConfig] = useState({ key: "fecha_inicio", direction: "desc" });
   const [isPending, startTransition] = useTransition();
 
-  const paginatedData = useMemo(() => {
-    const start = (currentPage - 1) * PAGE_SIZE;
-    return allData.slice(start, start + PAGE_SIZE);
-  }, [allData, currentPage]);
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
 
-  const totalPages = Math.max(1, Math.ceil(allData.length / PAGE_SIZE));
+  const fetchReport = (filters, page = 1, sort = sortConfig) => {
+    setCurrentPage(page);
+    setCurrentFilters(filters);
+    setSortConfig(sort);
 
-  const fetchReport = (filters) => {
-    setCurrentPage(1);
     startTransition(async () => {
-      const res = await getNovedadesReportAction(filters);
+      const res = await getNovedadesReportAction({
+        ...filters,
+        page,
+        pageSize: PAGE_SIZE,
+        sortKey: sort.key,
+        sortDirection: sort.direction,
+      });
+
       if (res?.success) {
-        setAllData(res.data);
-        if (!res.data.length) toast.info("No se hallaron registros en ese periodo.");
-        else toast.success(`${res.data.length} novedades encontradas.`);
+        setDisplayData(res.data);
+        setTotalCount(res.totalCount);
+        if (!res.data.length && page === 1) toast.info("No se hallaron registros en ese periodo.");
       } else {
         toast.error(res?.error ?? "Error al generar el reporte.");
       }
     });
   };
 
-  const handleExportExcel = () => {
-    const dataToExport = getNovedadesExportData(allData);
-    exportToExcel(dataToExport, "Reporte_Novedades", "Novedades");
+  const handleSort = (key) => {
+    const nextDir = sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
+    fetchReport(currentFilters, 1, { key, direction: nextDir });
+  };
+
+  const handleExportExcel = async () => {
+    if (!currentFilters) return;
+
+    startTransition(async () => {
+      toast.loading("Generando Excel...", { id: "export-excel-novedades" });
+      const res = await getNovedadesReportAction({
+        ...currentFilters,
+        sortKey: sortConfig.key,
+        sortDirection: sortConfig.direction,
+      });
+
+      if (res?.success) {
+        const dataToExport = getNovedadesExportData(res.data);
+        exportToExcel(dataToExport, "Reporte_Novedades", "Novedades");
+        toast.success("Excel generado correctamente.", { id: "export-excel-novedades" });
+      } else {
+        toast.error("Error al obtener datos para exportar.", { id: "export-excel-novedades" });
+      }
+    });
   };
 
   const handleExportPDF = async () => {
-    const dataToExport = getNovedadesExportData(allData);
-    await exportToPDF(
-      dataToExport,
-      novedadesPdfColumns,
-      "Reporte_Novedades",
-      "Historial de Permisos y Novedades"
-    );
+    if (!currentFilters) return;
+
+    startTransition(async () => {
+      toast.loading("Generando PDF...", { id: "export-pdf-novedades" });
+      const res = await getNovedadesReportAction({
+        ...currentFilters,
+        sortKey: sortConfig.key,
+        sortDirection: sortConfig.direction,
+      });
+
+      if (res?.success) {
+        const dataToExport = getNovedadesExportData(res.data);
+        await exportToPDF(
+          dataToExport,
+          novedadesPdfColumns,
+          "Reporte_Novedades",
+          "Historial de Permisos y Novedades"
+        );
+        toast.success("PDF generado correctamente.", { id: "export-pdf-novedades" });
+      } else {
+        toast.error("Error al obtener datos para exportar.", { id: "export-pdf-novedades" });
+      }
+    });
   };
 
   return {
-    paginatedData,
-    allData,
+    paginatedData: displayData,
     isPending,
-    hasData: allData.length > 0,
+    hasData: totalCount > 0,
     currentPage,
     totalPages,
-    totalCount: allData.length,
-    onPageChange: setCurrentPage,
+    totalCount,
+    sortConfig,
+    onPageChange: (page) => fetchReport(currentFilters, page, sortConfig),
+    onSort: handleSort,
     fetchReport,
     handleExportExcel,
     handleExportPDF,

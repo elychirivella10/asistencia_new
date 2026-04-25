@@ -23,5 +23,43 @@ export const SHIFT_CONFIG = {
     CREATE: 'shifts:create',
     UPDATE: 'shifts:update',
     DELETE: 'shifts:delete',
+  },
+  UI: {
+    LABELS: {
+      FORM: {
+        FIELDS: {
+          NAME: 'Nombre del Turno',
+          TOLERANCE: 'Margen de Tolerancia (min)',
+          START_TIME: 'Hora de Entrada',
+          END_TIME: 'Hora de Salida',
+          WORKING_DAYS: 'Días Laborales',
+          NIGHT_SHIFT: 'Turno Nocturno (Cruza la Medianoche)',
+        },
+        PLACEHOLDERS: {
+          NAME: 'Ej: Administrativo, Operativo Noche',
+          TOLERANCE: 'Ej: 15',
+        },
+        DESCRIPTIONS: {
+          WORKING_DAYS: 'Seleccione los días correspondientes a este turno.',
+          NIGHT_SHIFT: 'Active esta opción si el turno comienza un día y culmina al día siguiente.',
+        }
+      },
+      TABLE: {
+        NAME: 'Nombre del Turno',
+        SCHEDULE: 'Horario',
+        NIGHT: 'Nocturno',
+        DAYS: 'Días Laborales',
+        TOLERANCE: 'Tolerancia (min)',
+        ACTIONS: 'Acciones',
+      },
+      TOOLBAR: {
+        SEARCH_PLACEHOLDER: 'Buscar turnos...',
+        NEW_BUTTON: 'Nuevo Turno',
+        SEARCH_LABEL: 'Búsqueda de Turnos',
+        DIVIDER_FILTERS: 'Configuración de Filtros',
+        DIVIDER_SEARCH: 'Buscar por Nombre',
+        DIVIDER_ACTIONS: 'Acciones de Turnos',
+      }
+    }
   }
 };

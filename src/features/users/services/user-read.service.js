@@ -1,6 +1,7 @@
 import prisma from "@/features/shared/lib/prisma";
 import { getUserScope } from "./user-policy.service";
 import { USER_CONFIG } from "../config/user.constants";
+import { getVisibleAreas } from "@/features/areas/services/area-visibility.service";
 
 /**
  * Gets necessary data for users management page.
@@ -76,7 +77,7 @@ export async function getUsersPageData(
 
     const skip = (safePage - 1) * safePageSize;
 
-    const [users, totalCount, turnos, roles] = await Promise.all([
+    const [users, totalCount, turnos, roles, areas] = await Promise.all([
       prisma.usuarios.findMany({
         where,
         orderBy,
@@ -109,6 +110,7 @@ export async function getUsersPageData(
       prisma.usuarios.count({ where }),
       prisma.turnos.findMany({ orderBy: { nombre: "asc" }, select: { id: true, nombre: true } }),
       prisma.roles.findMany({ orderBy: { nombre: "asc" }, select: { id: true, nombre: true } }),
+      getVisibleAreas(currentUser),
     ]);
 
     const totalPages = Math.max(1, Math.ceil(totalCount / safePageSize));
@@ -120,7 +122,7 @@ export async function getUsersPageData(
       page: boundedPage,
       pageSize: safePageSize,
       totalPages,
-      areas: [],
+      areas,
       turnos,
       roles,
     };
@@ -174,5 +176,22 @@ export async function searchUsers(query, currentUser) {
   } catch (error) {
     console.error('Error searching users:', error);
     return [];
+  }
+}
+
+/**
+ * Gets a user's biometric_id by their database ID.
+ * @param {string} id - User ID.
+ * @returns {Promise<{biometric_id: number | null} | null>}
+ */
+export async function getUserBiometricId(id) {
+  try {
+    return await prisma.usuarios.findUnique({
+      where: { id },
+      select: { biometric_id: true }
+    });
+  } catch (error) {
+    console.error("Error getting user biometric ID:", error);
+    return null;
   }
 }

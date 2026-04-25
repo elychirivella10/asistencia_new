@@ -1,4 +1,5 @@
 import prisma from "@/features/shared/lib/prisma";
+import { ATTENDANCE_CONFIG } from "../config/attendance.constants";
 
 /**
  * Obtiene el mapa de estados de asistencia y sus colores.
@@ -6,7 +7,16 @@ import prisma from "@/features/shared/lib/prisma";
  */
 export async function getAttendanceStatusMap() {
   try {
-    const statuses = await prisma.$queryRaw`SELECT slug, nombre, color_hex, categoria, es_no_laborable, tipo_evento FROM cat_estados_asistencia`;
+    const statuses = await prisma.cat_estados_asistencia.findMany({
+      select: {
+        slug: true,
+        nombre: true,
+        color_hex: true,
+        categoria: true,
+        es_no_laborable: true,
+        tipo_evento: true
+      }
+    });
     
     if (!statuses || statuses.length === 0) {
       return {};
@@ -15,7 +25,7 @@ export async function getAttendanceStatusMap() {
     const sanitizeColor = (val) => {
       const v = typeof val === "string" ? val.trim() : "";
       const hex = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
-      return hex.test(v) ? v : "#6b7280";
+      return hex.test(v) ? v : ATTENDANCE_CONFIG.UI.DEFAULT_STATUS_COLOR;
     };
 
     const map = statuses.reduce((acc, curr) => {

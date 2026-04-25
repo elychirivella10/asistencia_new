@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import { CustomFormField } from '@/components/shared/form/CustomFormField'
 import { Loader2 } from 'lucide-react'
-import { cn, toFormData } from '@/features/shared/lib/utils'
+import { cn, toFormData } from '@/features/shared/lib/shared-utils'
 import { toast } from 'sonner'
 import { loginFormConfig } from '../config/login-form.config'
 
@@ -72,13 +72,20 @@ export function LoginFields({ className }) {
 
   return (
     <div className={cn("flex flex-col gap-6", className)}>
-      <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Bienvenido</h1>
-        <h2 className="text-xl font-bold">Sistema de Registro de Asistencia</h2>
-        <p className="text-muted-foreground text-balance text-sm">
+      <div className="flex flex-col items-center gap-2 text-center mb-4">
+        <div className="flex flex-col gap-1">
+          <h2 className="text-xl font-bold text-primary tracking-wide">
+            SISTEMA BIOMÉTRICO
+          </h2>
+          <p className="text-xs font-semibold text-muted-foreground uppercase max-w-[300px]">
+            Servicio Autónomo de la Propiedad Intelectual
+          </p>
+        </div>
+        <p className="text-muted-foreground text-sm mt-2">
           Ingresa tu cédula para acceder al sistema
         </p>
       </div>
+
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-6">

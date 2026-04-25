@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { REPORT_CONFIG } from "../config/report.constants";
 
 const { ALL } = REPORT_CONFIG.FILTERS;
@@ -25,7 +25,7 @@ const buildEventOptions = (statusMap, tipoEvento) => {
  * @param {Array}    areas
  * @param {Object}   statusMap
  */
-export function useReportToolbar({ onFilter, areas = [], statusMap = {} }) {
+export function useAttendanceReportToolbar({ onFilter, areas = [], statusMap = {} }) {
   const [fechaDesde, setFechaDesde] = useState("");
   const [fechaHasta, setFechaHasta] = useState("");
 
@@ -54,11 +54,11 @@ export function useReportToolbar({ onFilter, areas = [], statusMap = {} }) {
     return areas.filter((a) => areaId.includes(a.id));
   }, [areaId, areas]);
 
-  const areasFetcher = async (query) => {
+  const areasFetcher = useCallback(async (query) => {
     const q = typeof query === 'string' ? query.trim().toLowerCase() : '';
     if (!q) return areas;
-    return areas.filter((a) => a.nombre.toLowerCase().includes(q));
-  };
+    return areas.filter((a) => a.nombre?.toLowerCase().includes(q));
+  }, [areas]);
 
   const buildFilters = () => ({
     fechaDesde,
@@ -71,7 +71,7 @@ export function useReportToolbar({ onFilter, areas = [], statusMap = {} }) {
     excepcion:  excepcion?.length > 0 ? excepcion : undefined,
   });
 
-  const handleFilter = () => {
+  const handleSearch = () => {
     if (!fechaDesde || !fechaHasta) return;
     onFilter(buildFilters());
   };
@@ -86,6 +86,6 @@ export function useReportToolbar({ onFilter, areas = [], statusMap = {} }) {
     fechaDesde, fechaHasta, areaId, searchTerm, status, llegada, salida, excepcion,
     setFechaDesde, setFechaHasta, setAreaId, setSearchTerm, setStatus, setLlegada, setSalida, setExcepcion,
     ...options, selectedArea, areasFetcher,
-    handleFilter, handleReset,
+    handleSearch, handleReset,
   };
 }

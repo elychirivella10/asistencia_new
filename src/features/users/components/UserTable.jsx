@@ -1,4 +1,4 @@
- "use client";
+"use client";
 
 import { useMemo } from "react";
 import { toast } from "sonner";
@@ -28,8 +28,8 @@ export function UserTable({ data, areas, turnos, roles, pagination }) {
     useUserTableFilters(pagination);
 
   const columns = useMemo(
-    () => getUserTableColumns(dialogState.handleEdit, dialogState.handleDelete, can),
-    [can, dialogState.handleEdit, dialogState.handleDelete]
+    () => getUserTableColumns(dialogState.handleEdit, dialogState.handleDelete, dialogState.handleBiometrics, can),
+    [can, dialogState.handleEdit, dialogState.handleDelete, dialogState.handleBiometrics]
   );
 
   const handleBulkAssign = async (areaId) => {
@@ -54,6 +54,7 @@ export function UserTable({ data, areas, turnos, roles, pagination }) {
       onAreaChange={handlers.handleAreaChange}
       onStatusChange={handlers.handleStatusChange}
       onPageChange={handlers.handlePageChange}
+      onReset={handlers.handleReset}
       dialogState={dialogState}
       columns={columns}
       selection={selection}

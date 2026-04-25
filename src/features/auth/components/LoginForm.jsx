@@ -1,4 +1,4 @@
-import { cn } from "@/features/shared/lib/utils"
+import { cn } from "@/features/shared/lib/shared-utils"
 import { Card, CardContent } from "@/components/ui/card"
 import { LoginFields } from "./LoginFields"
 
@@ -17,7 +17,7 @@ export function LoginForm({ className, ...props }) {
           <LoginFields className="p-6 md:p-8" />
           <div className="bg-muted relative hidden md:block">
             <img
-              src="/fondo.png"
+              src="/backfondo.jpg"
               alt="Login Background"
               className="absolute inset-0 h-full w-full object-cover "
             />

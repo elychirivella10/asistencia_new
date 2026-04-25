@@ -1,6 +1,4 @@
-
 import { USER_CONFIG } from "./user.constants";
-import { searchVisibleAreas } from "@/features/areas/actions/area-read.action";
 
 /**
  * Generates default values for the user form.
@@ -16,86 +14,93 @@ export const getUserDefaultValues = (user) => ({
   email: user?.email || "",
   area_id: user?.area_id || "",
   turno_id: user?.turnos?.id || user?.turno_id || "",
-  biometric_id: user?.biometric_id || USER_CONFIG.UI.LABELS.NOT_LINKED,
+  biometric_id: user?.biometric_id || "",
+  es_activo: user?.es_activo ?? true,
   excluir_tardanza: user?.excluir_tardanza ?? false,
 });
 
-export const getUserFormConfig = (areas = [], turnos = [], roles = [], user = null) => [
-  // Row 1: Personal Information
-  [
-    { name: "nombre", label: "Nombre", placeholder: "Ej: Juan", component: "input" },
-    { name: "apellido", label: "Apellido", placeholder: "Ej: Pérez", component: "input" },
-  ],
-  // Row 2: Identification and Contact
-  [
-    { name: "cedula", label: "Cédula", placeholder: "Ej: 123456789", component: "input" },
-    { name: "email", label: "Email", placeholder: "juan@empresa.com", type: "email", component: "input" },
-  ],
-  // Row 3: Organization & Role
-  [
-    { 
-      name: "area_id", 
-      label: "Área", 
-      placeholder: "Seleccionar Área", 
-      component: "async-select", 
-      fetcher: searchVisibleAreas,
-      getLabel: (area) => area.nombre,
-      getValue: (area) => area.id,
-      renderOption: (area) => (
-        <div className="flex flex-col">
-          <span className="font-medium">{area.nombre}</span>
-          <span className="text-xs text-muted-foreground">
-            {area.cat_tipos_area?.nombre || 'Sin Tipo'} 
-            {area.cat_tipos_area?.nivel_jerarquico ? ` (Nivel ${area.cat_tipos_area.nivel_jerarquico})` : ''}
-          </span>
-        </div>
-      ),
-    },
-    { 
-      name: "rol_id", 
-      label: "Rol", 
-      placeholder: "Seleccionar Rol", 
-      component: "select", 
-      options: roles.map(r => ({ label: r.nombre, value: r.id.toString() })) 
-    },
-  ],
-  // Row 4: Shift
-  [
-    { 
-      name: "turno_id", 
-      label: "Turno", 
-      placeholder: "Seleccionar Turno", 
-      component: "select", 
-      options: turnos.map(t => ({ 
-        label: `${t.nombre}`, 
-        value: t.id 
-      })) 
-    },
-  ],
-  // Row 5: Biometric ID (Only if user exists)
-  user ? [
-    {
-      name: "biometric_id",
-      label: "ID Biométrico (Sincronizado)",
-      value: user.biometric_id || USER_CONFIG.UI.LABELS.NOT_LINKED,
-      component: "input",
-      disabled: true,
-      className: "bg-muted text-muted-foreground px-4 py-2"
-    }
-  ] : [],
-  // Row 5: Status
-  [
-    {
-      name: "es_activo",
-      label: "Estado del Usuario",
-      component: "checkbox",
-      description: (val) => val ? "Usuario activo en el sistema" : "Usuario inactivo (no marca asistencia)"
-    },
-    {
-      name: "excluir_tardanza",
-      label: "Exento de Tardanza/Inasistencia",
-      component: "checkbox",
-      description: "Si se activa, el supervisor de esta persona no recibirá notificaciones por sus llegadas fuera de hora."
-    }
-  ]
-].filter(row => row.length > 0);
+export const getUserFormConfig = (areas = [], turnos = [], roles = [], user = null) => {
+  const { FORM } = USER_CONFIG.UI.LABELS;
+
+  return [
+    // Row 1: Personal Information
+    [
+      { name: "nombre", label: FORM.FIELDS.NAME, placeholder: FORM.PLACEHOLDERS.NAME, component: "input" },
+      { name: "apellido", label: FORM.FIELDS.LASTNAME, placeholder: FORM.PLACEHOLDERS.LASTNAME, component: "input" },
+    ],
+    // Row 2: Identification and Contact
+    [
+      { name: "cedula", label: FORM.FIELDS.CEDULA, placeholder: FORM.PLACEHOLDERS.CEDULA, component: "input" },
+      { name: "email", label: FORM.FIELDS.EMAIL, placeholder: FORM.PLACEHOLDERS.EMAIL, type: "email", component: "input" },
+    ],
+    // Row 3: Organization & Role
+    [
+      { 
+        name: "area_id", 
+        label: FORM.FIELDS.AREA, 
+        placeholder: FORM.PLACEHOLDERS.SELECT_AREA, 
+        component: "async-select", 
+        fetcher: async (query) => {
+          const q = typeof query === "string" ? query.trim().toLowerCase() : "";
+          if (!q) return areas;
+          return areas.filter(a => a.nombre.toLowerCase().includes(q));
+        },
+        getLabel: (area) => area.nombre,
+        getValue: (area) => area.id,
+        renderOption: (area) => (
+          <div className="flex flex-col">
+            <span className="font-medium">{area.nombre}</span>
+            <span className="text-xs text-muted-foreground">
+              {area.cat_tipos_area?.nombre || 'Sin Tipo'} 
+              {area.cat_tipos_area?.nivel_jerarquico ? ` (Nivel ${area.cat_tipos_area.nivel_jerarquico})` : ''}
+            </span>
+          </div>
+        ),
+      },
+      { 
+        name: "rol_id", 
+        label: FORM.FIELDS.ROLE, 
+        placeholder: FORM.PLACEHOLDERS.SELECT_ROLE, 
+        component: "select", 
+        options: roles.map(r => ({ label: r.nombre, value: r.id.toString() })) 
+      },
+    ],
+    // Row 4: Shift
+    [
+      { 
+        name: "turno_id", 
+        label: FORM.FIELDS.SHIFT, 
+        placeholder: FORM.PLACEHOLDERS.SELECT_SHIFT, 
+        component: "select", 
+        options: turnos.map(t => ({ 
+          label: `${t.nombre}`, 
+          value: t.id 
+        })) 
+      },
+    ],
+    // Row 5: Biometric ID
+    [
+      {
+        name: "biometric_id",
+        label: FORM.FIELDS.BIOMETRIC,
+        placeholder: FORM.PLACEHOLDERS.BIOMETRIC || "Ej: 27038431",
+        component: "input",
+      }
+    ],
+    // Row 5: Status
+    [
+      {
+        name: "es_activo",
+        label: FORM.FIELDS.STATUS,
+        component: "checkbox",
+        description: (val) => val ? FORM.DESCRIPTIONS.ACTIVE : FORM.DESCRIPTIONS.INACTIVE
+      },
+      {
+        name: "excluir_tardanza",
+        label: FORM.FIELDS.EXEMPT_LATE,
+        component: "checkbox",
+        description: FORM.DESCRIPTIONS.EXEMPT
+      }
+    ]
+  ].filter(row => row.length > 0);
+};

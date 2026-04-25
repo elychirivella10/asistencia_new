@@ -1,4 +1,4 @@
-import { createScopeFilter, validateAreaAccess } from "@/features/permissions/services/scoping.service";
+import { createScopeFilter, validateAreaAccess } from "@/features/permissions/services/permission-scoping.service";
 import { ATTENDANCE_CONFIG } from "../config/attendance.constants";
 
 /**
@@ -11,9 +11,11 @@ import { ATTENDANCE_CONFIG } from "../config/attendance.constants";
 export async function getAttendanceScope(currentUser, requestedAreaId) {
   // Caso 1: Se solicita un área específica
   if (requestedAreaId && requestedAreaId !== ATTENDANCE_CONFIG.FILTERS.ALL) {
+    const areaToCheck = Array.isArray(requestedAreaId) ? requestedAreaId[0] : requestedAreaId;
+
     const access = await validateAreaAccess({
       currentUser,
-      areaId: requestedAreaId,
+      areaId: areaToCheck,
       globalPermission: ATTENDANCE_CONFIG.PERMISSIONS.READ_ALL
     });
 
@@ -21,7 +23,8 @@ export async function getAttendanceScope(currentUser, requestedAreaId) {
       throw new Error("Access Denied: No tienes permiso para ver esta área.");
     }
 
-    return { usuarios: { area_id: requestedAreaId } };
+    const ids = Array.isArray(requestedAreaId) ? requestedAreaId : [requestedAreaId];
+    return { usuario: { area_id: { in: ids } } };
   }
 
   // Caso 2: Vista general (determinado por permisos/jerarquía)
@@ -29,7 +32,7 @@ export async function getAttendanceScope(currentUser, requestedAreaId) {
     currentUser,
     readAllPermission: ATTENDANCE_CONFIG.PERMISSIONS.READ_ALL,
     fieldMap: {
-      areaField: 'usuarios.area_id',
+      areaField: 'usuario.area_id',
       userField: 'usuario_id'
     }
   });

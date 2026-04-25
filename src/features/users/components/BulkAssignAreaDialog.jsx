@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,13 +12,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { AsyncSelect } from "@/components/shared/form/AsyncSelect";
-import { searchVisibleAreas } from "@/features/areas/actions/area-read.action";
 
 export function BulkAssignAreaDialog({
   isOpen,
   onClose,
   selectedCount,
   onConfirm,
+  areas = [],
 }) {
   const [selectedArea, setSelectedArea] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,6 +31,12 @@ export function BulkAssignAreaDialog({
     setSelectedArea("");
     onClose();
   };
+
+  const areasFetcher = useCallback(async (query) => {
+    const q = typeof query === "string" ? query.trim().toLowerCase() : "";
+    if (!q) return areas;
+    return areas.filter((a) => a.nombre?.toLowerCase().includes(q));
+  }, [areas]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -47,7 +53,7 @@ export function BulkAssignAreaDialog({
             <AsyncSelect
               value={selectedArea}
               onChange={setSelectedArea}
-              fetcher={searchVisibleAreas}
+              fetcher={areasFetcher}
               placeholder="Seleccionar Área"
               getLabel={(area) => area.nombre}
               getValue={(area) => area.id}

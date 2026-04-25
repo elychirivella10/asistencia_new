@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { AreaTableDialogs } from "./AreaTableDialogs";
 import { TablePagination } from "@/components/shared/TablePagination";
 import { DataTable } from "@/components/shared/DataTable";
 import { AreaToolbar } from "./AreaToolbar";
+import { AreaOrganigramView } from "./AreaOrganigramView";
 
 export function AreaTableView({
   tableState,
@@ -50,6 +52,8 @@ export function AreaTableView({
     handleSuccess
   } = dialogState;
 
+  const [viewMode, setViewMode] = useState("table");
+
   return (
     <div className="space-y-4">
       {/* Toolbar */}
@@ -58,30 +62,42 @@ export function AreaTableView({
         onSearchChange={handleSearchChange}
         typeFilter={typeFilter}
         onTypeChange={handleTypeChange}
+        onReset={() => {
+          handleSearchChange("");
+          handleTypeChange("all");
+        }}
         onCreate={handleCreate}
         tiposArea={tiposArea}
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
       />
 
-      {/* Table */}
-      <div className={`transition-opacity duration-200 ${isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
-        <DataTable
-          data={paginatedAreas}
-          columns={columns}
-          sortConfig={sortConfig}
-          onSort={handleServerSort}
-          emptyMessage={searchTerm ? "No se encontraron áreas con ese criterio." : "No hay áreas registradas."}
-        />
-      </div>
+      {viewMode === "table" ? (
+        <>
+          {/* Table */}
+          <div className={`transition-opacity duration-200 ${isPending ? "opacity-50 pointer-events-none" : "opacity-100"}`}>
+            <DataTable
+              data={paginatedAreas}
+              columns={columns}
+              sortConfig={sortConfig}
+              onSort={handleServerSort}
+              emptyMessage={searchTerm ? "No se encontraron áreas con ese criterio." : "No hay áreas registradas."}
+            />
+          </div>
 
-      {/* Pagination */}
-      <TablePagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-        currentCount={paginatedAreas.length}
-        totalCount={filteredAreas.length}
-        entityName="áreas"
-      />
+          {/* Pagination */}
+          <TablePagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            currentCount={paginatedAreas.length}
+            totalCount={filteredAreas.length}
+            entityName="áreas"
+          />
+        </>
+      ) : (
+        <AreaOrganigramView dialogState={dialogState} />
+      )}
 
       {/* Dialogs */}
       <AreaTableDialogs

@@ -1,7 +1,7 @@
 import prisma from "@/features/shared/lib/prisma";
 import { formatTimeUTC, formatDateUTC } from "@/features/shared/lib/date-utils";
-import { createScopeFilter, validateAreaAccess } from "@/features/permissions/services/scoping.service";
-import { REPORT_CONFIG } from "../config/report.constants";
+import { getReportScope } from "./report-policy.service";
+import { buildReportOrderBy } from "./report-orderby.service";
 
 /**
  * Fetches required metadata for exactly the Novedades tab.
@@ -37,9 +37,14 @@ export async function getNovedadesReport({
   searchTerm,
   status,
   tipoPermisoId,
+  page,
+  pageSize,
+  sortKey,
+  sortDirection
 }, session) {
-  const fromDate = new Date(`${fechaDesde}T00:00:00.000Z`);
-  const toDate = new Date(`${fechaHasta}T23:59:59.999Z`);
+  // Dates are already Date objects from Zod coercion
+  const fromDate = fechaDesde;
+  const toDate = new Date(fechaHasta.setHours(23, 59, 59, 999));
 
   const where = {
     // Only fetch records where the absence window intersects the requested report window
@@ -47,65 +52,70 @@ export async function getNovedadesReport({
     fecha_fin: { gte: fromDate }
   };
 
-  // Enforce area scope — mirrors attendance module logic exactly
-  let scopeFilter;
-  if (areaId && areaId !== 'all') {
-    const access = await validateAreaAccess({
-      currentUser: session,
-      areaId,
-      globalPermission: REPORT_CONFIG.PERMISSIONS.READ_ALL,
-    });
-    if (!access.success) throw new Error("Access Denied: No tienes permiso para ver esta área.");
-    scopeFilter = { usuario: { area_id: areaId } };
-  } else {
-    scopeFilter = await createScopeFilter({
-      currentUser: session,
-      readAllPermission: REPORT_CONFIG.PERMISSIONS.READ_ALL,
-      fieldMap: { areaField: 'usuario.area_id', userField: 'usuario_id' },
-      allowSelf: true,
-    });
-  }
+  const andConditions = [];
+  const toArray = (val) => Array.isArray(val) ? val : [val];
+
+  // Enforce area scope — delegated to report-policy.service (mirrors attendance pattern)
+  const scopeFilter = await getReportScope(session, areaId);
   Object.assign(where, scopeFilter);
-  if (status && status !== 'all') {
-    where.estado = status.toUpperCase();
-  }
-  if (tipoPermisoId && tipoPermisoId !== 'all') {
-    where.tipo_id = parseInt(tipoPermisoId, 10);
+
+  if (status && status.length > 0 && !toArray(status).includes('all')) {
+    where.estado = { in: toArray(status).map(s => s.toUpperCase()) };
   }
 
-  const rows = await prisma.novedades.findMany({
-    where,
-    include: {
-      usuario: {
-        select: {
-          nombre: true,
-          apellido: true,
-          cedula: true,
-          area: { select: { nombre: true } },
+  if (tipoPermisoId && tipoPermisoId.length > 0 && !toArray(tipoPermisoId).includes('all')) {
+    where.tipo_id = { in: toArray(tipoPermisoId).map(id => parseInt(id, 10)) };
+  }
+
+  // Search term filter (DB side for performance and correct pagination)
+  if (searchTerm) {
+    where.usuario = {
+      ...where.usuario,
+      OR: [
+        { nombre: { contains: searchTerm, mode: "insensitive" } },
+        { apellido: { contains: searchTerm, mode: "insensitive" } },
+        { cedula: { contains: searchTerm, mode: "insensitive" } },
+      ],
+    };
+  }
+
+  // Handle pagination params
+  const skip = page && pageSize ? (Math.max(1, page) - 1) * pageSize : undefined;
+  const take = page && pageSize ? pageSize : undefined;
+
+  // Handle dynamic sorting
+  const orderBy = buildReportOrderBy(sortKey, sortDirection, "fecha_inicio");
+
+  const [totalCount, rows] = await Promise.all([
+    prisma.novedades.count({ where }),
+    prisma.novedades.findMany({
+      where,
+      skip,
+      take,
+      orderBy,
+      include: {
+        usuario: {
+          select: {
+            nombre: true,
+            apellido: true,
+            cedula: true,
+            area: { select: { nombre: true } },
+          },
         },
-      },
-      validador: {
-        select: {
-          nombre: true,
-          apellido: true,
+        validador: {
+          select: {
+            nombre: true,
+            apellido: true,
+          }
+        },
+        cat_tipos_permiso: {
+          select: { nombre: true }
         }
       },
-      cat_tipos_permiso: {
-        select: { nombre: true }
-      }
-    },
-    orderBy: { fecha_inicio: 'desc' },
-  });
+    }),
+  ]);
 
-  // Apply search term filter (client-side on the result set)
-  const filtered = searchTerm
-    ? rows.filter((r) => {
-      const str = `${r.usuario?.nombre ?? ''} ${r.usuario?.apellido ?? ''} ${r.usuario?.cedula ?? ''}`.toLowerCase();
-      return str.includes(searchTerm.toLowerCase());
-    })
-    : rows;
-
-  return filtered.map((r) => {
+  const formattedData = rows.map((r) => {
     let duracion = r.es_dia_completo ? "Día Completo" : "Parcial";
     if (!r.es_dia_completo && r.hora_inicio && r.hora_fin) {
       duracion = `${formatTimeUTC(r.hora_inicio)} - ${formatTimeUTC(r.hora_fin)}`;
@@ -124,4 +134,6 @@ export async function getNovedadesReport({
       Observaciones: r.observaciones ?? '',
     };
   });
+
+  return { data: formattedData, totalCount };
 }

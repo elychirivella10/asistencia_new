@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Clock, CalendarCheck, AlertTriangle, CheckCircle2, MinusCircle } from "lucide-react";
+import { ATTENDANCE_CONFIG } from "../config/attendance.constants";
 
 export function AttendanceStats({ stats }) {
   if (!stats || !stats.totalRecords) return null;
@@ -18,19 +19,23 @@ export function AttendanceStats({ stats }) {
     saldoHoras,
   } = stats;
 
-  const saldoLabel = `${saldoHoras > 0 ? "+" : ""}${saldoHoras || 0}h`;
-  const saldoClass = saldoHoras > 0 ? "text-success" : saldoHoras < 0 ? "text-destructive" : "";
-  const saldoSub = `Extras ${totalHorasExtras || 0}h · Debe ${totalHorasDebe || 0}h`;
+  const { UI: { LABELS } } = ATTENDANCE_CONFIG;
+  const { STATS } = LABELS;
+
+  const isPositive = saldoHoras >= 0;
+  const saldoLabel = `${Math.abs(saldoHoras)}h`;
+  const saldoSub = isPositive ? "A favor" : "En contra";
+  const saldoClass = isPositive ? "text-success" : "text-destructive";
 
   const items = [
-    { title: "Empleados", value: uniqueEmployees, sub: "Activos en periodo", Icon: Users, iconClass: "text-info" },
-    { title: "Horas Bruto", value: `${totalHoras}h`, sub: "Tiempo acumulado", Icon: Clock, iconClass: "text-info" },
-    { title: "Horas Neto", value: `${totalHorasNeto}h`, sub: "Con descuento de comedor", Icon: Clock, iconClass: "text-info" },
-    { title: "Balance", value: saldoLabel, sub: saldoSub, Icon: CalendarCheck, iconClass: "text-info", valueClass: saldoClass },
-    { title: "Descuento Comedor", value: `${totalDescuento}m`, sub: "Minutos descontados", Icon: MinusCircle, iconClass: "text-warning" },
-    { title: "Puntualidad", value: `${pctPuntualidad}%`, sub: `${totalPuntuales} registros`, Icon: CheckCircle2, iconClass: "text-success", valueClass: "text-success" },
-    { title: "Tardías", value: totalTardias, sub: "Requieren atención", Icon: AlertTriangle, iconClass: "text-warning", valueClass: "text-warning" },
-    { title: "Inasistencias", value: totalFaltas, sub: "Faltas registradas", Icon: AlertTriangle, iconClass: "text-destructive", valueClass: "text-destructive" },
+    { title: STATS.EMPLOYEES, value: uniqueEmployees, sub: STATS.EMPLOYEES_SUB, Icon: Users, iconClass: "text-info" },
+    { title: STATS.GROSS_HOURS, value: `${totalHoras}h`, sub: STATS.GROSS_HOURS_SUB, Icon: Clock, iconClass: "text-info" },
+    { title: STATS.NET_HOURS, value: `${totalHorasNeto}h`, sub: STATS.NET_HOURS_SUB, Icon: Clock, iconClass: "text-info" },
+    { title: STATS.BALANCE, value: saldoLabel, sub: saldoSub, Icon: CalendarCheck, iconClass: "text-info", valueClass: saldoClass },
+    { title: STATS.DINING_DISCOUNT, value: `${totalDescuento}m`, sub: STATS.DINING_DISCOUNT_SUB, Icon: MinusCircle, iconClass: "text-warning" },
+    { title: STATS.PUNCTUALITY, value: `${pctPuntualidad}%`, sub: `${totalPuntuales} ${LABELS.ENTITY_NAME}`, Icon: CheckCircle2, iconClass: "text-success", valueClass: "text-success" },
+    { title: STATS.LATE_ARRIVALS, value: totalTardias, sub: STATS.LATE_ARRIVALS_SUB, Icon: AlertTriangle, iconClass: "text-warning", valueClass: "text-warning" },
+    { title: STATS.ABSENCES, value: totalFaltas, sub: STATS.ABSENCES_SUB, Icon: AlertTriangle, iconClass: "text-destructive", valueClass: "text-destructive" },
   ];
 
   return (

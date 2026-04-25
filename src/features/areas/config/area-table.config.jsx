@@ -19,7 +19,7 @@ export const getAreaTableColumns = (onEdit, onAddSubArea, onDelete, can = () => 
 
   const columns = [
     {
-      header: "Nombre",
+      header: UI.LABELS.TABLE.NAME,
       accessorKey: "nombre",
       width: "300px",
       sortable: true,
@@ -38,7 +38,7 @@ export const getAreaTableColumns = (onEdit, onAddSubArea, onDelete, can = () => 
       ),
     },
     {
-      header: "Tipo",
+      header: UI.LABELS.TABLE.TYPE,
       accessorKey: "tipo",
       sortable: true,
       cell: (area) => (
@@ -48,7 +48,7 @@ export const getAreaTableColumns = (onEdit, onAddSubArea, onDelete, can = () => 
       ),
     },
     {
-      header: "Área Padre",
+      header: UI.LABELS.TABLE.PARENT,
       accessorKey: "parent",
       sortable: true,
       cell: (area) =>
@@ -64,7 +64,7 @@ export const getAreaTableColumns = (onEdit, onAddSubArea, onDelete, can = () => 
         ),
     },
     {
-      header: "Jefe / Encargado",
+      header: UI.LABELS.TABLE.CHIEF,
       accessorKey: "jefe",
       sortable: true,
       cell: (area) =>
@@ -92,7 +92,7 @@ export const getAreaTableColumns = (onEdit, onAddSubArea, onDelete, can = () => 
 
   if (canUpdate || canDelete || canCreate) {
     columns.push({
-      header: "Acciones",
+      header: UI.LABELS.TABLE.ACTIONS,
       className: "text-right",
       cell: (area) => (
         <div className="flex justify-end">
@@ -104,7 +104,7 @@ export const getAreaTableColumns = (onEdit, onAddSubArea, onDelete, can = () => 
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+              <DropdownMenuLabel>{UI.LABELS.TABLE.ACTIONS}</DropdownMenuLabel>
               
               {canCreate && (
                 <DropdownMenuItem onClick={() => onAddSubArea(area)}>

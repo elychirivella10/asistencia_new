@@ -19,6 +19,7 @@ export const userSchema = z.object({
   rol_id: z.coerce.number().min(1, "Debes seleccionar un rol"),
   area_id: z.string().uuid("Debes seleccionar un área"),
   turno_id: z.string().uuid("Debes seleccionar un turno"),
+  biometric_id: z.string().optional().or(z.literal('')),
   es_activo: z.preprocess(
     (val) => val === 'on' || val === 'true' || val === true,
     z.boolean()

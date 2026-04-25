@@ -6,13 +6,17 @@ const stringOrArray = z.union([z.string(), z.array(z.string())]).optional();
  * Base validation schema for date range and common filters.
  */
 const baseFilterSchema = z.object({
-  fechaDesde: z.string().min(1, "La fecha de inicio es obligatoria"),
-  fechaHasta: z.string().min(1, "La fecha de fin es obligatoria"),
+  fechaDesde: z.coerce.date(),
+  fechaHasta: z.coerce.date(),
   areaId: stringOrArray,
   searchTerm: z.string().optional(),
   status: stringOrArray,
+  page: z.coerce.number().int().positive().optional(),
+  pageSize: z.coerce.number().int().positive().optional(),
+  sortKey: z.string().optional(),
+  sortDirection: z.enum(["asc", "desc"]).optional(),
 }).refine(
-  (data) => new Date(data.fechaDesde) <= new Date(data.fechaHasta),
+  (data) => data.fechaDesde <= data.fechaHasta,
   {
     message: "La fecha de inicio no puede ser posterior a la fecha de fin.",
     path: ["fechaDesde"],

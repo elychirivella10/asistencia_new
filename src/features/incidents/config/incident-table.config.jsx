@@ -21,21 +21,21 @@ export const getIncidentColumns = (onView, onEdit, onDelete, can = () => true) =
   const columns = [
     {
       accessorKey: "fecha_inicio",
-      header: "Fecha Inicio",
+      header: UI.LABELS.TABLE.START_DATE,
       cell: (row) => <span className="font-medium">{formatDateUTC(row.fecha_inicio)}</span>,
       sortable: true,
       width: "120px",
     },
     {
       accessorKey: "fecha_fin",
-      header: "Fecha Fin",
+      header: UI.LABELS.TABLE.END_DATE,
       cell: (row) => formatDateUTC(row.fecha_fin),
       sortable: true,
       width: "120px",
     },
     {
       accessorKey: "usuario.nombre",
-      header: "Empleado",
+      header: UI.LABELS.TABLE.EMPLOYEE,
       cell: (row) => (
         <div className="flex flex-col">
           <span className="font-medium">
@@ -50,7 +50,7 @@ export const getIncidentColumns = (onView, onEdit, onDelete, can = () => true) =
     },
     {
       accessorKey: "tipo",
-      header: "Tipo",
+      header: UI.LABELS.TABLE.TYPE,
       cell: (row) => (
         <div className="flex flex-col">
           <Badge variant="outline">{row.cat_tipos_permiso?.nombre || "N/A"}</Badge>
@@ -66,7 +66,7 @@ export const getIncidentColumns = (onView, onEdit, onDelete, can = () => true) =
     },
     {
       accessorKey: "estado",
-      header: "Estado",
+      header: UI.LABELS.TABLE.STATUS,
       cell: (row) => (
         <Badge variant={UI.BADGE_VARIANTS[row.estado] || 'outline'}>
           {row.estado}
@@ -76,7 +76,7 @@ export const getIncidentColumns = (onView, onEdit, onDelete, can = () => true) =
     },
     {
       accessorKey: "observaciones",
-      header: "Observaciones",
+      header: UI.LABELS.TABLE.OBSERVATIONS,
       cell: (row) => (
         <div className="truncate max-w-[300px]" title={row.observaciones}>
           {row.observaciones || "-"}
@@ -88,6 +88,7 @@ export const getIncidentColumns = (onView, onEdit, onDelete, can = () => true) =
 
   if (canRead || canUpdate || canDelete) {
     columns.push({
+      header: UI.LABELS.TABLE.ACTIONS,
       id: "actions",
       cell: (row) => {
         const requiereSoporte = row.cat_tipos_permiso?.requiere_soporte;
@@ -101,7 +102,7 @@ export const getIncidentColumns = (onView, onEdit, onDelete, can = () => true) =
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                <DropdownMenuLabel>{UI.LABELS.TABLE.ACTIONS}</DropdownMenuLabel>
                 {canUpdate && (
                   <DropdownMenuItem onClick={() => onEdit(row)}>
                     <Pencil className="mr-2 h-4 w-4" />

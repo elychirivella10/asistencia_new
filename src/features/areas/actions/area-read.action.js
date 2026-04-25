@@ -43,8 +43,12 @@ export const searchVisibleAreas = createProtectedFunction(AREA_CONFIG.PERMISSION
  * @param {string} [currentAreaId] - ID of the area being edited (to avoid self-selection)
  * @param {number} [selectedNivel] - Hierarchy level of the selected area type (to filter valid parents)
  */
-export const searchParentAreas = createProtectedFunction(AREA_CONFIG.PERMISSIONS.READ, async (term, currentAreaId, selectedNivel, session) => {
-  const q = typeof term === "string" ? term.trim() : "";
-  const take = q.length >= 3 ? 200 : q.length >= 2 ? 50 : 25;
-  return await findParentAreas(q, currentAreaId, selectedNivel, session, { take });
+import { getAreaTree } from "../services/area-tree.service";
+
+export const getAreaTreeAction = createProtectedFunction(AREA_CONFIG.PERMISSIONS.READ, async (session) => {
+  console.log("[DEBUG getAreaTreeAction] Action iniciada. Session userId:", session?.id);
+  const tree = await getAreaTree(session);
+  console.log("[DEBUG getAreaTreeAction] Árbol obtenido, nodos raíz:", tree?.length);
+  return tree;
 });
+

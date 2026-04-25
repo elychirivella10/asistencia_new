@@ -1,4 +1,4 @@
-import { useMemo, useState, useTransition, useEffect } from "react";
+import { useMemo, useState, useTransition, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import { ATTENDANCE_CONFIG } from "../config/attendance.constants";
@@ -51,11 +51,11 @@ export function useAttendanceToolbar({ areas = [], statusMap = {} }) {
     return areas.filter((a) => areaId.includes(a.id));
   }, [areaId, areas]);
 
-  const areasFetcher = async (query) => {
+  const areasFetcher = useCallback(async (query) => {
     const q = typeof query === "string" ? query.trim().toLowerCase() : "";
     if (!q) return areas;
-    return areas.filter((area) => area.nombre.toLowerCase().includes(q));
-  };
+    return areas.filter((area) => area.nombre?.toLowerCase().includes(q));
+  }, [areas]);
 
   const handleSearch = () => {
     const params = new URLSearchParams();

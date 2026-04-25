@@ -1,29 +1,25 @@
 import { searchUsers } from "@/features/users/actions/user-read.action";
-import { searchParentAreas } from "@/features/areas/actions/area-read.action";
+import { AREA_CONFIG } from "./area.constants";
 
 export const getAreaFormConfig = (areas = [], currentAreaId = null, tiposArea = [], selectedTipoId = null) => {
   // 1. Obtener nivel del tipo seleccionado
   const selectedTipo = tiposArea.find(t => String(t.id) === String(selectedTipoId));
   const selectedNivel = selectedTipo ? selectedTipo.nivel_jerarquico : null;
 
-  // 2. Filtrar padres válidos (solo aquellos con nivel numéricamente MENOR = mayor jerarquía)
-  //    Además, evitar seleccionarse a sí mismo.
-  // NOTA: Esta lógica ahora también se maneja en el servidor (searchParentAreas),
-  // pero mantenemos parentOptions vacío o irrelevante ya que usaremos async-select.
-  // const parentOptions = ... (YA NO SE USA DIRECTAMENTE EN SELECT SÍNCRONO)
-
   const tipoOptions = tiposArea.map(t => ({
     label: t.nombre,
     value: String(t.id) 
   }));
 
+  const { FORM } = AREA_CONFIG.UI.LABELS;
+
   return [
     [
-      { name: "nombre", label: "Nombre del Área", placeholder: "Ej: Recursos Humanos", component: "input" },
+      { name: "nombre", label: FORM.FIELDS.NAME, placeholder: FORM.PLACEHOLDERS.NAME, component: "input" },
       {
         name: "tipo_id",
-        label: "Tipo de Área",
-        placeholder: "Seleccionar Tipo",
+        label: FORM.FIELDS.TYPE,
+        placeholder: FORM.PLACEHOLDERS.SELECT_TYPE,
         component: "select",
         options: tipoOptions,
       }
@@ -31,11 +27,25 @@ export const getAreaFormConfig = (areas = [], currentAreaId = null, tiposArea = 
     [
       {
         name: "parent_id",
-        label: "Área Padre (Opcional)",
-        placeholder: "Buscar Área Superior...",
+        label: FORM.FIELDS.PARENT,
+        placeholder: FORM.PLACEHOLDERS.SEARCH_PARENT,
         component: "async-select",
-        // Vinculamos los parámetros contextuales al fetcher
-        fetcher: (term) => searchParentAreas(term, currentAreaId, selectedNivel),
+        // Fetcher local: filtra las áreas que ya tenemos
+        fetcher: async (term) => {
+          const q = typeof term === "string" ? term.trim().toLowerCase() : "";
+          const safeNivel = Number.isFinite(Number(selectedNivel)) ? Number(selectedNivel) : null;
+
+          return areas.filter(area => {
+             // Coincidencia de nombre
+             const matchesTerm = area.nombre.toLowerCase().includes(q);
+             // No puede ser ella misma
+             const isNotSelf = area.id !== currentAreaId;
+             // Debe tener nivel jerárquico menor (LT) que el seleccionado
+             const hasCorrectNivel = safeNivel === null || (area.cat_tipos_area?.nivel_jerarquico < safeNivel);
+
+             return matchesTerm && isNotSelf && hasCorrectNivel;
+          });
+        },
         getLabel: (area) => `${area.nombre} (${area.cat_tipos_area?.nombre || 'Sin Tipo'})`,
         getValue: (area) => area.id,
         renderOption: (area) => (
@@ -50,8 +60,8 @@ export const getAreaFormConfig = (areas = [], currentAreaId = null, tiposArea = 
       },
       {
         name: "jefe_id",
-        label: "Jefe de Área",
-        placeholder: "Buscar usuario...",
+        label: FORM.FIELDS.CHIEF,
+        placeholder: FORM.PLACEHOLDERS.SEARCH_CHIEF,
         component: "async-select",
         fetcher: searchUsers,
         getLabel: (user) => `${user.nombre} ${user.apellido}`,
@@ -65,8 +75,8 @@ export const getAreaFormConfig = (areas = [], currentAreaId = null, tiposArea = 
       },
       {
         name: "excluir_tardanza",
-        label: "Exento de Tardanza/Inasistencia",
-        description: "Si se activa, no se enviarán correos automáticos si los empleados de esta área llegan tarde.",
+        label: FORM.FIELDS.EXEMPT_LATE,
+        description: FORM.DESCRIPTIONS.EXEMPT,
         component: "checkbox"
       }
     ]

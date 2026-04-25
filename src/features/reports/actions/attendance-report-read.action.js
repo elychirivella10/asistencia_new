@@ -1,7 +1,7 @@
 'use server';
 
 import { createProtectedFunction } from "@/features/shared/lib/safe-action";
-import { getAttendanceReport } from "../services/report-read.service";
+import { getAttendanceReport } from "../services/attendance-report-read.service";
 import { attendanceFilterSchema } from "../schemas/report-filter.schema";
 import { REPORT_CONFIG } from "../config/report.constants";
 
@@ -15,7 +15,7 @@ export const getAttendanceReportAction = createProtectedFunction(
     const parsedFilters = attendanceFilterSchema.parse(filters);
     
     // 2. Safe logic execution — session passed to enforce area scope
-    const data = await getAttendanceReport(parsedFilters, session);
-    return { success: true, data };
+    const { data, totalCount } = await getAttendanceReport(parsedFilters, session);
+    return { success: true, data, totalCount };
   }
 );

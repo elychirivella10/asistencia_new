@@ -1,38 +1,44 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Plus, Search } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { usePermission } from "@/features/permissions/components/PermissionsProvider";
 import { ROLE_CONFIG } from "../config/role.constants";
+import { Toolbar } from "@/components/shared/Toolbar";
 
 export function RoleToolbar({
   searchTerm,
   onSearchChange,
+  onReset,
   onCreate,
 }) {
   const { can } = usePermission();
+  const { UI: { LABELS } } = ROLE_CONFIG;
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl bg-muted/30 p-4 md:flex-row md:items-center md:justify-between">
-      <div className="flex flex-1 items-center gap-2">
-        <div className="relative w-full max-w-sm">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Buscar roles..."
-            className="pl-9 h-10 bg-background/60 border-none focus-visible:ring-1 focus-visible:ring-ring"
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
-          />
-        </div>
-      </div>
+    <Toolbar>
+      <Toolbar.Footer>
+        <Toolbar.Search
+          label={LABELS.TOOLBAR.SEARCH_LABEL}
+          placeholder={LABELS.TOOLBAR.SEARCH_PLACEHOLDER}
+          value={searchTerm}
+          onChange={(e) => onSearchChange(e.target.value)}
+        />
 
-      {can(ROLE_CONFIG.PERMISSIONS.WRITE) && (
-        <Button onClick={onCreate}>
-          <Plus className="mr-2 h-4 w-4" />
-          Nuevo Rol
-        </Button>
-      )}
-    </div>
+        <Toolbar.Actions label={LABELS.TOOLBAR.DIVIDER_ACTIONS}>
+          <Button variant="secondary" onClick={onReset} className="gap-2">
+            <X className="h-4 w-4" />
+            <span>{LABELS.CLEAN_BUTTON}</span>
+          </Button>
+
+          {can(ROLE_CONFIG.PERMISSIONS.WRITE) && (
+            <Button onClick={onCreate} className="gap-2">
+              <Plus className="h-4 w-4" />
+              <span>{LABELS.TOOLBAR.NEW_BUTTON}</span>
+            </Button>
+          )}
+        </Toolbar.Actions>
+      </Toolbar.Footer>
+    </Toolbar>
   );
 }

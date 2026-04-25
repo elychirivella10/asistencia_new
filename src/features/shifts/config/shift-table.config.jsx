@@ -12,17 +12,18 @@ import {
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 export const getShiftTableColumns = (onEdit, onDelete, can = () => true) => {
-  const canUpdate = can(SHIFT_CONFIG.PERMISSIONS.UPDATE);
-  const canDelete = can(SHIFT_CONFIG.PERMISSIONS.DELETE);
+  const { PERMISSIONS, UI } = SHIFT_CONFIG;
+  const canUpdate = can(PERMISSIONS.UPDATE);
+  const canDelete = can(PERMISSIONS.DELETE);
 
   const columns = [
   {
     accessorKey: "nombre",
-    header: "Nombre del Turno",
+    header: UI.LABELS.TABLE.NAME,
   },
   {
     id: "horario",
-    header: "Horario",
+    header: UI.LABELS.TABLE.SCHEDULE,
     cell: (shift) => {
       const entrada = shift.hora_entrada;
       const salida = shift.hora_salida;
@@ -32,7 +33,7 @@ export const getShiftTableColumns = (onEdit, onDelete, can = () => true) => {
         <div className="flex flex-col">
           <span className="font-medium">{entrada} - {salida}</span>
           {shift.cruza_medianoche && (
-            <span className="text-xs text-muted-foreground">(Nocturno)</span>
+            <span className="text-xs text-muted-foreground">({UI.LABELS.TABLE.NIGHT})</span>
           )}
         </div>
       );
@@ -40,14 +41,14 @@ export const getShiftTableColumns = (onEdit, onDelete, can = () => true) => {
   },
   {
     accessorKey: "margen_tolerancia_min",
-    header: "Tolerancia (min)",
+    header: UI.LABELS.TABLE.TOLERANCE,
     cell: (shift) => {
       return <span>{shift.margen_tolerancia_min} min</span>;
     }
   },
   {
     accessorKey: "dias_laborales",
-    header: "Días Laborales",
+    header: UI.LABELS.TABLE.DAYS,
     cell: (shift) => {
       const dias = shift.dias_laborales || [];
       
@@ -66,7 +67,7 @@ export const getShiftTableColumns = (onEdit, onDelete, can = () => true) => {
 
   if (canUpdate || canDelete) {
     columns.push({
-      header: "Acciones",
+      header: UI.LABELS.TABLE.ACTIONS,
       className: "text-right",
       cell: (shift) => (
         <div className="flex justify-end">
@@ -78,7 +79,7 @@ export const getShiftTableColumns = (onEdit, onDelete, can = () => true) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+              <DropdownMenuLabel>{UI.LABELS.TABLE.ACTIONS}</DropdownMenuLabel>
               
               {canUpdate && (
                 <DropdownMenuItem onClick={() => onEdit(shift)} className="cursor-pointer">

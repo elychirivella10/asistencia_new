@@ -1,13 +1,16 @@
 import { searchUsers } from "@/features/users/actions/user-read.action";
 import { searchVisibleAreas } from "@/features/areas/actions/area-read.action";
+import { SUPERVISION_CONFIG } from "./supervision.constants";
 
 export const getSupervisionFormConfig = () => {
+  const { FORM } = SUPERVISION_CONFIG.UI.LABELS;
+
   return [
     [
       {
         name: "usuario_id",
-        label: "Usuario Supervisor",
-        placeholder: "Buscar usuario...",
+        label: FORM.FIELDS.SUPERVISOR,
+        placeholder: FORM.PLACEHOLDERS.SEARCH_SUPERVISOR,
         component: "async-select",
         fetcher: searchUsers,
         getLabel: (user) => `${user.nombre} ${user.apellido} (${user.cedula})`,
@@ -21,8 +24,8 @@ export const getSupervisionFormConfig = () => {
       },
       {
         name: "area_id",
-        label: "Área a Supervisar",
-        placeholder: "Buscar área...",
+        label: FORM.FIELDS.AREA,
+        placeholder: FORM.PLACEHOLDERS.SEARCH_AREA,
         component: "async-select",
         fetcher: searchVisibleAreas,
         getLabel: (area) => area.nombre,

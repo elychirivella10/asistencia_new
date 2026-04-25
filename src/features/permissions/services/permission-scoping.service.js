@@ -1,4 +1,4 @@
-import { verifyPermission } from "@/features/permissions/services/authorization.service";
+import { verifyPermission } from "@/features/permissions/services/permission-authorization.service";
 import { getAreasPermitidas } from "@/features/areas/services/area-hierarchy.service";
 
 /**

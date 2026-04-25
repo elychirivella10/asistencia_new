@@ -23,5 +23,16 @@ export const AUTH_CONFIG = {
     SERVER_ERROR: 'Error del servidor al autenticar',
     UNAUTHORIZED: 'Usuario no autenticado',
     FORBIDDEN: 'No tienes permiso para realizar esta acción',
+  },
+  UI: {
+    LABELS: {
+      FORM: {
+        CEDULA: 'Cédula',
+        CEDULA_PLACEHOLDER: 'Ej: 123456789',
+        PASSWORD: 'Contraseña',
+        PASSWORD_PLACEHOLDER: '******',
+        SUBMIT: 'Iniciar Sesión',
+      }
+    }
   }
 };

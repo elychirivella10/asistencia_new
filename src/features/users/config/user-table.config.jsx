@@ -8,17 +8,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Fingerprint, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Fingerprint, MoreHorizontal, Pencil, Trash2, RefreshCw } from "lucide-react";
 import { USER_CONFIG } from "./user.constants";
 
-export const getUserTableColumns = (onEdit, onDelete, can = () => false) => {
+export const getUserTableColumns = (onEdit, onDelete, onBiometrics, can = () => false) => {
   const { PERMISSIONS, UI } = USER_CONFIG;
   const canUpdate = can(PERMISSIONS.UPDATE);
   const canDelete = can(PERMISSIONS.DELETE);
+  const canBiometrics = can(PERMISSIONS.MANAGE_BIOMETRICS);
 
   const columns = [
     {
-      header: "Usuario",
+      header: UI.LABELS.TABLE.NAME,
       accessorKey: "nombre",
       sortable: true,
       width: "300px",
@@ -32,7 +33,7 @@ export const getUserTableColumns = (onEdit, onDelete, can = () => false) => {
       ),
     },
     {
-      header: "Área",
+      header: UI.LABELS.TABLE.AREA,
       accessorKey: "area",
       sortable: true,
       cell: (user) =>
@@ -41,7 +42,7 @@ export const getUserTableColumns = (onEdit, onDelete, can = () => false) => {
         ),
     },
     {
-      header: "Rol",
+      header: UI.LABELS.TABLE.ROLE,
       accessorKey: "rol",
       sortable: true,
       cell: (user) => (
@@ -51,7 +52,7 @@ export const getUserTableColumns = (onEdit, onDelete, can = () => false) => {
       ),
     },
     {
-      header: "ID Biométrico",
+      header: UI.LABELS.TABLE.BIOMETRIC,
       accessorKey: "biometric_id",
       className: "text-center",
       cell: (user) => (
@@ -73,7 +74,7 @@ export const getUserTableColumns = (onEdit, onDelete, can = () => false) => {
       ),
     },
     {
-      header: "Estado",
+      header: UI.LABELS.TABLE.STATUS,
       accessorKey: "es_activo",
       sortable: true,
       cell: (user) => (
@@ -86,7 +87,7 @@ export const getUserTableColumns = (onEdit, onDelete, can = () => false) => {
 
   if (canUpdate || canDelete) {
     columns.push({
-      header: "Acciones",
+      header: UI.LABELS.TABLE.ACTIONS,
       className: "text-right",
       cell: (user) => (
         <div className="flex justify-end">
@@ -98,18 +99,24 @@ export const getUserTableColumns = (onEdit, onDelete, can = () => false) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+              <DropdownMenuLabel>{UI.LABELS.TABLE.ACTIONS}</DropdownMenuLabel>
               {canUpdate && (
                 <DropdownMenuItem onClick={() => onEdit(user)}>
                   <Pencil className="mr-2 h-4 w-4" />
                   Editar
                 </DropdownMenuItem>
               )}
-              {canUpdate && canDelete && <DropdownMenuSeparator />}
+              {canBiometrics && (
+                <DropdownMenuItem onClick={() => onBiometrics(user)}>
+                  <Fingerprint className="mr-2 h-4 w-4" />
+                  Biometría
+                </DropdownMenuItem>
+              )}
+              {(canUpdate || canBiometrics) && canDelete && <DropdownMenuSeparator />}
               {canDelete && (
                 <DropdownMenuItem
                   variant="destructive"
-                  onClick={() => onDelete(user.id)}
+                  onClick={() => onDelete(user)}
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
                   Eliminar

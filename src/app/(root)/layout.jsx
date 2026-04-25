@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar/AppSidebar"
 import { Separator } from "@/components/ui/separator"
+import { BiometricSyncProvider } from "@/features/users/components/BiometricSyncProvider"
 
 export default async function DashboardLayout({ children }) {
   const session = await getSession()
@@ -19,7 +20,9 @@ export default async function DashboardLayout({ children }) {
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          {children}
+          <BiometricSyncProvider>
+            {children}
+          </BiometricSyncProvider>
         </div>
       </SidebarInset>
     </SidebarProvider>

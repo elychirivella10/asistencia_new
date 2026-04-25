@@ -46,6 +46,7 @@ export function RoleTableView({
       <RoleToolbar
         searchTerm={filterText}
         onSearchChange={setFilterText}
+        onReset={() => setFilterText("")}
         onCreate={handleCreate}
       />
 

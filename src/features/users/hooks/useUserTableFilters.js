@@ -79,6 +79,12 @@ export function useUserTableFilters(pagination) {
     [navigateWithParams]
   );
 
+  const handleReset = useCallback(() => {
+    startTransition(() => {
+      router.push("?", { scroll: false });
+    });
+  }, [router, startTransition]);
+
   return {
     isPending,
     filters: {
@@ -101,6 +107,7 @@ export function useUserTableFilters(pagination) {
       handleStatusChange,
       handlePageChange,
       handleSortChange,
+      handleReset,
     },
   };
 }

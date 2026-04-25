@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { toast } from "sonner";
 import { saveArea } from "../actions/area-write.action";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { CustomFormField } from "@/components/shared/form/CustomFormField";
 import { CustomFormSelect } from "@/components/shared/form/CustomFormSelect";
 import { AsyncSelect } from "@/components/shared/form/AsyncSelect";
@@ -35,7 +35,10 @@ export function AreaForm({ area, areas, tiposArea, onSuccess }) {
   });
 
   const selectedTipoId = form.watch("tipo_id");
-  const formConfig = getAreaFormConfig(areas, area?.id, tiposArea, selectedTipoId);
+  const formConfig = useMemo(() => 
+    getAreaFormConfig(areas, area?.id, tiposArea, selectedTipoId),
+    [areas, area?.id, tiposArea, selectedTipoId]
+  );
 
   // Forzar actualización de campos al cambiar el prop area
   useEffect(() => {

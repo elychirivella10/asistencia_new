@@ -12,10 +12,10 @@ import { MoreHorizontal, Trash2, User, Building2, Pencil } from "lucide-react";
 import { SUPERVISION_CONFIG } from "./supervision.constants";
 
 export const getSupervisionTableColumns = (onEdit, onDelete, can = () => true) => {
-  const { PERMISSIONS } = SUPERVISION_CONFIG;
+  const { PERMISSIONS, UI } = SUPERVISION_CONFIG;
   return [
     {
-      header: "Supervisor",
+      header: UI.LABELS.TABLE.SUPERVISOR,
       accessorKey: "usuario_nombre",
       cell: (row) => (
           <div className="flex items-center gap-2 overflow-hidden">
@@ -30,7 +30,7 @@ export const getSupervisionTableColumns = (onEdit, onDelete, can = () => true) =
       )
     },
     {
-      header: "Área Supervisada",
+      header: UI.LABELS.TABLE.AREA,
       accessorKey: "area_nombre",
       cell: (row) => (
           <div className="flex items-center gap-2 overflow-hidden">
@@ -47,7 +47,7 @@ export const getSupervisionTableColumns = (onEdit, onDelete, can = () => true) =
       )
     },
     {
-        header: "Acciones",
+        header: UI.LABELS.TABLE.ACTIONS,
         className: "text-right w-[100px]",
         cell: (row) => (
             <div className="flex justify-end">
@@ -59,7 +59,7 @@ export const getSupervisionTableColumns = (onEdit, onDelete, can = () => true) =
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                        <DropdownMenuLabel>{UI.LABELS.TABLE.ACTIONS}</DropdownMenuLabel>
                         {can(PERMISSIONS.UPDATE) && (
                             <DropdownMenuItem onClick={() => onEdit(row)}>
                                 <Pencil className="mr-2 h-4 w-4" />

@@ -1,6 +1,6 @@
 import prisma from "@/features/shared/lib/prisma";
 import { getAreasPermitidas } from "./area-hierarchy.service";
-import { verifyPermission } from "@/features/permissions/services/authorization.service";
+import { verifyPermission } from "@/features/permissions/services/permission-authorization.service";
 import { AREA_CONFIG } from "../config/area.constants";
 
 export const getVisibleAreas = async (currentUser, term = "", { take } = {}) => {

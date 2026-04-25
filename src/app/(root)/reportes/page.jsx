@@ -2,8 +2,8 @@ import { checkPageAccess } from "@/features/auth/lib/auth-guard";
 import { AccessDenied } from "@/components/shared/AccessDenied";
 import { ErrorAlert } from "@/components/shared/ErrorAlert";
 import { ReportesView } from "@/features/reports/components/ReportesView";
-import { getReportPageData } from "@/features/reports/services/report-read.service";
-import { getNovedadesPageData } from "@/features/reports/services/novedades-read.service";
+import { getReportPageData } from "@/features/reports/services/attendance-report-read.service";
+import { getNovedadesPageData } from "@/features/reports/services/novedades-report-read.service";
 import { REPORT_CONFIG } from "@/features/reports/config/report.constants";
 
 export const metadata = {

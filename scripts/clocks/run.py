@@ -42,6 +42,7 @@ def main():
             
             # 4. Sincronizar Marcajes
             db_repo.sync_attendance(attendances, DEVICE_ID)
+
             print("✨ Sincronización con Base de Datos completada.")
 
             # 5. Limpieza (Si corresponde)

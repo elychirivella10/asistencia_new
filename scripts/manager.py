@@ -37,11 +37,11 @@ def run_script(script_path, args=[]):
     """Executes a python script as a subprocess to avoid import/namespace conflicts."""
     full_path = os.path.join(ROOT_DIR, script_path)
     cmd = [sys.executable, full_path] + args
-    print(f"\n[EXECUTING] {' '.join(cmd)}\n")
+    print(f"\n[EXECUTING] {' '.join(cmd)}\n", flush=True)
     try:
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as e:
-        print(f"\n[ERROR] Script failed with exit code {e.returncode}")
+        print(f"\n[ERROR] Script failed with exit code {e.returncode}", flush=True)
         sys.exit(e.returncode)
 
 def main():
@@ -67,6 +67,12 @@ def main():
     # Summarizer
     subparsers.add_parser("summarize", help="Run daily attendance summarizer")
 
+    # Device Management
+    dev_m = subparsers.add_parser("manage-device", help="Send management commands to the device (push user, delete finger, etc.)")
+    dev_m.add_argument("--action", required=True, choices=["push-user", "push-all-users", "delete-finger", "delete-user", "sync-templates", "total-sync"])
+    dev_m.add_argument("--id", help="Biometric ID of the user")
+    dev_m.add_argument("--finger", type=int, help="Finger index (0-9)")
+
     args = parser.parse_args()
 
     if args.command == "sync-personnel":
@@ -87,6 +93,12 @@ def main():
         
     elif args.command == "summarize":
         run_script("scripts/clocks/summarizer.py")
+        
+    elif args.command == "manage-device":
+        m_args = ["--action", args.action]
+        if args.id: m_args += ["--id", args.id]
+        if args.finger is not None: m_args += ["--finger", str(args.finger)]
+        run_script("scripts/clocks/manage_device.py", m_args)
         
     else:
         parser.print_help()

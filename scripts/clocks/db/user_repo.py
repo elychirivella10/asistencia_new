@@ -109,3 +109,60 @@ class UserRepo:
                     )
                 """, (name, email, b_id, cedula, hashed_pw))
             conn.commit()
+
+    def save_fingerprint(self, user_id, finger_index, template, version=10, conn=None):
+        """Saves or updates a fingerprint template for a user. Can reuse a connection."""
+        sql = """
+            INSERT INTO huellas_biometricas (id, usuario_id, finger_index, template, version, created_at)
+            VALUES (gen_random_uuid(), %s, %s, %s, %s, NOW())
+            ON CONFLICT (usuario_id, finger_index) 
+            DO UPDATE SET template = EXCLUDED.template, version = EXCLUDED.version, created_at = NOW()
+        """
+        params = (str(user_id), finger_index, template, version)
+
+        if conn:
+            with conn.cursor() as cur:
+                cur.execute(sql, params)
+        else:
+            with psycopg2.connect(self.db_url) as new_conn:
+                with new_conn.cursor() as cur:
+                    cur.execute(sql, params)
+                new_conn.commit()
+
+    def get_user_fingerprints(self, user_id):
+        """Retrieves all fingerprints for a specific user."""
+        with psycopg2.connect(self.db_url) as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT finger_index, template, version FROM huellas_biometricas
+                    WHERE usuario_id = %s
+                """, (str(user_id),))
+                return cur.fetchall()
+
+    def delete_fingerprints(self, user_id, finger_index=None):
+        """Deletes one or all fingerprints for a user in the DB."""
+        query = "DELETE FROM huellas_biometricas WHERE usuario_id = %s"
+        params = [str(user_id)]
+        
+        if finger_index is not None:
+            query += " AND finger_index = %s"
+            params.append(finger_index)
+            
+        with psycopg2.connect(self.db_url) as conn:
+            with conn.cursor() as cur:
+                cur.execute(query, tuple(params))
+            conn.commit()
+
+    def get_user_by_biometric_id(self, b_id):
+        """Returns biometric_id and full name for a user."""
+        with psycopg2.connect(self.db_url) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT biometric_id, nombre, apellido FROM usuarios WHERE biometric_id = %s", (str(b_id),))
+                return cur.fetchone()
+
+    def get_all_users_for_sync(self):
+        """Returns all active users with biometric_id for mass synchronization."""
+        with psycopg2.connect(self.db_url) as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT biometric_id, nombre, apellido FROM usuarios WHERE es_activo = True AND biometric_id IS NOT NULL")
+                return cur.fetchall()

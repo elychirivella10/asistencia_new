@@ -2,6 +2,7 @@
 
 import { UserFormDialog } from "./UserFormDialog";
 import { UserDeleteDialog } from "./UserDeleteDialog";
+import { UserBiometricsDialog } from "./UserBiometricsDialog";
 import { BulkAssignAreaDialog } from "./BulkAssignAreaDialog";
 
 export function UserTableDialogs({
@@ -13,6 +14,8 @@ export function UserTableDialogs({
   roles,
   deletingUser,
   setDeletingUser,
+  biometricUser,
+  setBiometricUser,
   isBulkAssignOpen,
   setIsBulkAssignOpen,
   selectedCount,
@@ -39,11 +42,18 @@ export function UserTableDialogs({
         />
       )}
 
+      <UserBiometricsDialog
+        user={biometricUser}
+        open={!!biometricUser}
+        onOpenChange={(isOpen) => !isOpen && setBiometricUser(null)}
+      />
+
       <BulkAssignAreaDialog
         isOpen={isBulkAssignOpen}
         onClose={() => setIsBulkAssignOpen(false)}
         selectedCount={selectedCount}
         onConfirm={onBulkAssign}
+        areas={areas}
       />
     </>
   );

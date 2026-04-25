@@ -8,7 +8,7 @@ export function useRoleTable(roles = EMPTY_ARRAY) {
   const [filterText, setFilterText] = useState("");
 
   const filterFunction = useCallback((item) => {
-    const searchLower = filterText.toLowerCase();
+    const searchLower = String(filterText || "").toLowerCase();
     return (
       item.nombre.toLowerCase().includes(searchLower) ||
       (item.descripcion && item.descripcion.toLowerCase().includes(searchLower))
